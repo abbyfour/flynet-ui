@@ -1,9 +1,15 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./App.css";
-import { BaseMap, MapProjection } from "./lib/map/BaseMap";
+import { BaseMap } from "./lib/map/BaseMap";
+import { ProjectionToggle } from "./lib/map/controls/ProjectionToggle";
 
 function App() {
-  return <BaseMap projection={MapProjection.Globe} />;
+  return (
+    <>
+      <ProjectionToggle />
+      <BaseMap />;
+    </>
+  );
 }
 
 export default App;

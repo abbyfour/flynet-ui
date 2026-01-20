@@ -1,15 +1,17 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 import App from "./App.tsx";
+import { persistor, store } from "./redux/store.ts";
 import "./reset.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    {/* <link
-      href="https://unpkg.com/maplibre-gl@5.16.0/dist/maplibre-gl.css"
-      rel="stylesheet"
-    /> */}
-
-    <App />
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <App />
+      </PersistGate>
+    </Provider>
   </StrictMode>,
 );
