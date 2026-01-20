@@ -12,7 +12,7 @@ import { uiReducer } from "./uiSlice";
 const uiPersistConfig = {
   key: "ui",
   storage,
-  whitelist: ["mapProjection"],
+  whitelist: ["mapProjection", "activeSidepanelWindow"],
 };
 
 const rootReducer = combineReducers({

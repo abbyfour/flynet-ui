@@ -6,9 +6,10 @@ export enum MapProjection {
 }
 
 export enum SidepanelWindows {
+  Flights = "flights",
   Friends = "friends",
-  Settings = "settings",
   Profile = "profile",
+  Settings = "settings",
 }
 
 export interface UIState {
@@ -31,13 +32,20 @@ const uiSlice = createSlice({
 
     setActiveSidepanelWindow(
       state: UIState,
-      action: PayloadAction<SidepanelWindows | undefined>,
+      action: PayloadAction<SidepanelWindows>,
     ) {
       state.activeSidepanelWindow = action.payload;
+    },
+
+    closeActiveSidepanelWindow(state: UIState) {
+      state.activeSidepanelWindow = undefined;
     },
   },
 });
 
-export const { setMapProjection, setActiveSidepanelWindow } = uiSlice.actions;
-
+export const {
+  setMapProjection,
+  setActiveSidepanelWindow,
+  closeActiveSidepanelWindow,
+} = uiSlice.actions;
 export const uiReducer = uiSlice.reducer;

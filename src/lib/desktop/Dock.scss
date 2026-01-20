@@ -1,0 +1,42 @@
+.Dock {
+  // centered on the bottom macos style
+  position: absolute;
+  bottom: 20px;
+  z-index: 1;
+  left: 50%;
+  transform: translateX(-50%);
+
+  .dock-icon-button {
+    border: none;
+    background: none;
+
+    &:not(.active) {
+      // Grey out
+      opacity: 0.8;
+
+      &:hover {
+        cursor: pointer;
+        animation: jiggle 0.3s ease-in-out;
+      }
+    }
+
+    &.active {
+      transform: scale(1.25);
+    }
+  }
+}
+
+@keyframes jiggle {
+  0% {
+    transform: rotate(0deg);
+  }
+  33% {
+    transform: rotate(10deg);
+  }
+  66% {
+    transform: rotate(-10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
