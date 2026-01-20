@@ -1,0 +1,15 @@
+@use "./styles/variables" as *;
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: $viewport-padding;
+  background: $bg-color;
+}
+
+.app {
+  height: 100vh;
+  width: 100vw;
+}

@@ -1,5 +1,5 @@
 import "maplibre-gl/dist/maplibre-gl.css";
-import "./App.css";
+import "./App.scss";
 import { BaseMap } from "./lib/map/BaseMap";
 import { ProjectionToggle } from "./lib/map/controls/ProjectionToggle";
 
