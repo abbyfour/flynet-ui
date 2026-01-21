@@ -1,0 +1,22 @@
+.StatusBar {
+  z-index: 1;
+  // TODO: ???? what is 99vw doing here
+  width: 99vw;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  height: 30px;
+  color: black;
+  background-color: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(2px);
+  font-size: 13px;
+
+  .logo {
+    font-weight: bold;
+    font-size: 14px;
+  }
+}
