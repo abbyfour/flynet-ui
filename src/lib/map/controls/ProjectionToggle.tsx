@@ -1,6 +1,7 @@
 import Toggle from "react-toggle";
-import { useAppDispatch, useAppSelector } from "../../../redux/store";
-import { MapProjection, setMapProjection } from "../../../redux/uiSlice";
+import { MapProjection } from "../../../data/classes/ui";
+import { useAppDispatch, useAppSelector } from "../../../data/store";
+import { setMapProjection } from "../../../data/uiSlice";
 import "./ProjectionToggle.scss";
 
 export function ProjectionToggle() {

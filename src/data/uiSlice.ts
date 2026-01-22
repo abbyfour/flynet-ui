@@ -1,25 +1,23 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-
-export enum MapProjection {
-  Globe = "globe",
-  Mercator = "mercator",
-}
-
-export enum SidepanelWindows {
-  Flights = "flights",
-  Friends = "friends",
-  Profile = "profile",
-  Settings = "settings",
-}
+import storage from "redux-persist/lib/storage";
+import { AppTheme, MapProjection, type SidepanelWindows } from "./classes/ui";
 
 export interface UIState {
   mapProjection: MapProjection;
   activeSidepanelWindow?: SidepanelWindows;
+  theme: AppTheme;
 }
 
 const initialState: UIState = {
   mapProjection: MapProjection.Mercator,
   activeSidepanelWindow: undefined,
+  theme: AppTheme.Light,
+};
+
+export const uiPersistConfig = {
+  key: "ui",
+  storage,
+  whitelist: ["mapProjection", "activeSidepanelWindow", "theme"],
 };
 
 const uiSlice = createSlice({
@@ -40,6 +38,10 @@ const uiSlice = createSlice({
     closeActiveSidepanelWindow(state: UIState) {
       state.activeSidepanelWindow = undefined;
     },
+
+    setTheme(state: UIState, action: PayloadAction<AppTheme>) {
+      state.theme = action.payload;
+    },
   },
 });
 
@@ -47,5 +49,6 @@ export const {
   setMapProjection,
   setActiveSidepanelWindow,
   closeActiveSidepanelWindow,
+  setTheme,
 } = uiSlice.actions;
 export const uiReducer = uiSlice.reducer;

@@ -1,4 +1,3 @@
-import { SidepanelWindows } from "../../redux/uiSlice";
 import "./Dock.scss";
 
 // icons
@@ -6,7 +5,12 @@ import flightsIcon from "../../assets/dock/flights.svg";
 import friendsIcon from "../../assets/dock/friends.svg";
 import profileIcon from "../../assets/dock/profile.svg";
 import settingsIcon from "../../assets/dock/settings.svg";
-import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { SidepanelWindows } from "../../data/classes/ui";
+import { useAppDispatch, useAppSelector } from "../../data/store";
+import {
+  closeActiveSidepanelWindow,
+  setActiveSidepanelWindow,
+} from "../../data/uiSlice";
 
 interface Window {
   name: SidepanelWindows;
@@ -27,16 +31,9 @@ export function Dock() {
   const dispatch = useAppDispatch();
 
   const changeWindow = (window: Window) => {
-    dispatch(
-      activeWindow === window.name
-        ? {
-            type: "ui/closeActiveSidepanelWindow",
-          }
-        : {
-            type: "ui/setActiveSidepanelWindow",
-            payload: window.name,
-          },
-    );
+    return activeWindow === window.name
+      ? dispatch(closeActiveSidepanelWindow())
+      : dispatch(setActiveSidepanelWindow(window.name));
   };
 
   return (

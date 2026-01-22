@@ -1,0 +1,17 @@
+.SidepanelContainer {
+  position: absolute;
+  top: 3em;
+  background-color: #f0f0f0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 1;
+
+  &.left {
+    left: 1em;
+  }
+
+  &.right {
+    right: 1em;
+  }
+}
