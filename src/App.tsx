@@ -2,7 +2,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import "./App.scss";
 import { Dock } from "./lib/desktop/Dock";
 import { StatusBar } from "./lib/desktop/statusBar/StatusBar";
-import { ThemeToggle } from "./lib/desktop/themeToggle/ProjectionToggle";
+import { ThemeToggle } from "./lib/desktop/themeToggle/ThemeToggle";
 import { LoginWindow } from "./lib/desktop/windows/login/LoginWindow";
 import { SidepanelWindow } from "./lib/desktop/windows/SidepanelWindow";
 import { ProjectionToggle } from "./lib/map/controls/ProjectionToggle";
