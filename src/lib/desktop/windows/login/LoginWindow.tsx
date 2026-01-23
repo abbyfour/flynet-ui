@@ -1,11 +1,7 @@
 import { useState } from "react";
-import {
-  useLazyMeQuery,
-  useLoginMutation,
-} from "../../../../data/services/usersAPI";
+import { useLoginMutation } from "../../../../data/services/usersAPI";
 import { useAppDispatch, useAppSelector } from "../../../../data/store";
 import { clearUser, saveUser } from "../../../../data/userSlice";
-import { addTokenToUser } from "../../../../util/userUtil";
 import { SidepanelContainer } from "../../SidepanelContainer";
 import "./LoginWindow.scss";
 
@@ -20,13 +16,13 @@ export function LoginWindow() {
   ) : (
     <SidepanelContainer align="right" className="LoginWindow">
       <div className="LoggedInMessage">
-        <p>Welcome back, {currentUser.firstName}!</p>
+        <p>Welcome back, {currentUser.nickname}!</p>
         <button
           className="logout"
           type="button"
           onClick={() => dispatch(clearUser())}
         >
-          stop having me be logged in
+          logout
         </button>
       </div>
     </SidepanelContainer>
@@ -36,29 +32,22 @@ export function LoginWindow() {
 function LoginForm() {
   const dispatch = useAppDispatch();
   const [login, { isLoading: isLoggingIn }] = useLoginMutation();
-  const [me] = useLazyMeQuery();
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const tokenResponse = await login({
-        username: formData.email,
+      const user = await login({
+        username: formData.username,
         password: formData.password,
       }).unwrap();
 
-      const userProperties = await me({
-        token: tokenResponse.access_token,
-      }).unwrap();
-
-      const userWithToken = addTokenToUser(userProperties, tokenResponse);
-
-      dispatch(saveUser(userWithToken));
+      dispatch(saveUser(user));
     } catch (err) {
       console.error("Failed to login:", err);
       setLoginError(err instanceof Error ? err.message : String(err));
@@ -68,13 +57,15 @@ function LoginForm() {
   return (
     <div className="LoginForm">
       <form onSubmit={handleLogin}>
-        <label htmlFor="email">Email</label>
+        <label htmlFor="username">Username</label>
         <input
-          title="email"
-          type="email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          placeholder="Enter your email"
+          title="username"
+          type="text"
+          value={formData.username}
+          onChange={(e) =>
+            setFormData({ ...formData, username: e.target.value })
+          }
+          placeholder="Enter your username"
           required
         />
 

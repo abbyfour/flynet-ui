@@ -16,7 +16,7 @@ export function StatusBar() {
       <p className="logo">FlyNet</p>
 
       {currentUser && (
-        <p className="user">Welcome back, {currentUser.firstName}.</p>
+        <p className="user">Welcome back, {currentUser.nickname}.</p>
       )}
 
       <p>
