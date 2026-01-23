@@ -10,9 +10,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@deck.gl/core": "^9.2.6",
+    "@deck.gl/layers": "^9.2.6",
+    "@deck.gl/mapbox": "^9.2.6",
+    "@deck.gl/react": "9.2.6",
+    "@deck.gl/widgets": "^9.2.6",
+    "@luma.gl/constants": "^9.2.6",
+    "@luma.gl/core": "^9.2.6",
+    "@luma.gl/shadertools": "^9.2.6",
     "@reduxjs/toolkit": "^2.11.2",
-    "@types/maplibre-gl": "^1.14.0",
     "@types/redux-persist": "^4.3.1",
+    "deck.gl": "^9.2.6",
     "maplibre-gl": "^5.16.0",
     "prop-types": "^15.8.1",
     "react": "^19.2.0",

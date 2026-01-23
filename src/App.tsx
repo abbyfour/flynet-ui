@@ -5,19 +5,26 @@ import { StatusBar } from "./lib/desktop/statusBar/StatusBar";
 import { ThemeToggle } from "./lib/desktop/themeToggle/ProjectionToggle";
 import { LoginWindow } from "./lib/desktop/windows/login/LoginWindow";
 import { SidepanelWindow } from "./lib/desktop/windows/SidepanelWindow";
-import { BaseMap } from "./lib/map/BaseMap";
 import { ProjectionToggle } from "./lib/map/controls/ProjectionToggle";
+import { Map } from "./lib/map/Map";
 
 function App() {
   return (
     <>
+      {/* Desktop UI */}
       <StatusBar />
+      <Dock />
+
+      {/* Windows */}
       <LoginWindow />
       <SidepanelWindow />
-      <Dock />
+
+      {/* Map controls */}
       <ProjectionToggle />
       <ThemeToggle />
-      <BaseMap />;
+
+      {/* Renders both base map and data layers */}
+      <Map />
     </>
   );
 }
