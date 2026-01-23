@@ -1,8 +1,8 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import type {
   ExtendedUserProperties,
-  TokenResponse,
   UserProperties,
+  UserWithToken,
 } from "../classes/user";
 import { baseFlynetQuery } from "./client";
 
@@ -19,11 +19,11 @@ export const usersApi = createApi({
     }),
 
     login: build.mutation<
-      TokenResponse,
+      UserWithToken<ExtendedUserProperties>,
       { username: string; password: string }
     >({
       query: (credentials) => ({
-        url: "token",
+        url: "auth/login",
         method: "POST",
         body: new URLSearchParams(credentials),
         headers: {
@@ -31,18 +31,7 @@ export const usersApi = createApi({
         },
       }),
     }),
-
-    me: build.query<ExtendedUserProperties, { token: string }>({
-      query: ({ token }) => ({
-        url: `user/me`,
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }),
-    }),
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation, useLazyMeQuery } =
-  usersApi;
+export const { useRegisterMutation, useLoginMutation } = usersApi;
