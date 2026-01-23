@@ -3,16 +3,14 @@ import type { Flight } from "../../../data/classes/flights";
 import { AppTheme, MapProjection } from "../../../data/classes/ui";
 import { useAppSelector } from "../../../data/store";
 import { getAirportCoordinates } from "../../../util/mapUtil";
+import { useColours } from "../style/useColours";
 import { flights } from "./flights";
 
 export function FlightsLayer() {
   const projection = useAppSelector((state) => state.ui.mapProjection);
   const theme = useAppSelector((state) => state.ui.theme);
 
-  const colour: [number, number, number] =
-    theme === AppTheme.Dark ? [255, 200, 0] : [211, 47, 0];
-  const highlightColour: [number, number, number] =
-    theme === AppTheme.Dark ? [255, 255, 255] : [0, 0, 0];
+  const { flightLineColour, flightLineHighlightColour } = useColours();
 
   return new ArcLayer<Flight>({
     id: "flights-layer",
@@ -23,7 +21,7 @@ export function FlightsLayer() {
     data: flights,
     pickable: true,
     autoHighlight: true,
-    highlightColor: highlightColour,
+    highlightColor: flightLineHighlightColour,
 
     // Accessors
     getSourcePosition: (d: Flight) => getAirportCoordinates(d.originAirport),
@@ -31,9 +29,9 @@ export function FlightsLayer() {
       getAirportCoordinates(d.destinationAirport),
 
     // Styles
-    getWidth: theme === AppTheme.Dark ? 1.5 : 1.5, // wider lines for easier interaction
+    getWidth: theme === AppTheme.Dark ? 1.5 : 1.5,
 
-    getSourceColor: () => colour,
-    getTargetColor: () => colour,
+    getSourceColor: () => flightLineColour,
+    getTargetColor: () => flightLineColour,
   } as any);
 }
