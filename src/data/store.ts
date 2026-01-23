@@ -6,6 +6,7 @@ import {
   type TypedUseSelectorHook,
 } from "react-redux";
 import { persistReducer, persistStore } from "redux-persist";
+import { flightsApi } from "./services/flightsAPI";
 import { usersApi } from "./services/usersAPI";
 import { uiPersistConfig, uiReducer } from "./uiSlice";
 import { userPersistConfig, userReducer } from "./userSlice";
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   user: persistReducer(userPersistConfig, userReducer),
 
   [usersApi.reducerPath]: usersApi.reducer,
+  [flightsApi.reducerPath]: flightsApi.reducer,
 });
 
 export const store = configureStore({
@@ -23,7 +25,9 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false, // redux-persist needs this
-    }).concat(usersApi.middleware),
+    })
+      .concat(usersApi.middleware)
+      .concat(flightsApi.middleware),
 });
 
 setupListeners(store.dispatch);
