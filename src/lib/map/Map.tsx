@@ -13,6 +13,7 @@ export function Map() {
   return (
     <BaseMap
       mapStyle={`https://api.maptiler.com/maps/${mapTilerStyle}/style.json?key=${maptilerKey}`}
+      mapOptions={{ antialias: true }}
       projection={projection}
     >
       <DataLayers />
