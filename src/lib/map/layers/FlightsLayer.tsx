@@ -26,13 +26,14 @@ export function FlightsLayer() {
     highlightColor: highlightColour,
 
     // Accessors
-    getSourcePosition: (d) => getAirportCoordinates(d.originAirport),
-    getTargetPosition: (d) => getAirportCoordinates(d.destinationAirport),
+    getSourcePosition: (d: Flight) => getAirportCoordinates(d.originAirport),
+    getTargetPosition: (d: Flight) =>
+      getAirportCoordinates(d.destinationAirport),
 
     // Styles
     getWidth: theme === AppTheme.Dark ? 1.5 : 1.5, // wider lines for easier interaction
 
     getSourceColor: () => colour,
     getTargetColor: () => colour,
-  });
+  } as any);
 }
