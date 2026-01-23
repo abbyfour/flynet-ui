@@ -1,4 +1,3 @@
-import Toggle from "react-toggle";
 import { AppTheme } from "../../../data/classes/ui";
 import { useAppDispatch, useAppSelector } from "../../../data/store";
 import { setTheme } from "../../../data/uiSlice";
@@ -10,14 +9,17 @@ export function ThemeToggle() {
 
   return (
     <div className="ThemeToggle">
-      <Toggle
+      <input
+        type="checkbox"
         id="theme-toggle"
-        icons={false}
         checked={theme === "dark"}
         onChange={(e) =>
           dispatch(setTheme(e.target.checked ? AppTheme.Dark : AppTheme.Light))
         }
       />
+      <label htmlFor="theme-toggle" className="toggle-label">
+        dark mode
+      </label>
     </div>
   );
 }

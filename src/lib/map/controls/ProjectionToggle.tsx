@@ -1,4 +1,3 @@
-import Toggle from "react-toggle";
 import { MapProjection } from "../../../data/classes/ui";
 import { useAppDispatch, useAppSelector } from "../../../data/store";
 import { setMapProjection } from "../../../data/uiSlice";
@@ -10,9 +9,9 @@ export function ProjectionToggle() {
 
   return (
     <div className="ProjectionToggle">
-      <Toggle
+      <input
+        type="checkbox"
         id="projection-toggle"
-        icons={false}
         checked={projection === MapProjection.Globe}
         onChange={(e) =>
           dispatch(
@@ -22,6 +21,9 @@ export function ProjectionToggle() {
           )
         }
       />
+      <label htmlFor="projection-toggle" className="toggle-label">
+        globe view
+      </label>
     </div>
   );
 }
