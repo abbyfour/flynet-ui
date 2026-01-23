@@ -1,8 +1,7 @@
 import { type DeckProps } from "@deck.gl/core";
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import { useControl } from "react-map-gl/maplibre";
-import { useAppSelector } from "../../data/store";
-import { TestLayer } from "./layers/FlightsLayer";
+import { FlightsLayer } from "./layers/FlightsLayer";
 
 // Taken straight from documention
 function DeckGLOverlay(props: DeckProps) {
@@ -23,14 +22,5 @@ function DeckGLOverlay(props: DeckProps) {
 }
 
 export function DataLayers() {
-  const projection = useAppSelector((state) => state.ui.mapProjection);
-  const theme = useAppSelector((state) => state.ui.theme);
-
-  // Key the overlay to projection/theme so it remounts and re-attaches
-  // if the map recreates its canvas or style during projection/theme changes.
-  const key = `${projection}-${theme}-${
-    typeof window !== "undefined" ? window.devicePixelRatio : 1
-  }`;
-
-  return <DeckGLOverlay key={key} layers={[TestLayer()]} />;
+  return <DeckGLOverlay layers={[FlightsLayer()]} />;
 }
