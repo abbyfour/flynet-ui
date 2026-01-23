@@ -8,12 +8,12 @@ export function FlightsLayer() {
   const theme = useAppSelector((state) => state.ui.theme);
 
   const colour: [number, number, number] =
-    theme === AppTheme.Dark ? [255, 200, 0] : [227, 176, 23];
+    theme === AppTheme.Dark ? [255, 200, 0] : [211, 47, 0];
 
   return new ArcLayer({
     id: "flights-layer",
     greatCircle: true,
-    getHeight: 0.1,
+    getHeight: 0.05,
     beforeId:
       projection === MapProjection.Mercator ? "Place labels" : undefined,
     data: flights,
@@ -23,7 +23,7 @@ export function FlightsLayer() {
     getTargetPosition: (d) => d.target,
 
     // Styles
-    getWidth: 3,
+    getWidth: theme === AppTheme.Dark ? 0.5 : 1,
     widthScale: 1,
 
     getSourceColor: () => colour,

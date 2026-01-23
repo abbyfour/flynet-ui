@@ -1,6 +1,7 @@
 import { type DeckProps } from "@deck.gl/core";
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import { useControl } from "react-map-gl/maplibre";
+import { AirportsLayer } from "./layers/AirportsLayer";
 import { FlightsLayer } from "./layers/FlightsLayer";
 
 // Taken straight from documention
@@ -22,5 +23,5 @@ function DeckGLOverlay(props: DeckProps) {
 }
 
 export function DataLayers() {
-  return <DeckGLOverlay layers={[FlightsLayer()]} />;
+  return <DeckGLOverlay layers={[FlightsLayer(), AirportsLayer()]} />;
 }
