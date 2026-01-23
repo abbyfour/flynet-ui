@@ -10,6 +10,7 @@ export function AirportsLayer() {
   return new ScatterplotLayer<Airport>({
     id: "airports-layer",
     data: airports,
+    pickable: true,
 
     // Accessors
     getPosition: (d) => [parseFloat(d.lon), parseFloat(d.lat), 1000], // lift slightly above terrain/tiles to avoid z-fighting
