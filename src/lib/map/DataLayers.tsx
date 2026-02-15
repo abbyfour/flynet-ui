@@ -2,9 +2,17 @@ import { type DeckProps, type PickingInfo } from "@deck.gl/core";
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import { useCallback } from "react";
 import { useControl } from "react-map-gl/maplibre";
-import type { Airport, Flight } from "../../data/classes/flights";
+import { useGetFlightsQuery } from "../../data/services/flights/flightsAPI";
+import {
+  selectAirportsFromFlights,
+  selectRoutesFromFlights,
+  type GroupedAirport,
+  type GroupedRoute,
+} from "../../data/services/flights/selectFlights";
+import { useAppSelector } from "../../data/store";
 import { AirportsLayer } from "./layers/AirportsLayer";
-import { FlightsLayer } from "./layers/FlightsLayer";
+import { RoutesLayer } from "./layers/RoutesLayer";
+import { MapTooltip } from "./MapTooltip";
 
 // Taken straight from documention
 function DeckGLOverlay(props: DeckProps) {
@@ -25,22 +33,26 @@ function DeckGLOverlay(props: DeckProps) {
 }
 
 export function DataLayers() {
+  const { isLoading: flightsLoading, isError: flightsErrored } =
+    useGetFlightsQuery();
+
+  const routes = useAppSelector(selectRoutesFromFlights);
+  const airports = useAppSelector(selectAirportsFromFlights);
+
+  const flightsReady = !flightsLoading && !flightsErrored;
+
   const getTooltip = useCallback(
-    ({ object }: PickingInfo<Airport | Flight>) => {
-      if (object && "airportName" in object) {
-        return `${object.airportName} (${object.iataCode})`;
-      }
-      if (object && "flightNumber" in object) {
-        return `Flight ${object.flightNumber}: ${object.originAirport.iataCode} → ${object.destinationAirport.iataCode}`;
-      }
-      return null;
-    },
+    ({ object }: PickingInfo<GroupedAirport | GroupedRoute>) =>
+      MapTooltip(object),
     [],
   );
 
   return (
     <DeckGLOverlay
-      layers={[AirportsLayer(), FlightsLayer()]}
+      layers={[
+        AirportsLayer({ airports: flightsReady ? airports : [] }),
+        RoutesLayer({ routes: flightsReady ? routes : [] }),
+      ]}
       getTooltip={getTooltip}
     />
   );
