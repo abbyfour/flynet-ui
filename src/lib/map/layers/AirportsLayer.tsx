@@ -1,26 +1,28 @@
 import { ScatterplotLayer } from "deck.gl";
-import type { Airport } from "../../../data/classes/flights";
-import { AppTheme } from "../../../data/classes/ui";
-import { useAppSelector } from "../../../data/store";
-import { airports } from "./airports";
+import type { GroupedAirport } from "../../../data/services/flights/selectFlights";
+import { useColours } from "../style/useColours";
 
-export function AirportsLayer() {
-  const theme = useAppSelector((state) => state.ui.theme);
+type AirportsLayerProps = {
+  airports: GroupedAirport[];
+};
 
-  return new ScatterplotLayer<Airport>({
+export function AirportsLayer({ airports }: AirportsLayerProps) {
+  const { airportDotColour } = useColours();
+
+  return new ScatterplotLayer<GroupedAirport>({
     id: "airports-layer",
     data: airports,
     pickable: true,
 
     // Accessors
-    getPosition: (d) => [parseFloat(d.lon), parseFloat(d.lat), 1000], // lift slightly above terrain/tiles to avoid z-fighting
+    getPosition: (d: GroupedAirport) => [...d.airport.coords, 1000], // lift slightly above terrain/tiles to avoid z-fighting
 
     // Styles
     getRadius: 1500,
     radiusScale: 1,
-    radiusMinPixels: 2, // keep visible when zoomed out
+    radiusMinPixels: 2.5, // keep visible when zoomed out
     radiusMaxPixels: 12, // prevent oversized circles when zoomed in
 
-    getFillColor: theme === AppTheme.Dark ? [255, 255, 255] : [0, 0, 0],
+    getFillColor: airportDotColour,
   });
 }

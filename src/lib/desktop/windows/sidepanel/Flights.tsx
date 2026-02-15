@@ -1,4 +1,4 @@
-import { useGetFlightsQuery } from "../../../../data/services/flightsAPI";
+import { useGetFlightsQuery } from "../../../../data/services/flights/flightsAPI";
 import { useAppSelector } from "../../../../data/store";
 
 export function Flights() {
