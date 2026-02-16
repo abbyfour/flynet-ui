@@ -16,8 +16,13 @@ const selectFlights = createSelector(
   (result) => result?.data?.items,
 );
 
-const selectFlightsAsObjects = createSelector(selectFlights, (flights) =>
-  flights ? flights.map((flight) => new Flight(flight)) : [],
+/**
+ * Selects flights from the Redux store and transforms them into instances of the Flight class. If there are no flights, it returns an empty array.
+ */
+export const selectFlightsAsObjects = createSelector(selectFlights, (flights) =>
+  (flights ? flights.map((flight) => new Flight(flight)) : []).sort(
+    (a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0),
+  ),
 );
 
 /**

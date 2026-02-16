@@ -8,6 +8,9 @@ export interface UIState {
   activeSidepanelWindow?: SidepanelWindows;
   theme: AppTheme;
   mapPosition?: Coordinates;
+
+  highlightedAirportId?: number;
+  highlightedRouteKey?: string;
 }
 
 const initialState: UIState = {
@@ -15,6 +18,8 @@ const initialState: UIState = {
   activeSidepanelWindow: undefined,
   theme: AppTheme.Light,
   mapPosition: undefined,
+  highlightedAirportId: undefined,
+  highlightedRouteKey: undefined,
 };
 
 export const uiPersistConfig = {
@@ -49,6 +54,25 @@ const uiSlice = createSlice({
     recordMapPosition(state: UIState, action: PayloadAction<Coordinates>) {
       state.mapPosition = action.payload;
     },
+
+    recordHighlightedAirport(
+      state: UIState,
+      action: PayloadAction<number | undefined>,
+    ) {
+      state.highlightedAirportId = action.payload;
+    },
+
+    recordHighlightedRoute(
+      state: UIState,
+      action: PayloadAction<string | undefined>,
+    ) {
+      state.highlightedRouteKey = action.payload;
+    },
+
+    clearHighlights(state: UIState) {
+      state.highlightedAirportId = undefined;
+      state.highlightedRouteKey = undefined;
+    },
   },
 });
 
@@ -58,5 +82,9 @@ export const {
   closeActiveSidepanelWindow,
   setTheme,
   recordMapPosition,
+  recordHighlightedAirport,
+  recordHighlightedRoute,
+  clearHighlights,
 } = uiSlice.actions;
+
 export const uiReducer = uiSlice.reducer;

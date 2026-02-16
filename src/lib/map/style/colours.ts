@@ -1,4 +1,5 @@
 export type RGB = [number, number, number];
+export type RGBA = [number, number, number, number];
 
 export const colours = {
   yellow: [255, 200, 0],

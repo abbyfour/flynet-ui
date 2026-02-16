@@ -1,0 +1,38 @@
+.Flights {
+  width: max-content;
+  max-width: 20vw;
+}
+
+.FlightPill {
+  padding: 0.8em;
+  cursor: pointer;
+  border-top: 1px solid darkgray;
+
+  &.highlighted {
+    .middle {
+      // give the text a highlighter effect by adding a bright background color with some transparency
+      background-color: rgba(255, 200, 0, 0.5);
+    }
+  }
+
+  .header,
+  .footer {
+    font-size: 12px;
+    color: gray;
+  }
+
+  .header,
+  .middle {
+    margin-bottom: 5px;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+
+    .left {
+      display: flex;
+      gap: 0.8em;
+    }
+  }
+}
