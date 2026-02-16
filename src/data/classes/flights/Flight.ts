@@ -87,12 +87,12 @@ export class Flight {
 
 export class Plane {
   constructor(
-    public model: string,
-    public registration: string,
+    public model?: string,
+    public registration?: string,
   ) {}
 
   public static fromRawFlight(rawFlight: APIFlight): Plane | undefined {
-    if (!rawFlight.planeModel || !rawFlight.planeRegistration) {
+    if (!rawFlight.planeModel && !rawFlight.planeRegistration) {
       return undefined;
     }
 

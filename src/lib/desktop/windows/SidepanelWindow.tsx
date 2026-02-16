@@ -2,7 +2,7 @@ import { SidepanelWindows } from "../../../data/classes/ui";
 import { useAppDispatch, useAppSelector } from "../../../data/store";
 import { closeActiveSidepanelWindow } from "../../../data/uiSlice";
 import { SidepanelContainer } from "../SidepanelContainer";
-import { Flights } from "./sidepanel/Flights";
+import { Flights } from "./sidepanel/flights/Flights";
 import { Friends } from "./sidepanel/Friends";
 import { Profile } from "./sidepanel/Profile";
 import { Settings } from "./sidepanel/Settings";
