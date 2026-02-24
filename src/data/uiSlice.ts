@@ -11,6 +11,8 @@ export interface UIState {
 
   highlightedAirportId?: number;
   highlightedRouteKey?: string;
+
+  selectedFlightId?: number;
 }
 
 const initialState: UIState = {
@@ -20,6 +22,7 @@ const initialState: UIState = {
   mapPosition: undefined,
   highlightedAirportId: undefined,
   highlightedRouteKey: undefined,
+  selectedFlightId: undefined,
 };
 
 export const uiPersistConfig = {
@@ -55,6 +58,7 @@ const uiSlice = createSlice({
       state.mapPosition = action.payload;
     },
 
+    // Highlighted map elements
     recordHighlightedAirport(
       state: UIState,
       action: PayloadAction<number | undefined>,
@@ -73,18 +77,35 @@ const uiSlice = createSlice({
       state.highlightedAirportId = undefined;
       state.highlightedRouteKey = undefined;
     },
+
+    // Selected entities
+    setSelectedFlight(
+      state: UIState,
+      action: PayloadAction<number | undefined>,
+    ) {
+      state.selectedFlightId = action.payload;
+    },
+
+    clearSelectedFlight(state: UIState) {
+      state.selectedFlightId = undefined;
+    },
   },
 });
 
 export const {
-  setMapProjection,
   setActiveSidepanelWindow,
   closeActiveSidepanelWindow,
+
   setTheme,
+  setMapProjection,
   recordMapPosition,
+
   recordHighlightedAirport,
   recordHighlightedRoute,
   clearHighlights,
+
+  setSelectedFlight,
+  clearSelectedFlight,
 } = uiSlice.actions;
 
 export const uiReducer = uiSlice.reducer;

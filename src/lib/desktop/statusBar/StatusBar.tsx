@@ -12,7 +12,7 @@ export function StatusBar() {
   }, []);
 
   return (
-    <div className="StatusBar">
+    <div className="StatusBar text-small">
       <p className="logo">FlyNet</p>
 
       {currentUser && (

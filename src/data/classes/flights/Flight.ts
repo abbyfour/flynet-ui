@@ -40,12 +40,14 @@ export class Flight {
   public readonly origin: Airport;
   public readonly destination: Airport;
   public readonly route: Route;
+  public readonly airline: Airline | undefined;
 
   constructor(private raw: APIFlight) {
     this.plane = Plane.fromRawFlight(raw);
     this.origin = new Airport(raw.originAirport);
     this.destination = new Airport(raw.destinationAirport);
     this.route = new Route(this.origin, this.destination);
+    this.airline = raw.airline ? new Airline(raw.airline) : undefined;
   }
 
   get id(): number {
@@ -54,9 +56,7 @@ export class Flight {
   get flightNumber(): string | undefined {
     return this.raw.flightNumber;
   }
-  get airline(): string | undefined {
-    return this.raw.airline;
-  }
+
   get date(): Date | undefined {
     return this.raw.date;
   }
@@ -107,16 +107,13 @@ export class Route {
   ) {}
 
   /**
-   * A human-readable label for this route, e.g. "YVR - FRA"
-   */
-  get label(): string {
-    return `${this.origin.displayCode} - ${this.destination.displayCode}`;
-  }
-
-  /**
    * A unique key for this route, regardless of direction (e.g. YVR-FRA and FRA-YVR would have the same key)
    */
   get key(): string {
     return [this.origin.id, this.destination.id].sort().join("-");
   }
+}
+
+export class Airline {
+  constructor(public name: string) {}
 }

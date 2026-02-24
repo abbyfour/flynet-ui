@@ -14,7 +14,6 @@ export function MapTooltip(
   }
 
   if (object && "route" in object) {
-    console.log(object.flights);
     return `${displayRouteName(object.route)}\n${displayFlightsOnRoute(object.flights)}`;
   }
 

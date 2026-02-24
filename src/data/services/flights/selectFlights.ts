@@ -6,6 +6,7 @@ import { flightsApi } from "./flightsAPI";
 export type GroupedFlightDetails = {
   id: number;
   flightNumber?: string;
+  flightId?: number;
   route: Route;
 };
 
@@ -104,4 +105,13 @@ export const selectAirportsFromFlights = createSelector(
 
     return Array.from(airportsById.values());
   },
+);
+
+/**
+ * Selects the currently selected flight object from the Redux store.
+ */
+export const selectSelectedFlight = createSelector(
+  [selectFlightsAsObjects, (state) => state.ui.selectedFlightId],
+  (flights, selectedFlightId) =>
+    flights.find((flight) => flight.id === selectedFlightId) || null,
 );
