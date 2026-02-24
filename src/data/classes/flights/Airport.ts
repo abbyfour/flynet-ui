@@ -10,11 +10,13 @@ export interface APIAirport {
   continent: string;
   isoCountry: string;
   isoRegion: string;
+  city: string;
+
   airportType: AirportType;
   id: number;
 }
 
-type AirportType = string;
+export type AirportType = "large_airport" | "medium_airport" | "small_airport";
 
 export class Airport {
   constructor(private raw: APIAirport) {}
@@ -37,6 +39,10 @@ export class Airport {
 
   get isoRegion(): string {
     return this.raw.isoRegion;
+  }
+
+  get city(): string {
+    return this.raw.city;
   }
 
   get type(): AirportType {

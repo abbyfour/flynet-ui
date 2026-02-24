@@ -1,12 +1,17 @@
 import type { Flight } from "../../../../../data/classes/flights/Flight";
 import { useGetFlightsQuery } from "../../../../../data/services/flights/flightsAPI";
-import { selectFlightsAsObjects } from "../../../../../data/services/flights/selectFlights";
+import {
+  selectFlightsAsObjects,
+  selectSelectedFlight,
+} from "../../../../../data/services/flights/selectFlights";
 import { useAppSelector } from "../../../../../data/store";
 import { FlightPill } from "./FlightPill";
 import "./Flights.scss";
+import { FlightView } from "./FlightView";
 
 export function Flights() {
   const currentUser = useAppSelector((state) => state.user.currentUser);
+  const selectedFlight = useAppSelector(selectSelectedFlight);
   const { isLoading: flightsLoading, isError: flightsErrored } =
     useGetFlightsQuery();
 
@@ -35,18 +40,24 @@ export function Flights() {
 
   return (
     <div className="Flights">
-      <h1 className="title">Flights</h1>
+      <h3 className="title">Flights</h3>
 
       {!flightsReady ? <p>Loading flights...</p> : <></>}
 
-      {flights && flights.length ? (
+      {flightsReady && selectedFlight ? (
+        <FlightView flight={selectedFlight} />
+      ) : (
+        <></>
+      )}
+
+      {!selectedFlight && flights && flights.length ? (
         <ul>
           {flights.map((flight) => (
             <FlightPill flight={flight} highlighted={isHighlighted(flight)} />
           ))}
         </ul>
       ) : (
-        <p>No flights found.</p>
+        <></>
       )}
     </div>
   );
