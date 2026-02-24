@@ -42,7 +42,7 @@ export class Airport {
   }
 
   get city(): string {
-    return this.raw.city;
+    return this.raw.city || "Unknown";
   }
 
   get type(): AirportType {

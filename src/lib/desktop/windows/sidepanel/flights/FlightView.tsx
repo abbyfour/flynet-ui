@@ -76,6 +76,13 @@ export function FlightView({ flight }: FlightViewProps) {
             {AirportDetails({ airport: flight.destination })}
           </div>
         </div>
+
+        {flight.note && (
+          <div className="notes">
+            <h5>Notes:</h5>
+            {flight.note}
+          </div>
+        )}
       </div>
     </div>
   );

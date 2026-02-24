@@ -6,7 +6,7 @@ export interface APIFlight {
   id: number;
   flightNumber?: string;
   airline?: string;
-  date?: Date;
+  date?: string;
 
   departureTime?: string;
   arrivalTime?: string;
@@ -58,7 +58,7 @@ export class Flight {
   }
 
   get date(): Date | undefined {
-    return this.raw.date;
+    return this.raw.date ? new Date(this.raw.date) : undefined;
   }
 
   get departureTime(): string | undefined {

@@ -30,7 +30,7 @@ export function FlightPill({ flight, highlighted }: FlightPillProps) {
               <span className="flight-number">{flight.flightNumber}</span>
             )}
             <span className="route">
-              {flight.origin.displayCode} → {flight.destination.displayCode}
+              {flight.origin.displayCode} -&gt; {flight.destination.displayCode}
             </span>
           </div>
 

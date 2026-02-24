@@ -45,10 +45,11 @@
   .header {
     display: flex;
     justify-content: space-between;
+    gap: 0.5em;
 
     .left {
       display: flex;
-      gap: 0.8em;
+      gap: 0.5em;
     }
   }
 }

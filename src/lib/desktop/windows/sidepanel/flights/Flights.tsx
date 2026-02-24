@@ -53,7 +53,11 @@ export function Flights() {
       {!selectedFlight && flights && flights.length ? (
         <ul>
           {flights.map((flight) => (
-            <FlightPill flight={flight} highlighted={isHighlighted(flight)} />
+            <FlightPill
+              key={flight.id}
+              flight={flight}
+              highlighted={isHighlighted(flight)}
+            />
           ))}
         </ul>
       ) : (
