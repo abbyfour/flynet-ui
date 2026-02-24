@@ -114,7 +114,8 @@ function AirportCodePill({ airport }: { airport: Airport }) {
     <div className="AirportCodePill">
       {airport.displayCode}
       <span className="tooltip">
-        IATA: {airport.iataCode || "N/A"}, ICAO: {airport.icaoCode || "N/A"}
+        IATA: {airport.iataCode || "N/A"} | ICAO: {airport.icaoCode || "N/A"} |
+        Local: {airport.localCode || "N/A"}
       </span>
     </div>
   );
@@ -128,6 +129,8 @@ function displayAirportType(type: AirportType) {
       return "Medium Airport";
     case "small_airport":
       return "Small Airport";
+    case "seaplane_base":
+      return "Seaplane Base";
     default:
       return type;
   }

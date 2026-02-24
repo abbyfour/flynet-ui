@@ -3,6 +3,7 @@ export interface APIAirport {
 
   icaoCode?: string;
   iataCode?: string;
+  localCode?: string;
 
   lat: string;
   lon: string;
@@ -16,7 +17,11 @@ export interface APIAirport {
   id: number;
 }
 
-export type AirportType = "large_airport" | "medium_airport" | "small_airport";
+export type AirportType =
+  | "large_airport"
+  | "medium_airport"
+  | "small_airport"
+  | "seaplane_base";
 
 export class Airport {
   constructor(private raw: APIAirport) {}
@@ -62,7 +67,11 @@ export class Airport {
     return this.raw.iataCode;
   }
 
+  get localCode(): string | undefined {
+    return this.raw.localCode === "null" ? undefined : this.raw.localCode;
+  }
+
   get displayCode(): string {
-    return this.iataCode ?? this.icaoCode ?? "000";
+    return this.iataCode ?? this.icaoCode ?? this.raw.localCode ?? "???";
   }
 }
