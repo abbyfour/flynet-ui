@@ -4,16 +4,20 @@ import {
   selectFlightsAsObjects,
   selectSelectedFlight,
 } from "../../../../../data/services/flights/selectFlights";
-import { useAppSelector } from "../../../../../data/store";
+import { useAppDispatch, useAppSelector } from "../../../../../data/store";
+import { openNewFlightForm } from "../../../../../data/uiSlice";
 import { FlightPill } from "./FlightPill";
 import "./Flights.scss";
 import { FlightView } from "./FlightView";
+import { AddFlight } from "./AddFlight/AddFlight";
 
 export function Flights() {
   const currentUser = useAppSelector((state) => state.user.currentUser);
   const selectedFlight = useAppSelector(selectSelectedFlight);
   const { isLoading: flightsLoading, isError: flightsErrored } =
     useGetFlightsQuery();
+  const newFlight = useAppSelector((state) => state.ui.newFlight);
+  const dispatch = useAppDispatch();
 
   const flightsReady = !flightsLoading && !flightsErrored;
 
@@ -30,6 +34,9 @@ export function Flights() {
     highlightedAirportId === flight.route.origin.id ||
     highlightedAirportId === flight.route.destination.id;
 
+  const shouldDisplayFlights =
+    flightsReady && !selectedFlight && !newFlight && flights && flights.length;
+
   if (!currentUser) {
     return (
       <div>
@@ -40,17 +47,21 @@ export function Flights() {
 
   return (
     <div className="Flights">
-      <h3 className="title">Flights</h3>
+      <h3 className="title">
+        Flights <button onClick={() => dispatch(openNewFlightForm())}>+</button>
+      </h3>
 
       {!flightsReady ? <p>Loading flights...</p> : <></>}
 
-      {flightsReady && selectedFlight ? (
+      {flightsReady && selectedFlight && !newFlight ? (
         <FlightView flight={selectedFlight} />
       ) : (
         <></>
       )}
 
-      {!selectedFlight && flights && flights.length ? (
+      {newFlight ? <AddFlight /> : <></>}
+
+      {shouldDisplayFlights ? (
         <ul>
           {flights.map((flight) => (
             <FlightPill

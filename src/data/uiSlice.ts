@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import type { Coordinates } from "../util/mapUtil";
+import type { NewFlightProperties } from "./classes/flights/NewFlightProperties";
 import { AppTheme, MapProjection, type SidepanelWindows } from "./classes/ui";
 
 export interface UIState {
@@ -13,6 +14,7 @@ export interface UIState {
   highlightedRouteKey?: string;
 
   selectedFlightId?: number;
+  newFlight?: NewFlightProperties;
 }
 
 const initialState: UIState = {
@@ -89,6 +91,21 @@ const uiSlice = createSlice({
     clearSelectedFlight(state: UIState) {
       state.selectedFlightId = undefined;
     },
+
+    openNewFlightForm(state: UIState) {
+      state.newFlight = {};
+    },
+
+    setNewFlight(
+      state: UIState,
+      action: PayloadAction<NewFlightProperties | undefined>,
+    ) {
+      state.newFlight = action.payload;
+    },
+
+    clearNewFlight(state: UIState) {
+      state.newFlight = undefined;
+    },
   },
 });
 
@@ -106,6 +123,10 @@ export const {
 
   setSelectedFlight,
   clearSelectedFlight,
+
+  openNewFlightForm,
+  setNewFlight,
+  clearNewFlight,
 } = uiSlice.actions;
 
 export const uiReducer = uiSlice.reducer;

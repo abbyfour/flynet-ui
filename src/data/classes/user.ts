@@ -1,5 +1,5 @@
 export interface UserProperties {
-  id: string;
+  id: number;
   username: string;
   nickname: string;
 }

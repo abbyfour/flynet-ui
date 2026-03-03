@@ -1,5 +1,5 @@
 import { ArcLayer } from "deck.gl";
-import type { Route } from "../../../data/classes/flights/Flight";
+import type { Route } from "../../../data/classes/flights/Route";
 import { AppTheme, MapProjection } from "../../../data/classes/ui";
 import type { GroupedRoute } from "../../../data/services/flights/selectFlights";
 import { useAppSelector } from "../../../data/store";

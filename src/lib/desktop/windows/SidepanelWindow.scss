@@ -2,6 +2,9 @@
   padding: 0.5em;
   overflow: scroll;
   max-height: 85vh;
+  width: max-content;
+  max-width: 20vw;
+  min-width: 15vw;
 
   h1 {
     margin-top: 0.2em;
