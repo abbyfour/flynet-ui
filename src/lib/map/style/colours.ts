@@ -18,6 +18,8 @@ export type ThemedColourKey = {
 };
 
 export const colourRoles = {
+  primaryText: { light: "black", dark: "white" },
+
   flightLine: { light: "red", dark: "yellow" },
   flightLineHighlight: { light: "darkRed", dark: "white" },
   airportDot: { light: "black", dark: "white" },

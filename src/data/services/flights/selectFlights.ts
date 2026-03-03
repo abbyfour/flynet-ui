@@ -8,7 +8,6 @@ import { flightsApi } from "./flightsAPI";
 export type GroupedFlightDetails = {
   id: number;
   flightNumber?: string;
-  flightId?: number;
   route: Route;
 };
 

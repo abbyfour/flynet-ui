@@ -44,6 +44,7 @@ export function DataLayers() {
 
   const routes = useAppSelector(selectRoutesFromFlights);
   const airports = useAppSelector(selectAirportsFromFlights);
+  const selectedFlightId = useAppSelector((state) => state.ui.selectedFlightId);
 
   const flightsReady = !flightsLoading && !flightsErrored;
 
@@ -70,7 +71,7 @@ export function DataLayers() {
     <DeckGLOverlay
       layers={[
         AirportsLayer({ airports: flightsReady ? airports : [] }),
-        RoutesLayer({ routes: flightsReady ? routes : [] }),
+        RoutesLayer({ routes: flightsReady ? routes : [], selectedFlightId }),
       ]}
       getTooltip={getTooltip}
       onHover={onHover}

@@ -35,7 +35,10 @@ export function FlightView({ flight }: FlightViewProps) {
         {flight.date && (
           <div className="date">
             <h5>Date:</h5>
-            {flight.date.toLocaleDateString()}
+            {flight.date.toLocaleDateString()}{" "}
+            {flight.arrivalTime && flight.departureTime
+              ? `• ${flight.departureTime} -> ${flight.arrivalTime}`
+              : ""}
           </div>
         )}
 

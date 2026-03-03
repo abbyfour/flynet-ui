@@ -6,10 +6,10 @@ import {
 } from "../../../../../data/services/flights/selectFlights";
 import { useAppDispatch, useAppSelector } from "../../../../../data/store";
 import { openNewFlightForm } from "../../../../../data/uiSlice";
+import { AddFlight } from "./AddFlight/AddFlight";
 import { FlightPill } from "./FlightPill";
 import "./Flights.scss";
 import { FlightView } from "./FlightView";
-import { AddFlight } from "./AddFlight/AddFlight";
 
 export function Flights() {
   const currentUser = useAppSelector((state) => state.user.currentUser);
