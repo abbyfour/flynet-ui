@@ -43,7 +43,7 @@ export class Airport {
   }
 
   get isoRegion(): string {
-    return this.raw.isoRegion;
+    return this.raw.isoRegion.split("-")[1] ?? this.raw.isoRegion;
   }
 
   get city(): string {

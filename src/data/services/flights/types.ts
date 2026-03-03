@@ -1,4 +1,4 @@
-import type { Time } from "../../../lib/forms/types";
+import type { Time } from "../../../util/types";
 
 export interface AddFlightRequestBody {
   flightNumber?: string;

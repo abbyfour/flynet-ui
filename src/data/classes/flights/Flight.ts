@@ -1,3 +1,4 @@
+import type { Time } from "../../../util/types";
 import type { GroupedFlightDetails } from "../../services/flights/selectFlights";
 import type { UserProperties } from "../user";
 import { Airline } from "./Airline";
@@ -11,8 +12,8 @@ export interface APIFlight {
   airline?: string;
   date?: string;
 
-  departureTime?: string;
-  arrivalTime?: string;
+  departureTime?: Time;
+  arrivalTime?: Time;
 
   planeModel?: string;
   planeRegistration?: string;
@@ -35,7 +36,7 @@ export interface APIFlight {
   /** @deprecated ID of the departure airport */
   originAirportId?: number;
   /** @deprecated ID of the arrival airport */
-  destinationAirportId: number;
+  destinationAirportId?: number;
 }
 
 export class Flight {
@@ -64,10 +65,10 @@ export class Flight {
     return this.raw.date ? new Date(this.raw.date) : undefined;
   }
 
-  get departureTime(): string | undefined {
+  get departureTime(): Time | undefined {
     return this.raw.departureTime;
   }
-  get arrivalTime(): string | undefined {
+  get arrivalTime(): Time | undefined {
     return this.raw.arrivalTime;
   }
 

@@ -1,4 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
+import { compareTimes } from "../../../util/types";
 import type { Airport } from "../../classes/flights/Airport";
 import { Flight } from "../../classes/flights/Flight";
 import { Route } from "../../classes/flights/Route";
@@ -118,6 +119,8 @@ export const selectSelectedFlight = createSelector(
 );
 
 function sortFlights(a: Flight, b: Flight) {
+  if (!a.date && !b.date) return 0;
+
   if (!a.date) return 1;
   if (!b.date) return -1;
 
@@ -128,12 +131,7 @@ function sortFlights(a: Flight, b: Flight) {
   if (dateA > dateB) return -1;
 
   // If dates are equal, compare departure times
-  if (a.departureTime === b.departureTime) return 0;
-  if (!a.departureTime) return 1;
-  if (!b.departureTime) return -1;
-
-  if (a.departureTime < b.departureTime) return 1;
-  if (a.departureTime > b.departureTime) return -1;
+  return (compareTimes(a.departureTime, b.departureTime) || 0) * -1; // Multiply by -1 to sort in descending order
 
   return 0;
 }

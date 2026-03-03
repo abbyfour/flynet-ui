@@ -15,8 +15,16 @@ export function AddFlight() {
 
   const [addFlight, { isLoading }] = useAddFlightMutation();
 
-  const handleSubmit = () => {
-    addFlight(newFlightToRequest(newFlightProperties));
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const result = await addFlight(newFlightToRequest(newFlightProperties));
+
+    if (result.error) {
+      console.error("Failed to add flight", result.error);
+      return;
+    }
+
     dispatch(clearNewFlight());
   };
 
@@ -133,7 +141,10 @@ export function AddFlight() {
           id="tailNumber"
           label="Tail Number"
           onChange={(value) =>
-            setNewFlightProperties((prev) => ({ ...prev, tailNumber: value }))
+            setNewFlightProperties((prev) => ({
+              ...prev,
+              planeRegistration: value,
+            }))
           }
         />
 

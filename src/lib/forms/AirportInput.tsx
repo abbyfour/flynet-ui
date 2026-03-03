@@ -48,7 +48,7 @@ export function AirportInput({
         <div className="airport-pill">
           <span className="code">{value.displayCode}</span>
           <span className="name">{value.name}</span>
-          <button onClick={handleClear} className="clear-button">
+          <button type="button" onClick={handleClear} className="clear-button">
             x
           </button>
         </div>
@@ -74,6 +74,7 @@ export function AirportInput({
       {data && !value && (
         <div className="airport-dropdown">
           <button
+            type="button"
             onClick={() => handleSelect(toProperties(data))}
             className="airport-option"
           >

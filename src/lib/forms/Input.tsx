@@ -1,5 +1,5 @@
+import { type Time } from "../../util/types";
 import "./Input.scss";
-import { type Time } from "./types";
 
 type InputType = "text" | "date" | "time" | "longtext";
 
@@ -68,7 +68,7 @@ function parseDate(value: string | undefined): Date | undefined {
 
   const date = new Date(value);
   if (isNaN(date.getTime())) {
-    throw new Error(`Invalid date value: ${value}`);
+    return undefined;
   }
 
   return date;
