@@ -1,4 +1,4 @@
-import type { Route } from "../../data/classes/flights/Flight";
+import type { Route } from "../../data/classes/flights/Route";
 import type {
   GroupedAirport,
   GroupedFlightDetails,

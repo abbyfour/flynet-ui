@@ -1,6 +1,10 @@
+import type { Time } from "../../../util/types";
 import type { GroupedFlightDetails } from "../../services/flights/selectFlights";
 import type { UserProperties } from "../user";
+import { Airline } from "./Airline";
 import { Airport, type APIAirport } from "./Airport";
+import { Plane } from "./Plane";
+import { Route } from "./Route";
 
 export interface APIFlight {
   id: number;
@@ -8,8 +12,8 @@ export interface APIFlight {
   airline?: string;
   date?: string;
 
-  departureTime?: string;
-  arrivalTime?: string;
+  departureTime?: Time;
+  arrivalTime?: Time;
 
   planeModel?: string;
   planeRegistration?: string;
@@ -25,14 +29,14 @@ export interface APIFlight {
 
   // Deprecated properties
   /** @deprecated Code of the departure airport */
-  departureAirport: string;
+  departureAirport?: string;
   /** @deprecated Code of the arrival airport */
-  arrivalAirport: string;
+  arrivalAirport?: string;
 
   /** @deprecated ID of the departure airport */
-  originAirportId: number;
+  originAirportId?: number;
   /** @deprecated ID of the arrival airport */
-  destinationAirportId: number;
+  destinationAirportId?: number;
 }
 
 export class Flight {
@@ -42,7 +46,7 @@ export class Flight {
   public readonly route: Route;
   public readonly airline: Airline | undefined;
 
-  constructor(private raw: APIFlight) {
+  constructor(protected raw: APIFlight) {
     this.plane = Plane.fromRawFlight(raw);
     this.origin = new Airport(raw.originAirport);
     this.destination = new Airport(raw.destinationAirport);
@@ -61,10 +65,10 @@ export class Flight {
     return this.raw.date ? new Date(this.raw.date) : undefined;
   }
 
-  get departureTime(): string | undefined {
+  get departureTime(): Time | undefined {
     return this.raw.departureTime;
   }
-  get arrivalTime(): string | undefined {
+  get arrivalTime(): Time | undefined {
     return this.raw.arrivalTime;
   }
 
@@ -83,37 +87,4 @@ export class Flight {
       route: this.route,
     };
   }
-}
-
-export class Plane {
-  constructor(
-    public model?: string,
-    public registration?: string,
-  ) {}
-
-  public static fromRawFlight(rawFlight: APIFlight): Plane | undefined {
-    if (!rawFlight.planeModel && !rawFlight.planeRegistration) {
-      return undefined;
-    }
-
-    return new Plane(rawFlight.planeModel, rawFlight.planeRegistration);
-  }
-}
-
-export class Route {
-  constructor(
-    public origin: Airport,
-    public destination: Airport,
-  ) {}
-
-  /**
-   * A unique key for this route, regardless of direction (e.g. YVR-FRA and FRA-YVR would have the same key)
-   */
-  get key(): string {
-    return [this.origin.id, this.destination.id].sort().join("-");
-  }
-}
-
-export class Airline {
-  constructor(public name: string) {}
 }

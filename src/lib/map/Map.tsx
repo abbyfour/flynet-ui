@@ -22,10 +22,7 @@ export function Map() {
     };
   });
 
-  const mapTilerStyle =
-    theme === "dark"
-      ? "dataviz-v4-dark"
-      : "019bea9d-6f20-789c-a22f-3ea6415f0b5a";
+  const mapTilerStyle = theme === "dark" ? "dataviz-v4-dark" : "dataviz-v4";
 
   // Force a full remount of the BaseMap when projection/theme/DPR change.
   // This avoids timing/attachment issues where Deck overlays lose connection

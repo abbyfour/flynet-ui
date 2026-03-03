@@ -1,6 +1,8 @@
 import { createSelector } from "@reduxjs/toolkit";
+import { compareTimes } from "../../../util/types";
 import type { Airport } from "../../classes/flights/Airport";
-import { Flight, Route } from "../../classes/flights/Flight";
+import { Flight } from "../../classes/flights/Flight";
+import { Route } from "../../classes/flights/Route";
 import { flightsApi } from "./flightsAPI";
 
 export type GroupedFlightDetails = {
@@ -22,7 +24,7 @@ const selectFlights = createSelector(
  */
 export const selectFlightsAsObjects = createSelector(selectFlights, (flights) =>
   (flights ? flights.map((flight) => new Flight(flight)) : []).sort(
-    (a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0),
+    sortFlights,
   ),
 );
 
@@ -115,3 +117,21 @@ export const selectSelectedFlight = createSelector(
   (flights, selectedFlightId) =>
     flights.find((flight) => flight.id === selectedFlightId) || null,
 );
+
+function sortFlights(a: Flight, b: Flight) {
+  if (!a.date && !b.date) return 0;
+
+  if (!a.date) return 1;
+  if (!b.date) return -1;
+
+  const dateA = new Date(a.date);
+  const dateB = new Date(b.date);
+
+  if (dateA < dateB) return 1;
+  if (dateA > dateB) return -1;
+
+  // If dates are equal, compare departure times
+  return (compareTimes(a.departureTime, b.departureTime) || 0) * -1; // Multiply by -1 to sort in descending order
+
+  return 0;
+}

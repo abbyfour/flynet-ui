@@ -1,7 +1,9 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
+import { Airport, type APIAirport } from "../../classes/flights/Airport";
 import type { APIFlight } from "../../classes/flights/Flight";
 import type { APIFlightLog } from "../../classes/flights/FlightLog";
 import { baseFlynetQuery } from "../client";
+import type { AddFlightRequestBody } from "./types";
 
 const limit = 50;
 
@@ -72,7 +74,29 @@ export const flightsApi = createApi({
         }
       },
     }),
+
+    getAirportByCode: build.query<Airport | undefined, string>({
+      query: (code) => `airport/code/${code.toUpperCase()}`,
+      transformResponse: (response: APIAirport) => {
+        if (response) {
+          return new Airport(response);
+        }
+        return undefined;
+      },
+    }),
+
+    addFlight: build.mutation<void, AddFlightRequestBody>({
+      query: (newFlight) => ({
+        url: "flight_logs/",
+        method: "POST",
+        body: newFlight,
+      }),
+    }),
   }),
 });
 
-export const { useGetFlightsQuery } = flightsApi;
+export const {
+  useGetFlightsQuery,
+  useLazyGetAirportByCodeQuery,
+  useAddFlightMutation,
+} = flightsApi;
