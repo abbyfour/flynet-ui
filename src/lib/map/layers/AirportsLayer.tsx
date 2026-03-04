@@ -16,7 +16,7 @@ export function AirportsLayer({ airports }: AirportsLayerProps) {
     pickable: true,
 
     // Accessors
-    getPosition: (d: GroupedAirport) => [...d.airport.coords, 1000], // lift slightly above terrain/tiles to avoid z-fighting
+    getPosition: (d: GroupedAirport) => [...d.airport.coords],
 
     // Styles
     getRadius: 1500,

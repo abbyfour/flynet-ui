@@ -7,7 +7,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../../../data/store";
 import { openNewFlightForm } from "../../../../../data/uiSlice";
 import { AddFlight } from "./AddFlight/AddFlight";
-import { FlightPill } from "./FlightPill";
+import { FlightListItem } from "./FlightListItem";
 import "./Flights.scss";
 import { FlightView } from "./FlightView";
 
@@ -64,8 +64,8 @@ export function Flights() {
       {shouldDisplayFlights ? (
         <ul>
           {flights.map((flight) => (
-            <FlightPill
-              key={flight.id}
+            <FlightListItem
+              key={`flight-${flight.id}`}
               flight={flight}
               highlighted={isHighlighted(flight)}
             />

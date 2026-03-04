@@ -3,6 +3,7 @@ import type {
   AirportType,
 } from "../../../../../data/classes/flights/Airport";
 import type { Flight } from "../../../../../data/classes/flights/Flight";
+import { useDeleteFlightMutation } from "../../../../../data/services/flights/flightsAPI";
 import { useAppDispatch } from "../../../../../data/store";
 import { clearSelectedFlight } from "../../../../../data/uiSlice";
 import { joinClasses } from "../../../../../util/componentUtil";
@@ -16,11 +17,33 @@ type FlightViewProps = {
 export function FlightView({ flight }: FlightViewProps) {
   const dispatch = useAppDispatch();
 
+  const [deleteFlight] = useDeleteFlightMutation();
+
   const goBack = () => dispatch(clearSelectedFlight());
+
+  // confirm before deleting
+  const handleDeleteFlight = async () => {
+    if (confirm("Are you sure you want to delete this flight?")) {
+      const result = await deleteFlight(flight.id);
+
+      if (result.error) {
+        console.error("Failed to delete flight", result.error);
+        return;
+      }
+
+      goBack();
+    }
+  };
 
   return (
     <div className="FlightView">
-      <button onClick={goBack}>back</button>
+      <button type="button" onClick={goBack}>
+        back
+      </button>
+
+      <button type="button" onClick={handleDeleteFlight}>
+        delete
+      </button>
 
       <div className="content">
         <h4 className="title">
