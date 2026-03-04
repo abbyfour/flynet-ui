@@ -15,6 +15,7 @@ export interface UIState {
 
   selectedFlightId?: number;
   newFlight?: NewFlightProperties;
+  flightsListScrollPosition: number;
 }
 
 const initialState: UIState = {
@@ -25,6 +26,7 @@ const initialState: UIState = {
   highlightedAirportId: undefined,
   highlightedRouteKey: undefined,
   selectedFlightId: undefined,
+  flightsListScrollPosition: 0,
 };
 
 export const uiPersistConfig = {
@@ -106,6 +108,13 @@ const uiSlice = createSlice({
     clearNewFlight(state: UIState) {
       state.newFlight = undefined;
     },
+
+    recordFlightsListScrollPosition(
+      state: UIState,
+      action: PayloadAction<number>,
+    ) {
+      state.flightsListScrollPosition = action.payload;
+    },
   },
 });
 
@@ -127,6 +136,8 @@ export const {
   openNewFlightForm,
   setNewFlight,
   clearNewFlight,
+
+  recordFlightsListScrollPosition,
 } = uiSlice.actions;
 
 export const uiReducer = uiSlice.reducer;
