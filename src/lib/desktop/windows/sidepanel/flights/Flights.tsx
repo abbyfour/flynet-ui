@@ -5,7 +5,11 @@ import {
   selectSelectedFlight,
 } from "../../../../../data/services/flights/selectFlights";
 import { useAppDispatch, useAppSelector } from "../../../../../data/store";
-import { openNewFlightForm } from "../../../../../data/uiSlice";
+import {
+  openNewFlightForm,
+  recordFlightsListScrollPosition,
+} from "../../../../../data/uiSlice";
+import { MemoryFoamList } from "../../../../../lib/uilib/MemoryFoamList";
 import { AddFlight } from "./AddFlight/AddFlight";
 import { FlightListItem } from "./FlightListItem";
 import "./Flights.scss";
@@ -34,8 +38,9 @@ export function Flights() {
     highlightedAirportId === flight.route.origin.id ||
     highlightedAirportId === flight.route.destination.id;
 
-  const shouldDisplayFlights =
-    flightsReady && !selectedFlight && !newFlight && flights && flights.length;
+  const isListVisible = Boolean(
+    flightsReady && !selectedFlight && !newFlight && flights && flights.length,
+  );
 
   if (!currentUser) {
     return (
@@ -48,7 +53,10 @@ export function Flights() {
   return (
     <div className="Flights">
       <h3 className="title">
-        Flights <button onClick={() => dispatch(openNewFlightForm())}>+</button>
+        Flights{" "}
+        <button type="button" onClick={() => dispatch(openNewFlightForm())}>
+          +
+        </button>
       </h3>
 
       {!flightsReady ? <p>Loading flights...</p> : <></>}
@@ -61,19 +69,21 @@ export function Flights() {
 
       {newFlight ? <AddFlight /> : <></>}
 
-      {shouldDisplayFlights ? (
-        <ul>
-          {flights.map((flight) => (
-            <FlightListItem
-              key={`flight-${flight.id}`}
-              flight={flight}
-              highlighted={isHighlighted(flight)}
-            />
-          ))}
-        </ul>
-      ) : (
-        <></>
-      )}
+      <MemoryFoamList
+        isVisible={isListVisible}
+        storageKey="flightsListScrollPosition"
+        onScroll={(position) =>
+          dispatch(recordFlightsListScrollPosition(position))
+        }
+      >
+        {flights?.map((flight) => (
+          <FlightListItem
+            key={`flight-${flight.id}`}
+            flight={flight}
+            highlighted={isHighlighted(flight)}
+          />
+        ))}
+      </MemoryFoamList>
     </div>
   );
 }

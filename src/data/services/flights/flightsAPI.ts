@@ -7,9 +7,14 @@ import type { AddFlightRequestBody } from "./types";
 
 const limit = 50;
 
+enum FlightsApiTags {
+  Flights = "Flights",
+}
+
 export const flightsApi = createApi({
   reducerPath: "flightsApi",
   baseQuery: baseFlynetQuery(),
+  tagTypes: [FlightsApiTags.Flights],
   endpoints: (build) => ({
     getFlights: build.query<APIFlightLog, void>({
       queryFn: async (_, __, _extraOptions, baseQuery) => {
@@ -73,6 +78,7 @@ export const flightsApi = createApi({
           };
         }
       },
+      providesTags: [FlightsApiTags.Flights],
     }),
 
     getAirportByCode: build.query<Airport | undefined, string>({
@@ -91,6 +97,7 @@ export const flightsApi = createApi({
         method: "POST",
         body: newFlight,
       }),
+      invalidatesTags: [FlightsApiTags.Flights],
     }),
 
     deleteFlight: build.mutation<void, number>({
@@ -98,6 +105,7 @@ export const flightsApi = createApi({
         url: `flight_logs/${flightId}`,
         method: "DELETE",
       }),
+      invalidatesTags: [FlightsApiTags.Flights],
     }),
   }),
 });
