@@ -7,7 +7,10 @@ import { useDeleteFlightMutation } from "../../../../../data/services/flights/fl
 import { useAppDispatch } from "../../../../../data/store";
 import { clearSelectedFlight } from "../../../../../data/uiSlice";
 import { joinClasses } from "../../../../../util/componentUtil";
+import { confirm } from "../../../../uilib/notices/Confirm";
 
+import { Toasts } from "../../../../uilib/notices/Toast";
+import { dispatchNotice } from "../../../../uilib/notices/dispatchNotice";
 import "./FlightView.scss";
 
 type FlightViewProps = {
@@ -21,14 +24,29 @@ export function FlightView({ flight }: FlightViewProps) {
 
   const goBack = () => dispatch(clearSelectedFlight());
 
-  // confirm before deleting
   const handleDeleteFlight = async () => {
-    if (confirm("Are you sure you want to delete this flight?")) {
+    const confirmation = await confirm({
+      title: "Are you sure you want to delete this flight?",
+      children: <p>You can always add it again if you miss it.</p>,
+      color: "red",
+      labels: { confirm: "Yes, goodbye.", cancel: "Nevermind..." },
+    });
+
+    if (confirmation) {
       const result = await deleteFlight(flight.id);
 
       if (result.error) {
-        console.error("Failed to delete flight", result.error);
-        return;
+        dispatchNotice(
+          Toasts.error({
+            message: "Flight could not be deleted.",
+          }),
+        );
+      } else {
+        dispatchNotice(
+          Toasts.success({
+            message: "Flight deletion successful.",
+          }),
+        );
       }
 
       goBack();
