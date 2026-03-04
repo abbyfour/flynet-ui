@@ -3,10 +3,14 @@ import type {
   AirportType,
 } from "../../../../../data/classes/flights/Airport";
 import type { Flight } from "../../../../../data/classes/flights/Flight";
+import { useDeleteFlightMutation } from "../../../../../data/services/flights/flightsAPI";
 import { useAppDispatch } from "../../../../../data/store";
 import { clearSelectedFlight } from "../../../../../data/uiSlice";
 import { joinClasses } from "../../../../../util/componentUtil";
+import { confirm } from "../../../../uilib/notices/Confirm";
 
+import { Toasts } from "../../../../uilib/notices/Toast";
+import { dispatchNotice } from "../../../../uilib/notices/dispatchNotice";
 import "./FlightView.scss";
 
 type FlightViewProps = {
@@ -16,11 +20,48 @@ type FlightViewProps = {
 export function FlightView({ flight }: FlightViewProps) {
   const dispatch = useAppDispatch();
 
+  const [deleteFlight] = useDeleteFlightMutation();
+
   const goBack = () => dispatch(clearSelectedFlight());
+
+  const handleDeleteFlight = async () => {
+    const confirmation = await confirm({
+      title: "Are you sure you want to delete this flight?",
+      children: <p>You can always add it again if you miss it.</p>,
+      color: "red",
+      labels: { confirm: "Yes, goodbye.", cancel: "Nevermind..." },
+    });
+
+    if (confirmation) {
+      const result = await deleteFlight(flight.id);
+
+      if (result.error) {
+        dispatchNotice(
+          Toasts.error({
+            message: "Flight could not be deleted.",
+          }),
+        );
+      } else {
+        dispatchNotice(
+          Toasts.success({
+            message: "Flight deletion successful.",
+          }),
+        );
+      }
+
+      goBack();
+    }
+  };
 
   return (
     <div className="FlightView">
-      <button onClick={goBack}>back</button>
+      <button type="button" onClick={goBack}>
+        back
+      </button>
+
+      <button type="button" onClick={handleDeleteFlight}>
+        delete
+      </button>
 
       <div className="content">
         <h4 className="title">

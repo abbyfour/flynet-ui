@@ -92,6 +92,13 @@ export const flightsApi = createApi({
         body: newFlight,
       }),
     }),
+
+    deleteFlight: build.mutation<void, number>({
+      query: (flightId) => ({
+        url: `flight_logs/${flightId}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -99,4 +106,5 @@ export const {
   useGetFlightsQuery,
   useLazyGetAirportByCodeQuery,
   useAddFlightMutation,
+  useDeleteFlightMutation,
 } = flightsApi;

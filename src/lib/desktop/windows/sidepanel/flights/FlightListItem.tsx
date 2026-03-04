@@ -3,12 +3,12 @@ import { useAppDispatch } from "../../../../../data/store";
 import { setSelectedFlight } from "../../../../../data/uiSlice";
 import { joinClasses } from "../../../../../util/componentUtil";
 
-type FlightPillProps = {
+type FlightListItemProps = {
   flight: Flight;
   highlighted?: boolean;
 };
 
-export function FlightPill({ flight, highlighted }: FlightPillProps) {
+export function FlightListItem({ flight, highlighted }: FlightListItemProps) {
   const dispatch = useAppDispatch();
 
   const handleOnClick = () => {
@@ -17,8 +17,7 @@ export function FlightPill({ flight, highlighted }: FlightPillProps) {
 
   return (
     <div
-      className={joinClasses("FlightPill", highlighted && "highlighted")}
-      key={flight.id}
+      className={joinClasses("FlightListItem", highlighted && "highlighted")}
       onClick={handleOnClick}
     >
       <div className="icon"></div>
