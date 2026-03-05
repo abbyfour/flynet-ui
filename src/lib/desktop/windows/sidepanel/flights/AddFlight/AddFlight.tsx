@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { m } from "../../../../../../assets/text/messages";
 import type { NewFlightProperties } from "../../../../../../data/classes/flights/NewFlightProperties";
 import { useAddFlightMutation } from "../../../../../../data/services/flights/flightsAPI";
 import type { AddFlightRequestBody } from "../../../../../../data/services/flights/types";
@@ -23,17 +24,9 @@ export function AddFlight() {
     const result = await addFlight(newFlightToRequest(newFlightProperties));
 
     if (result.error) {
-      dispatchNotice(
-        Toasts.error({
-          message: "Flight could not be added — tower unresponsive.",
-        }),
-      );
+      dispatchNotice(Toasts.error(m.flight.couldNotBeAdded));
     } else {
-      dispatchNotice(
-        Toasts.success({
-          message: "Flight added — clear for takeoff.",
-        }),
-      );
+      dispatchNotice(Toasts.success(m.flight.addedSuccessfully));
     }
 
     dispatch(clearNewFlight());

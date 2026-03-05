@@ -1,3 +1,4 @@
+import { m } from "../../../../../assets/text/messages";
 import type {
   Airport,
   AirportType,
@@ -26,8 +27,8 @@ export function FlightView({ flight }: FlightViewProps) {
 
   const handleDeleteFlight = async () => {
     const confirmation = await confirm({
-      title: "Are you sure you want to delete this flight?",
-      children: <p>You can always add it again if you miss it.</p>,
+      title: m.flight.confirmDeletion.title,
+      children: <p>{m.flight.confirmDeletion.text}</p>,
       color: "red",
       labels: { confirm: "Yes, goodbye.", cancel: "Nevermind..." },
     });
@@ -36,17 +37,9 @@ export function FlightView({ flight }: FlightViewProps) {
       const result = await deleteFlight(flight.id);
 
       if (result.error) {
-        dispatchNotice(
-          Toasts.error({
-            message: "Flight could not be deleted — server INOP.",
-          }),
-        );
+        dispatchNotice(Toasts.error(m.flight.couldNotBeDeleted));
       } else {
-        dispatchNotice(
-          Toasts.success({
-            message: "Flight removed — the transponder’s gone dark",
-          }),
-        );
+        dispatchNotice(Toasts.success(m.flight.deletedSuccessfully()));
       }
 
       goBack();

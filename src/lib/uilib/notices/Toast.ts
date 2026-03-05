@@ -23,7 +23,21 @@ export function Toast({ title, message, color, autoClose }: ToastProps): Toast {
 }
 
 export const Toasts = {
-  success: (props: ToastProps) => Toast({ ...props, color: "green" }),
-  error: (props: ToastProps) => Toast({ ...props, color: "red" }),
-  warning: (props: ToastProps) => Toast({ ...props, color: "yellow" }),
+  success: (props: ToastProps | string) =>
+    Toast({
+      ...(typeof props === "string" ? { message: props } : props),
+      color: "green",
+    }),
+
+  error: (props: ToastProps | string) =>
+    Toast({
+      ...(typeof props === "string" ? { message: props } : props),
+      color: "red",
+    }),
+
+  warning: (props: ToastProps | string) =>
+    Toast({
+      ...(typeof props === "string" ? { message: props } : props),
+      color: "yellow",
+    }),
 };
