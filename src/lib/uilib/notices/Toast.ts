@@ -1,8 +1,9 @@
 import type { NotificationData } from "@mantine/notifications";
+import type React from "react";
 import { NoticeType } from "./dispatchNotice";
 
 interface ToastProps {
-  message: string;
+  message: React.ReactNode;
   title?: string;
   color?: string;
   autoClose?: number;

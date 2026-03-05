@@ -33,6 +33,10 @@ export function Flights() {
     (state) => state.ui.highlightedAirportId,
   );
 
+  const handleAddFlight = () => {
+    dispatch(openNewFlightForm());
+  };
+
   const isHighlighted = (flight: Flight) =>
     highlightedRouteKey === flight.route.key ||
     highlightedAirportId === flight.route.origin.id ||
@@ -54,7 +58,7 @@ export function Flights() {
     <div className="Flights">
       <h3 className="title">
         Flights{" "}
-        <button type="button" onClick={() => dispatch(openNewFlightForm())}>
+        <button type="button" onClick={handleAddFlight}>
           +
         </button>
       </h3>

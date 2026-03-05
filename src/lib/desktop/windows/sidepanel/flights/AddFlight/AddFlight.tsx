@@ -6,6 +6,8 @@ import { useAppDispatch } from "../../../../../../data/store";
 import { clearNewFlight } from "../../../../../../data/uiSlice";
 import { AirportInput } from "../../../../../forms/AirportInput";
 import { Input } from "../../../../../forms/Input";
+import { dispatchNotice } from "../../../../../uilib/notices/dispatchNotice";
+import { Toasts } from "../../../../../uilib/notices/Toast";
 import "./AddFlight.scss";
 
 export function AddFlight() {
@@ -21,8 +23,17 @@ export function AddFlight() {
     const result = await addFlight(newFlightToRequest(newFlightProperties));
 
     if (result.error) {
-      console.error("Failed to add flight", result.error);
-      return;
+      dispatchNotice(
+        Toasts.error({
+          message: "Flight could not be added — tower unresponsive.",
+        }),
+      );
+    } else {
+      dispatchNotice(
+        Toasts.success({
+          message: "Flight added — clear for takeoff.",
+        }),
+      );
     }
 
     dispatch(clearNewFlight());

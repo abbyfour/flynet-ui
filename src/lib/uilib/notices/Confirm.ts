@@ -13,6 +13,7 @@ export function ConfirmModal(props: ConfirmProps): ConfirmModal {
   return {
     title: "are you sure?",
     labels: { confirm: "Yes", cancel: "No" },
+    centered: true,
 
     confirmProps: { color: props.color },
     ...props,

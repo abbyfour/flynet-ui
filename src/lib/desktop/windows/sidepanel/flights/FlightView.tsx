@@ -38,13 +38,13 @@ export function FlightView({ flight }: FlightViewProps) {
       if (result.error) {
         dispatchNotice(
           Toasts.error({
-            message: "Flight could not be deleted.",
+            message: "Flight could not be deleted — server INOP.",
           }),
         );
       } else {
         dispatchNotice(
           Toasts.success({
-            message: "Flight deletion successful.",
+            message: "Flight removed — the transponder’s gone dark",
           }),
         );
       }
