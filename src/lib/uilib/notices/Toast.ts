@@ -16,7 +16,7 @@ export function Toast({ title, message, color, autoClose }: ToastProps): Toast {
     title,
     message,
     color,
-    position: "top-right",
+    position: "top-center",
     autoClose: autoClose || 3000,
     noticeType: NoticeType.Toast,
   };
