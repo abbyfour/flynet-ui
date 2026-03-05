@@ -10,9 +10,11 @@ import {
   recordFlightsListScrollPosition,
 } from "../../../../../data/uiSlice";
 import { MemoryFoamList } from "../../../../../lib/uilib/MemoryFoamList";
+import { injectMap } from "../../../../../util/arrayUtil";
 import { AddFlight } from "./AddFlight/AddFlight";
 import { FlightListItem } from "./FlightListItem";
 import "./Flights.scss";
+import { FlightSeparator } from "./FlightSeperator";
 import { FlightView } from "./FlightView";
 
 export function Flights() {
@@ -80,13 +82,37 @@ export function Flights() {
           dispatch(recordFlightsListScrollPosition(position))
         }
       >
-        {flights?.map((flight) => (
-          <FlightListItem
-            key={`flight-${flight.id}`}
-            flight={flight}
-            highlighted={isHighlighted(flight)}
-          />
-        ))}
+        {injectMap(
+          flights,
+          (flight) => (
+            <FlightListItem
+              key={`flight-${flight.id}`}
+              flight={flight}
+              highlighted={isHighlighted(flight)}
+            />
+          ),
+          (cur, prev) => {
+            if (cur.upcoming && !prev) {
+              return (
+                <FlightSeparator
+                  key={`separator-${cur.id}`}
+                  label={`Upcoming (${flights.filter((f) => f.upcoming).length})`}
+                />
+              );
+            } else if (
+              !prev ||
+              (prev.upcoming && !cur.upcoming) ||
+              cur.date?.getFullYear() !== prev.date?.getFullYear()
+            ) {
+              return (
+                <FlightSeparator
+                  key={`separator-${cur.id}`}
+                  label={`${cur.date?.getFullYear() || "No date"} (${flights.filter((f) => !f.upcoming && f.date?.getFullYear() === cur.date?.getFullYear()).length})`}
+                />
+              );
+            }
+          },
+        )}
       </MemoryFoamList>
     </div>
   );

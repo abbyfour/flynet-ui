@@ -80,6 +80,15 @@ export class Flight {
     return this.raw.user;
   }
 
+  // Calculated properties
+
+  /**
+   * Returns true if the flight hasn't happened yet
+   */
+  get upcoming(): boolean {
+    return !!this.date && this.date > new Date();
+  }
+
   asGroupedFlightDetails(): GroupedFlightDetails {
     return {
       id: this.id,
