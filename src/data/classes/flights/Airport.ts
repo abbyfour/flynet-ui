@@ -24,7 +24,9 @@ export type AirportType =
   | "seaplane_base";
 
 export class Airport {
-  constructor(private raw: APIAirport) {}
+  constructor(private raw: APIAirport) {
+    if (!raw) this.raw = {} as APIAirport; // to prevent crashes from missing data, but will result in an "Unknown" airport with id -1, so should be avoided if possible
+  }
 
   get name(): string {
     return this.raw.airportName;
@@ -43,7 +45,9 @@ export class Airport {
   }
 
   get isoRegion(): string {
-    return this.raw.isoRegion.split("-")[1] ?? this.raw.isoRegion;
+    return this.raw.isoRegion
+      ? (this.raw.isoRegion.split("-")[1] ?? this.raw.isoRegion)
+      : "";
   }
 
   get city(): string {
@@ -55,7 +59,7 @@ export class Airport {
   }
 
   get id(): number {
-    return this.raw.id;
+    return this.raw?.id || -1;
   }
 
   // Codes

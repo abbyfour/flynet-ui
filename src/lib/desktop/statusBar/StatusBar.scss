@@ -9,11 +9,24 @@
   align-items: center;
   padding: 0 10px;
   height: 30px;
-  color: black;
-  background: rgb(255, 250, 237);
+  color: rgb(88, 39, 6);
+  background: rgb(255, 255, 255);
+
+  .user-message,
+  .time {
+    font-size: 0.833rem;
+    font-weight: 500;
+  }
 
   .logo {
-    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+
+    .text {
+      font-weight: bold;
+    }
   }
 
   .user-management {
@@ -24,9 +37,5 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-  }
-
-  .time {
-    font-variant-numeric: tabular-nums;
   }
 }

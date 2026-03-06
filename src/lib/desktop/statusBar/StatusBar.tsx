@@ -5,12 +5,16 @@ import { clearFlightsCache } from "../../../data/services/flights/flightsAPI";
 import { useAppDispatch, useAppSelector } from "../../../data/store";
 import { clearAllUIFlightData } from "../../../data/uiSlice";
 import { clearUser } from "../../../data/userSlice";
+import { useEphemeralThinking } from "../../../util/thinkingUtil";
 import "./StatusBar.scss";
+import { Thinking } from "./Thinking";
 
 export function StatusBar() {
   const [now, setNow] = useState(() => new Date());
   const currentUser = useAppSelector((state) => state.user.currentUser);
+  const thinking = useAppSelector((state) => state.ui.thinking);
   const dispatch = useAppDispatch();
+  const setEphemeralThinking = useEphemeralThinking(dispatch);
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
@@ -18,14 +22,20 @@ export function StatusBar() {
   }, []);
 
   const logout = () => {
+    setEphemeralThinking("goodbye! see you in the air");
+
     dispatch(clearUser());
     dispatch(clearAllUIFlightData());
     clearFlightsCache();
   };
 
   return (
-    <div className="StatusBar text-small">
-      <p className="logo">✈ FlyNetOS</p>
+    <div className="StatusBar">
+      <div className="logo">
+        <p className="text">✈ FlyNet</p>
+
+        <Thinking thinking={thinking} />
+      </div>
 
       {currentUser && (
         <div className="user-management">
@@ -33,7 +43,7 @@ export function StatusBar() {
             Welcome back, {currentUser.nickname || currentUser.username}!
           </p>
 
-          <Tooltip label="Logout" withArrow>
+          <Tooltip label="Logout" withArrow color="red">
             <ActionIcon variant="transparent" color="red" onClick={logout}>
               <IconLogout2 size={20} />
             </ActionIcon>

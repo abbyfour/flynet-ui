@@ -35,8 +35,6 @@ export function AddFlight() {
 
   return (
     <div className="AddFlight">
-      {isLoading && <p>Adding flight...</p>}
-
       <form onSubmit={handleSubmit}>
         <Input
           type="text"

@@ -4,11 +4,16 @@ import type { Coordinates } from "../util/mapUtil";
 import type { NewFlightProperties } from "./classes/flights/NewFlightProperties";
 import { AppTheme, MapProjection, type SidepanelWindows } from "./classes/ui";
 
+export interface Thinking {
+  message: string;
+}
+
 export interface UIState {
   mapProjection: MapProjection;
   activeSidepanelWindow?: SidepanelWindows;
   theme: AppTheme;
   mapPosition?: Coordinates;
+  thinking?: Thinking;
 
   highlightedAirportId?: number;
   highlightedRouteKey?: string;
@@ -121,6 +126,17 @@ const uiSlice = createSlice({
       state.newFlight = undefined;
       state.flightsListScrollPosition = 0;
     },
+
+    // Thinking
+    setPermanentThinking(state: UIState, action: PayloadAction<string>) {
+      if (action.payload) {
+        state.thinking = { message: action.payload };
+      }
+    },
+
+    clearThinking(state: UIState) {
+      state.thinking = undefined;
+    },
   },
 });
 
@@ -146,6 +162,9 @@ export const {
   recordFlightsListScrollPosition,
 
   clearAllUIFlightData,
+
+  setPermanentThinking,
+  clearThinking,
 } = uiSlice.actions;
 
 export const uiReducer = uiSlice.reducer;

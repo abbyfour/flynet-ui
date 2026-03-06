@@ -135,9 +135,10 @@ export function Flights() {
                 />
               );
             } else if (
-              !prev ||
-              (prev.upcoming && !cur.upcoming) ||
-              cur.date?.getFullYear() !== prev.date?.getFullYear()
+              !cur.upcoming &&
+              (!prev ||
+                (prev.upcoming && !cur.upcoming) ||
+                cur.date?.getFullYear() !== prev.date?.getFullYear())
             ) {
               return (
                 <FlightSeparator

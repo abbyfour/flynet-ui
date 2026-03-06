@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useLazyGetFlightsQuery } from "../../../../data/services/flights/flightsAPI";
 import { useLoginMutation } from "../../../../data/services/usersAPI";
 import { useAppDispatch, useAppSelector } from "../../../../data/store";
+import { clearThinking, setPermanentThinking } from "../../../../data/uiSlice";
 import { saveUser } from "../../../../data/userSlice";
 import { Input } from "../../../forms/Input";
 import { SidepanelContainer } from "../../SidepanelContainer";
@@ -40,7 +41,10 @@ function LoginForm() {
       }).unwrap();
 
       dispatch(saveUser(user));
-      getFlights();
+      dispatch(setPermanentThinking("you look familiar! loading your flights"));
+      getFlights().then(() => {
+        dispatch(clearThinking());
+      });
     } catch (err) {
       console.error("Failed to login:", err);
       setLoginError(err instanceof Error ? err.message : String(err));
