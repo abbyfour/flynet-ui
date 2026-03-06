@@ -58,7 +58,7 @@ export function Flights() {
     } else {
       dispatch(
         setSidepanelOptions({
-          title: "Add Flight",
+          title: "Add flight",
           onGoBack: () => dispatch(clearNewFlight()),
         }),
       );
@@ -96,7 +96,7 @@ export function Flights() {
           onClick={handleAddFlight}
           disabled={!flightsReady}
         >
-          Add Flight
+          Add flight
         </Button>
       )}
 

@@ -11,6 +11,9 @@
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 
+// Mantine DatePicker styles (must be after core styles to avoid specificity issues)
+import "@mantine/dates/styles.css";
+
 // MapLibre styles
 import "maplibre-gl/dist/maplibre-gl.css";
 

@@ -1,4 +1,5 @@
-import { Button } from "@mantine/core";
+import { Button, Fieldset } from "@mantine/core";
+import { IconPlaneArrival, IconPlaneDeparture } from "@tabler/icons-react";
 import { useState } from "react";
 import { m } from "../../../../../../assets/text/messages";
 import type { NewFlightProperties } from "../../../../../../data/classes/flights/NewFlightProperties";
@@ -72,9 +73,7 @@ export function AddFlight() {
 
         <br />
 
-        <div className="route-input">
-          <h5>Route</h5>
-
+        <Fieldset legend="Route" radius={"xs"}>
           <AirportInput
             id="origin"
             label="Origin"
@@ -102,7 +101,7 @@ export function AddFlight() {
               }))
             }
           />
-        </div>
+        </Fieldset>
 
         <br />
 
@@ -111,6 +110,7 @@ export function AddFlight() {
           id="departureTime"
           label="Departure Time"
           disabled={isLoading}
+          icon={<IconPlaneDeparture size={16} stroke={1.5} />}
           onChange={(value) =>
             setNewFlightProperties((prev) => ({
               ...prev,
@@ -126,6 +126,7 @@ export function AddFlight() {
           id="arrivalTime"
           label="Arrival Time"
           disabled={isLoading}
+          icon={<IconPlaneArrival size={16} stroke={1.5} />}
           onChange={(value) =>
             setNewFlightProperties((prev) => ({ ...prev, arrivalTime: value }))
           }
@@ -179,7 +180,7 @@ export function AddFlight() {
           variant="outline"
           color="dark"
         >
-          Add Flight
+          Add flight
         </Button>
       </form>
     </div>

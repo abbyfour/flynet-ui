@@ -9,6 +9,7 @@ type AirportInputProps = {
   label: string;
   value: AirportProperties | undefined;
   disabled?: boolean;
+  leftSection?: React.ReactNode;
 
   onChange?: (value: AirportProperties | undefined) => void;
 };
@@ -18,6 +19,7 @@ export function AirportInput({
   label,
   value,
   disabled = false,
+  leftSection,
   onChange,
 }: AirportInputProps) {
   const [code, setCode] = useState(value?.displayCode || "");
@@ -62,10 +64,12 @@ export function AirportInput({
   return (
     <div className="AirportSearch">
       <Input
+        required
         type="text"
         id={id}
         label={label}
         onChange={(v) => setCode(v ?? "")}
+        icon={leftSection}
         disabled={disabled}
       />
 

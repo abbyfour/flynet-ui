@@ -1,3 +1,6 @@
+import { PasswordInput, Textarea, TextInput } from "@mantine/core";
+import { DateInput, TimeInput } from "@mantine/dates";
+import dayjs from "dayjs";
 import { type Time } from "../../util/types";
 import "./Input.scss";
 
@@ -18,6 +21,7 @@ type InputProps<T extends InputType> = {
   disabled?: boolean;
   required?: boolean;
   placeholder?: string;
+  icon?: React.ReactNode;
 
   onChange?(value: InputValue<T>): void;
 };
@@ -29,33 +33,92 @@ export function Input<T extends InputType>({
   onChange,
   required = false,
   placeholder = "",
+  icon: leftSection,
 
   disabled = false,
 }: InputProps<T>) {
-  return (
-    <div className="Input">
-      <label htmlFor={id}>{label}</label>
-
-      {type === "longtext" ? (
-        <textarea
+  switch (type) {
+    case "text":
+      return (
+        <TextInput
+          radius={"xs"}
+          label={label}
+          className="Input"
           id={id}
-          disabled={disabled}
-          placeholder={placeholder}
-          required={required}
-          onChange={(e) => onChange?.(transformValue(type, e.target.value))}
-        />
-      ) : (
-        <input
-          id={id}
-          type={getInputType(type)}
           placeholder={placeholder}
           required={required}
           disabled={disabled}
+          leftSection={leftSection}
           onChange={(e) => onChange?.(transformValue(type, e.target.value))}
         />
-      )}
-    </div>
-  );
+      );
+    case "date":
+      return (
+        <DateInput
+          label={label}
+          className="Input"
+          id={id}
+          radius={"xs"}
+          placeholder={placeholder}
+          required={required}
+          disabled={disabled}
+          clearable={!required}
+          leftSection={leftSection}
+          maxDate={dayjs().add(2, "year").format("YYYY-MM-DD")}
+          onChange={(date) =>
+            onChange?.(transformValue(type, date ?? undefined))
+          }
+        />
+      );
+    case "time":
+      return (
+        <TimeInput
+          label={label}
+          className="Input"
+          id={id}
+          radius={"xs"}
+          placeholder={placeholder}
+          required={required}
+          disabled={disabled}
+          leftSection={leftSection}
+          onChange={(e) =>
+            onChange?.(transformValue(type, e.target.value ?? undefined))
+          }
+        />
+      );
+    case "password":
+      return (
+        <PasswordInput
+          type={type}
+          label={label}
+          id={id}
+          disabled={disabled}
+          required={required}
+          placeholder={placeholder}
+          leftSection={leftSection}
+          onChange={(e) => onChange?.(transformValue(type, e.target.value))}
+        />
+      );
+    case "longtext":
+      return (
+        <Textarea
+          className="Input"
+          label={label}
+          id={id}
+          radius={"xs"}
+          disabled={disabled}
+          placeholder={placeholder}
+          required={required}
+          leftSection={leftSection}
+          onChange={(e) => onChange?.(transformValue(type, e.target.value))}
+          autosize
+          minRows={2}
+          maxRows={4}
+        />
+      );
+    default:
+      throw new Error(`Unsupported input type: ${type}`);
+  }
 }
 
 function transformValue<T extends InputType>(
@@ -86,19 +149,4 @@ function parseDate(value: string | undefined): Date | undefined {
   }
 
   return date;
-}
-
-function getInputType(type: InputType): string {
-  switch (type) {
-    case "text":
-      return "text";
-    case "date":
-      return "date";
-    case "time":
-      return "time";
-    case "password":
-      return "password";
-    default:
-      return "text";
-  }
 }
