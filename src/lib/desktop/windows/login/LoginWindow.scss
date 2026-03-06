@@ -33,17 +33,4 @@
   .login-error {
     color: red;
   }
-
-  button {
-    padding: 0.5em;
-    cursor: pointer;
-    background: #777777;
-    color: whitesmoke;
-    border: none;
-    border-radius: 5px;
-
-    &:hover {
-      background: #e67b24;
-    }
-  }
 }
