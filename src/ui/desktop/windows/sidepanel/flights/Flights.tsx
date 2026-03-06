@@ -14,8 +14,8 @@ import {
   openNewFlightForm,
   recordFlightsListScrollPosition,
 } from "../../../../../data/uiSlice";
-import { MemoryFoamList } from "../../../../../lib/uilib/MemoryFoamList";
 import { injectMap } from "../../../../../util/arrayUtil";
+import { MemoryFoamList } from "../../../../MemoryFoamList";
 import { AddFlight } from "./AddFlight/AddFlight";
 import { FlightListItem } from "./FlightListItem";
 import "./Flights.scss";

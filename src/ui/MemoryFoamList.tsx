@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, type ReactNode } from "react";
-import { useAppSelector } from "../../data/store";
-import type { UIState } from "../../data/uiSlice";
+import { useAppSelector } from "../data/store";
+import type { UIState } from "../data/uiSlice";
 
 interface MemoryFoamListProps {
   /** Whether the list is currently visible */

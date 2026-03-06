@@ -9,8 +9,8 @@ import { useAppDispatch } from "../../../../../../data/store";
 import { clearNewFlight } from "../../../../../../data/uiSlice";
 import { AirportInput } from "../../../../../forms/AirportInput";
 import { Input } from "../../../../../forms/Input";
-import { dispatchNotice } from "../../../../../uilib/notices/dispatchNotice";
-import { Toasts } from "../../../../../uilib/notices/Toast";
+import { dispatchNotice } from "../../../../../notices/dispatchNotice";
+import { Toasts } from "../../../../../notices/Toast";
 import "./AddFlight.scss";
 
 export function AddFlight() {

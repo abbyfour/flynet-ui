@@ -9,10 +9,10 @@ import { useDeleteFlightMutation } from "../../../../../data/services/flights/fl
 import { useAppDispatch } from "../../../../../data/store";
 import { clearSelectedFlight } from "../../../../../data/uiSlice";
 import { joinClasses } from "../../../../../util/componentUtil";
-import { confirm } from "../../../../uilib/notices/Confirm";
+import { confirm } from "../../../../notices/Confirm";
 
-import { Toasts } from "../../../../uilib/notices/Toast";
-import { dispatchNotice } from "../../../../uilib/notices/dispatchNotice";
+import { Toasts } from "../../../../notices/Toast";
+import { dispatchNotice } from "../../../../notices/dispatchNotice";
 import "./FlightView.scss";
 
 type FlightViewProps = {
