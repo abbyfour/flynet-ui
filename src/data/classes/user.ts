@@ -1,7 +1,7 @@
 export interface UserProperties {
   id: number;
   username: string;
-  nickname: string;
+  nickname?: string;
 }
 
 export interface ExtendedUserProperties extends UserProperties {

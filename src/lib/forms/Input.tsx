@@ -14,6 +14,7 @@ type InputProps<T extends InputType> = {
   type: T;
   id: string;
   label: string;
+  disabled?: boolean;
 
   onChange?(value: InputValue<T>): void;
 };
@@ -23,6 +24,7 @@ export function Input<T extends InputType>({
   id,
   label,
   onChange,
+  disabled = false,
 }: InputProps<T>) {
   return (
     <div className="Input">
@@ -32,12 +34,14 @@ export function Input<T extends InputType>({
         <textarea
           id={id}
           onChange={(e) => onChange?.(transformValue(type, e.target.value))}
+          disabled={disabled}
         />
       ) : (
         <input
           type={getInputType(type)}
           id={id}
           onChange={(e) => onChange?.(transformValue(type, e.target.value))}
+          disabled={disabled}
         />
       )}
     </div>

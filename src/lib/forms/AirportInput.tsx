@@ -8,6 +8,8 @@ type AirportInputProps = {
   id: string;
   label: string;
   value: AirportProperties | undefined;
+  disabled?: boolean;
+
   onChange?: (value: AirportProperties | undefined) => void;
 };
 
@@ -15,6 +17,7 @@ export function AirportInput({
   id,
   label,
   value,
+  disabled = false,
   onChange,
 }: AirportInputProps) {
   const [code, setCode] = useState(value?.displayCode || "");
@@ -63,6 +66,7 @@ export function AirportInput({
         id={id}
         label={label}
         onChange={(v) => setCode(v ?? "")}
+        disabled={disabled}
       />
 
       {isLoading && <div className="loading">Searching...</div>}
@@ -77,6 +81,7 @@ export function AirportInput({
             type="button"
             onClick={() => handleSelect(toProperties(data))}
             className="airport-option"
+            disabled={disabled}
           >
             <div className="airport-code">{data.displayCode}</div>
             <div className="airport-details">

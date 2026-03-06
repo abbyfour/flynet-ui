@@ -23,6 +23,7 @@
     "@mantine/modals": "^8.3.15",
     "@mantine/notifications": "^8.3.15",
     "@reduxjs/toolkit": "^2.11.2",
+    "@tabler/icons-react": "^3.39.0",
     "@types/redux-persist": "^4.3.1",
     "deck.gl": "^9.2.6",
     "maplibre-gl": "^5.16.0",

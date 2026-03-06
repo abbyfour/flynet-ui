@@ -42,6 +42,7 @@ const RAW_RUNTIME_STATE =
           ["@mantine/modals", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.3.15"],\
           ["@mantine/notifications", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.3.15"],\
           ["@reduxjs/toolkit", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:2.11.2"],\
+          ["@tabler/icons-react", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:3.39.0"],\
           ["@types/node", "npm:24.10.9"],\
           ["@types/prop-types", "npm:15.7.15"],\
           ["@types/react", "npm:19.2.8"],\
@@ -3150,6 +3151,38 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@tabler/icons", [\
+      ["npm:3.39.0", {\
+        "packageLocation": "../../.yarn/berry/cache/@tabler-icons-npm-3.39.0-b4dfc9c025-10c0.zip/node_modules/@tabler/icons/",\
+        "packageDependencies": [\
+          ["@tabler/icons", "npm:3.39.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@tabler/icons-react", [\
+      ["npm:3.39.0", {\
+        "packageLocation": "../../.yarn/berry/cache/@tabler-icons-react-npm-3.39.0-e5ecdc0fe2-10c0.zip/node_modules/@tabler/icons-react/",\
+        "packageDependencies": [\
+          ["@tabler/icons-react", "npm:3.39.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:3.39.0", {\
+        "packageLocation": "./.yarn/__virtual__/@tabler-icons-react-virtual-9c60579088/3/.yarn/berry/cache/@tabler-icons-react-npm-3.39.0-e5ecdc0fe2-10c0.zip/node_modules/@tabler/icons-react/",\
+        "packageDependencies": [\
+          ["@tabler/icons", "npm:3.39.0"],\
+          ["@tabler/icons-react", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:3.39.0"],\
+          ["@types/react", "npm:19.2.8"],\
+          ["react", "npm:19.2.3"]\
+        ],\
+        "packagePeers": [\
+          "@types/react",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@turf/boolean-clockwise", [\
       ["npm:5.1.5", {\
         "packageLocation": "../../.yarn/berry/cache/@turf-boolean-clockwise-npm-5.1.5-cc5e7a58d0-10c0.zip/node_modules/@turf/boolean-clockwise/",\
@@ -4831,6 +4864,7 @@ const RAW_RUNTIME_STATE =
           ["@mantine/modals", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.3.15"],\
           ["@mantine/notifications", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.3.15"],\
           ["@reduxjs/toolkit", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:2.11.2"],\
+          ["@tabler/icons-react", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:3.39.0"],\
           ["@types/node", "npm:24.10.9"],\
           ["@types/prop-types", "npm:15.7.15"],\
           ["@types/react", "npm:19.2.8"],\

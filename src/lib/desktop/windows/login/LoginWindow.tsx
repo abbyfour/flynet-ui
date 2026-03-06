@@ -1,31 +1,19 @@
 import { useState } from "react";
 import { useLoginMutation } from "../../../../data/services/usersAPI";
 import { useAppDispatch, useAppSelector } from "../../../../data/store";
-import { clearUser, saveUser } from "../../../../data/userSlice";
+import { saveUser } from "../../../../data/userSlice";
 import { SidepanelContainer } from "../../SidepanelContainer";
 import "./LoginWindow.scss";
 
 export function LoginWindow() {
   const currentUser = useAppSelector((state) => state.user.currentUser);
-  const dispatch = useAppDispatch();
 
   return !currentUser ? (
     <SidepanelContainer align="right" className="LoginWindow">
       <LoginForm />
     </SidepanelContainer>
   ) : (
-    <SidepanelContainer align="right" className="LoginWindow">
-      <div className="LoggedInMessage">
-        <p>Welcome back, {currentUser.nickname}!</p>
-        <button
-          className="logout"
-          type="button"
-          onClick={() => dispatch(clearUser())}
-        >
-          logout
-        </button>
-      </div>
-    </SidepanelContainer>
+    <></>
   );
 }
 

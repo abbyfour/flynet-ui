@@ -1,3 +1,4 @@
+import { Button } from "@mantine/core";
 import { m } from "../../../../../assets/text/messages";
 import type {
   Airport,
@@ -48,14 +49,6 @@ export function FlightView({ flight }: FlightViewProps) {
 
   return (
     <div className="FlightView">
-      <button type="button" onClick={goBack}>
-        back
-      </button>
-
-      <button type="button" onClick={handleDeleteFlight}>
-        delete
-      </button>
-
       <div className="content">
         <h4 className="title">
           {flight.flightNumber && (
@@ -121,6 +114,17 @@ export function FlightView({ flight }: FlightViewProps) {
           </div>
         )}
       </div>
+
+      <Button
+        className="delete-button"
+        fullWidth
+        variant="outline"
+        color="red"
+        type="button"
+        onClick={handleDeleteFlight}
+      >
+        Delete
+      </Button>
     </div>
   );
 }
@@ -134,9 +138,9 @@ function AirportDetails({
 }) {
   return (
     <div className={joinClasses("AirportDetails", className)}>
-      <span className="name">
-        {<AirportCodePill airport={airport} />} {airport.name}
-      </span>
+      {<AirportCodePill airport={airport} />}
+
+      <span className="name">{airport.name}</span>
 
       <span className="subline">
         {displayAirportType(airport.type)} • {airport.city}, {airport.isoRegion}

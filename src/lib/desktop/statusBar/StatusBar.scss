@@ -1,7 +1,6 @@
 .StatusBar {
   z-index: 1;
-  // TODO: ???? what is 99vw doing here
-  width: 99vw;
+  width: 100%;
   position: absolute;
   top: 0;
   left: 0;
@@ -11,10 +10,23 @@
   padding: 0 10px;
   height: 30px;
   color: black;
-  background-color: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(2px);
+  background: rgb(255, 250, 237);
 
   .logo {
     font-weight: bold;
+  }
+
+  .user-management {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .time {
+    font-variant-numeric: tabular-nums;
   }
 }

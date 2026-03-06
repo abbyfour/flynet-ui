@@ -2048,6 +2048,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tabler/icons-react@npm:^3.39.0":
+  version: 3.39.0
+  resolution: "@tabler/icons-react@npm:3.39.0"
+  dependencies:
+    "@tabler/icons": "npm:3.39.0"
+  peerDependencies:
+    react: ">= 16"
+  checksum: 10c0/bc61569cc645db14a613599822246294c3976aa1f9dda3a1d736867cb1320493b8f69722d3aebc9a3fbf84763c16d107471d9eea2f5a2351458ee75ce295b702
+  languageName: node
+  linkType: hard
+
+"@tabler/icons@npm:3.39.0":
+  version: 3.39.0
+  resolution: "@tabler/icons@npm:3.39.0"
+  checksum: 10c0/30aef378d9b2513dbf4076506d74ea1b414af781cd0631c12b26833d3add109d786cdcf50fb37c4e1935f2254cf72044330ec3846ef03ab558c5a1db53873530
+  languageName: node
+  linkType: hard
+
 "@turf/boolean-clockwise@npm:^5.1.5":
   version: 5.1.5
   resolution: "@turf/boolean-clockwise@npm:5.1.5"
@@ -3397,6 +3415,7 @@ __metadata:
     "@mantine/modals": "npm:^8.3.15"
     "@mantine/notifications": "npm:^8.3.15"
     "@reduxjs/toolkit": "npm:^2.11.2"
+    "@tabler/icons-react": "npm:^3.39.0"
     "@types/node": "npm:^24.10.1"
     "@types/prop-types": "npm:^15"
     "@types/react": "npm:^19.2.5"

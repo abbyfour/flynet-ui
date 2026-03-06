@@ -1,9 +1,17 @@
-export function Friends() {
+import { useEffect } from "react";
+import { setSidepanelOptions } from "../../../../data/sidepanelSlice";
+import { useAppDispatch } from "../../../../data/store";
+
+export function Social() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setSidepanelOptions({ title: "Social" }));
+  }, [dispatch]);
+
   return (
     <div>
-      <h1>Friends</h1>
-
-      <p>This is the Friends sidepanel window</p>
+      <p>This is the Social sidepanel window</p>
     </div>
   );
 }

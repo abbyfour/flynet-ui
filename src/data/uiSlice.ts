@@ -115,6 +115,12 @@ const uiSlice = createSlice({
     ) {
       state.flightsListScrollPosition = action.payload;
     },
+
+    clearAllUIFlightData(state: UIState) {
+      state.selectedFlightId = undefined;
+      state.newFlight = undefined;
+      state.flightsListScrollPosition = 0;
+    },
   },
 });
 
@@ -138,6 +144,8 @@ export const {
   clearNewFlight,
 
   recordFlightsListScrollPosition,
+
+  clearAllUIFlightData,
 } = uiSlice.actions;
 
 export const uiReducer = uiSlice.reducer;

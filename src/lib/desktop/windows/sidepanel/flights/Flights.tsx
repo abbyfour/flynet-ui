@@ -1,11 +1,16 @@
+import { Button } from "@mantine/core";
+import { useEffect } from "react";
 import type { Flight } from "../../../../../data/classes/flights/Flight";
 import { useGetFlightsQuery } from "../../../../../data/services/flights/flightsAPI";
 import {
   selectFlightsAsObjects,
   selectSelectedFlight,
 } from "../../../../../data/services/flights/selectFlights";
+import { setSidepanelOptions } from "../../../../../data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "../../../../../data/store";
 import {
+  clearNewFlight,
+  clearSelectedFlight,
   openNewFlightForm,
   recordFlightsListScrollPosition,
 } from "../../../../../data/uiSlice";
@@ -35,6 +40,31 @@ export function Flights() {
     (state) => state.ui.highlightedAirportId,
   );
 
+  useEffect(() => {
+    if (selectedFlight) {
+      dispatch(
+        setSidepanelOptions({
+          title: `Flight ${selectedFlight.flightNumber}`,
+          onGoBack: () => dispatch(clearSelectedFlight()),
+        }),
+      );
+    } else if (!newFlight) {
+      dispatch(
+        setSidepanelOptions({
+          title: "Flights",
+          onGoBack: undefined,
+        }),
+      );
+    } else {
+      dispatch(
+        setSidepanelOptions({
+          title: "Add Flight",
+          onGoBack: () => dispatch(clearNewFlight()),
+        }),
+      );
+    }
+  }, [dispatch, newFlight, selectedFlight]);
+
   const handleAddFlight = () => {
     dispatch(openNewFlightForm());
   };
@@ -58,12 +88,17 @@ export function Flights() {
 
   return (
     <div className="Flights">
-      <h3 className="title">
-        Flights{" "}
-        <button type="button" onClick={handleAddFlight}>
-          +
-        </button>
-      </h3>
+      {!newFlight && !selectedFlight && (
+        <Button
+          fullWidth
+          variant="outline"
+          color="dark"
+          onClick={handleAddFlight}
+          disabled={!flightsReady}
+        >
+          Add Flight
+        </Button>
+      )}
 
       {!flightsReady ? <p>Loading flights...</p> : <></>}
 

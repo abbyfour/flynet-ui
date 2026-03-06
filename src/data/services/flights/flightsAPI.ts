@@ -116,3 +116,5 @@ export const {
   useAddFlightMutation,
   useDeleteFlightMutation,
 } = flightsApi;
+
+export const clearFlightsCache = () => flightsApi.util.resetApiState();

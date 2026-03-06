@@ -1,7 +1,14 @@
-import { useAppSelector } from "../../../../data/store";
+import { useEffect } from "react";
+import { setSidepanelOptions } from "../../../../data/sidepanelSlice";
+import { useAppDispatch, useAppSelector } from "../../../../data/store";
 
 export function Profile() {
   const currentUser = useAppSelector((state) => state.user.currentUser);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setSidepanelOptions({ title: "Profile" }));
+  }, [dispatch]);
 
   if (!currentUser) {
     return <div>Please sign in!</div>;

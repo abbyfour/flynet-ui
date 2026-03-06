@@ -8,12 +8,14 @@ import {
 import { persistReducer, persistStore } from "redux-persist";
 import { flightsApi } from "./services/flights/flightsAPI";
 import { usersApi } from "./services/usersAPI";
+import { sidepanelReducer } from "./sidepanelSlice";
 import { uiPersistConfig, uiReducer } from "./uiSlice";
 import { userPersistConfig, userReducer } from "./userSlice";
 
 const rootReducer = combineReducers({
   ui: persistReducer(uiPersistConfig, uiReducer),
   user: persistReducer(userPersistConfig, userReducer),
+  sidepanel: sidepanelReducer,
 
   [usersApi.reducerPath]: usersApi.reducer,
   [flightsApi.reducerPath]: flightsApi.reducer,
