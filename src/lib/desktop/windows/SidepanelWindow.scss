@@ -1,11 +1,37 @@
 .SidepanelWindow {
-  padding: 0.5em;
-  overflow: scroll;
-  max-height: 85vh;
-  width: 20vw;
+  .window-header {
+    background-color: rgb(255, 200, 0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
 
-  h1 {
-    margin-top: 0.2em;
-    margin-bottom: 0.2em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+
+    .window-controls {
+      position: absolute;
+      left: 0;
+
+      display: flex;
+      align-items: center;
+    }
+
+    .window-title {
+      white-space: nowrap;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+    }
+  }
+
+  .content {
+    padding: 0.5em;
+    overflow: scroll;
+    max-height: 85vh;
+    width: 20vw;
+    min-width: 350px;
+    background: rgb(255, 250, 237);
   }
 }

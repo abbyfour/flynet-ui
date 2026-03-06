@@ -1,3 +1,4 @@
+import { Button } from "@mantine/core";
 import { useState } from "react";
 import { m } from "../../../../../../assets/text/messages";
 import type { NewFlightProperties } from "../../../../../../data/classes/flights/NewFlightProperties";
@@ -34,15 +35,12 @@ export function AddFlight() {
 
   return (
     <div className="AddFlight">
-      <h1>new flight</h1>
-
-      {isLoading && <p>Adding flight...</p>}
-
       <form onSubmit={handleSubmit}>
         <Input
           type="text"
           id="flightNumber"
           label="Flight Number"
+          disabled={isLoading}
           onChange={(value) =>
             setNewFlightProperties((prev) => ({ ...prev, flightNumber: value }))
           }
@@ -54,6 +52,7 @@ export function AddFlight() {
           type="date"
           id="date"
           label="Date"
+          disabled={isLoading}
           onChange={(value) =>
             setNewFlightProperties((prev) => ({ ...prev, date: value }))
           }
@@ -65,6 +64,7 @@ export function AddFlight() {
           type="text"
           id="airline"
           label="Airline"
+          disabled={isLoading}
           onChange={(value) =>
             setNewFlightProperties((prev) => ({ ...prev, airline: value }))
           }
@@ -79,6 +79,7 @@ export function AddFlight() {
             id="origin"
             label="Origin"
             value={newFlightProperties.origin}
+            disabled={isLoading}
             onChange={(value) =>
               setNewFlightProperties((prev) => ({
                 ...prev,
@@ -93,6 +94,7 @@ export function AddFlight() {
             id="destination"
             label="Destination"
             value={newFlightProperties.destination}
+            disabled={isLoading}
             onChange={(value) =>
               setNewFlightProperties((prev) => ({
                 ...prev,
@@ -108,6 +110,7 @@ export function AddFlight() {
           type="time"
           id="departureTime"
           label="Departure Time"
+          disabled={isLoading}
           onChange={(value) =>
             setNewFlightProperties((prev) => ({
               ...prev,
@@ -122,6 +125,7 @@ export function AddFlight() {
           type="time"
           id="arrivalTime"
           label="Arrival Time"
+          disabled={isLoading}
           onChange={(value) =>
             setNewFlightProperties((prev) => ({ ...prev, arrivalTime: value }))
           }
@@ -133,6 +137,7 @@ export function AddFlight() {
           type="text"
           id="aircraft"
           label="Aircraft"
+          disabled={isLoading}
           onChange={(value) =>
             setNewFlightProperties((prev) => ({ ...prev, planeModel: value }))
           }
@@ -144,6 +149,7 @@ export function AddFlight() {
           type="text"
           id="tailNumber"
           label="Tail Number"
+          disabled={isLoading}
           onChange={(value) =>
             setNewFlightProperties((prev) => ({
               ...prev,
@@ -158,6 +164,7 @@ export function AddFlight() {
           type="longtext"
           id="notes"
           label="Notes"
+          disabled={isLoading}
           onChange={(value) =>
             setNewFlightProperties((prev) => ({ ...prev, note: value }))
           }
@@ -165,7 +172,15 @@ export function AddFlight() {
 
         <br />
 
-        <button type="submit">Add Flight</button>
+        <Button
+          type="submit"
+          loading={isLoading}
+          fullWidth
+          variant="outline"
+          color="dark"
+        >
+          Add Flight
+        </Button>
       </form>
     </div>
   );

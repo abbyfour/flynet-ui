@@ -1,31 +1,23 @@
+import { Button } from "@mantine/core";
 import { useState } from "react";
+import { useLazyGetFlightsQuery } from "../../../../data/services/flights/flightsAPI";
 import { useLoginMutation } from "../../../../data/services/usersAPI";
 import { useAppDispatch, useAppSelector } from "../../../../data/store";
-import { clearUser, saveUser } from "../../../../data/userSlice";
+import { clearThinking, setPermanentThinking } from "../../../../data/uiSlice";
+import { saveUser } from "../../../../data/userSlice";
+import { Input } from "../../../forms/Input";
 import { SidepanelContainer } from "../../SidepanelContainer";
 import "./LoginWindow.scss";
 
 export function LoginWindow() {
   const currentUser = useAppSelector((state) => state.user.currentUser);
-  const dispatch = useAppDispatch();
 
   return !currentUser ? (
     <SidepanelContainer align="right" className="LoginWindow">
       <LoginForm />
     </SidepanelContainer>
   ) : (
-    <SidepanelContainer align="right" className="LoginWindow">
-      <div className="LoggedInMessage">
-        <p>Welcome back, {currentUser.nickname}!</p>
-        <button
-          className="logout"
-          type="button"
-          onClick={() => dispatch(clearUser())}
-        >
-          logout
-        </button>
-      </div>
-    </SidepanelContainer>
+    <></>
   );
 }
 
@@ -33,6 +25,7 @@ function LoginForm() {
   const dispatch = useAppDispatch();
   const [login, { isLoading: isLoggingIn }] = useLoginMutation();
   const [loginError, setLoginError] = useState<string | null>(null);
+  const [getFlights] = useLazyGetFlightsQuery();
 
   const [formData, setFormData] = useState({
     username: "",
@@ -48,6 +41,10 @@ function LoginForm() {
       }).unwrap();
 
       dispatch(saveUser(user));
+      dispatch(setPermanentThinking("you look familiar! loading your flights"));
+      getFlights().then(() => {
+        dispatch(clearThinking());
+      });
     } catch (err) {
       console.error("Failed to login:", err);
       setLoginError(err instanceof Error ? err.message : String(err));
@@ -57,35 +54,40 @@ function LoginForm() {
   return (
     <div className="LoginForm">
       <form onSubmit={handleLogin}>
-        <label htmlFor="username">Username</label>
-        <input
-          title="username"
-          type="text"
-          value={formData.username}
-          onChange={(e) =>
-            setFormData({ ...formData, username: e.target.value })
-          }
-          placeholder="Enter your username"
+        <Input
           required
+          type="text"
+          id="username"
+          label="Username"
+          placeholder="Enter your username"
+          disabled={isLoggingIn}
+          onChange={(value) =>
+            setFormData((prev) => ({ ...prev, username: value || "" }))
+          }
         />
 
-        <label htmlFor="password">Password</label>
-        <input
-          title="password"
-          type="password"
-          value={formData.password}
-          onChange={(e) =>
-            setFormData({ ...formData, password: e.target.value })
-          }
-          placeholder="hunter2"
+        <Input
           required
+          type="password"
+          id="password"
+          label="Password"
+          placeholder="Enter your password"
+          disabled={isLoggingIn}
+          onChange={(value) =>
+            setFormData((prev) => ({ ...prev, password: value || "" }))
+          }
         />
 
         {loginError && <p className="login-error">Login data fill issue</p>}
 
-        <button type="submit" disabled={isLoggingIn}>
-          {isLoggingIn ? "Logging in..." : "Login"}
-        </button>
+        <Button
+          type="submit"
+          loading={isLoggingIn}
+          variant="outline"
+          disabled={!formData.username || !formData.password}
+        >
+          Login
+        </Button>
       </form>
     </div>
   );

@@ -112,7 +112,10 @@ export const flightsApi = createApi({
 
 export const {
   useGetFlightsQuery,
+  useLazyGetFlightsQuery,
   useLazyGetAirportByCodeQuery,
   useAddFlightMutation,
   useDeleteFlightMutation,
 } = flightsApi;
+
+export const clearFlightsCache = () => flightsApi.util.resetApiState();

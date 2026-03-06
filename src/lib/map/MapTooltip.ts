@@ -6,15 +6,37 @@ import type {
 } from "../../data/services/flights/selectFlights";
 import { uniquify } from "../../util/arrayUtil";
 
-export function MapTooltip(
-  object?: GroupedAirport | GroupedRoute,
-): string | null {
+function baseTooltip(message: string): { html: string; style: object } {
+  return {
+    html: `<div>${message}</div>`,
+    style: {
+      fontFamily: "Teachers, sans-serif",
+      fontSize: "1rem",
+      backgroundColor: "#1a1a2e",
+      color: "#ffffff",
+      borderRadius: "6px",
+      padding: "8px 12px",
+      border: "1px solid rgba(255,255,255,0.1)",
+      whiteSpace: "pre-line",
+    },
+  };
+}
+
+export function MapTooltip(object?: GroupedAirport | GroupedRoute) {
   if (object && "airport" in object) {
-    return `${object.airport.name} (${object.airport.displayCode})\n(${object.flights.length} flight${object.flights.length !== 1 ? "s" : ""})\n${displayRoutesForAirport(object)}`;
+    return baseTooltip(
+      `<span style="font-weight: bold;">${object.airport.name}</span> (${object.airport.displayCode})
+<span style="font-style: italic; font-size: 90%;">${object.flights.length} flight${object.flights.length !== 1 ? "s" : ""}</span>
+
+${displayRoutesForAirport(object)}`,
+    );
   }
 
   if (object && "route" in object) {
-    return `${displayRouteName(object.route)}\n${displayFlightsOnRoute(object.flights)}`;
+    return baseTooltip(
+      `<span style="font-weight: bold;">${displayRouteName(object.route)}</span>
+${displayFlightsOnRoute(object.flights)}`,
+    );
   }
 
   return null;
@@ -26,7 +48,7 @@ function displayRouteName(route: Route): string {
 
 function displayFlightsOnRoute(flights: GroupedFlightDetails[]): string {
   return (
-    `(${flights.length} flight${flights.length !== 1 ? "s" : ""})\n` +
+    `<span style="font-style: italic; font-size: 90%;">${flights.length} flight${flights.length !== 1 ? "s" : ""}</span>\n\n` +
     uniquify(
       flights
         .filter((f) => !!f.flightNumber)

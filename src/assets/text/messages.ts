@@ -22,4 +22,12 @@ export const m = {
         "Flight removed — returning to the gate.",
       ),
   },
+
+  statusBar: {
+    message: (nickname: string) =>
+      random(
+        `Welcome back, ${nickname}.`,
+        `${nickname}, sounds like you’re due for an altitude recovery procedure`,
+      ),
+  },
 } as const;

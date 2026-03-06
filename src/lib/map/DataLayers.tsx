@@ -45,8 +45,9 @@ export function DataLayers() {
   const routes = useAppSelector(selectRoutesFromFlights);
   const airports = useAppSelector(selectAirportsFromFlights);
   const selectedFlightId = useAppSelector((state) => state.ui.selectedFlightId);
+  const currentUser = useAppSelector((state) => state.user.currentUser);
 
-  const flightsReady = !flightsLoading && !flightsErrored;
+  const flightsReady = !flightsLoading && !flightsErrored && currentUser;
 
   const getTooltip = useCallback(
     ({ object }: PickingInfo<GroupedAirport | GroupedRoute>) =>
