@@ -9,7 +9,6 @@ const maptilerKey = import.meta.env.VITE_MAPTILER_KEY;
 export function Map() {
   const dispatch = useAppDispatch();
 
-  const projection = useAppSelector((state) => state.ui.mapProjection);
   const theme = useAppSelector((state) => state.ui.theme);
 
   // Capture initial view state once without subscribing to mapPosition updates
@@ -24,10 +23,8 @@ export function Map() {
 
   const mapTilerStyle = theme === "dark" ? "dataviz-v4-dark" : "dataviz-v4";
 
-  // Force a full remount of the BaseMap when projection/theme/DPR change.
-  // This avoids timing/attachment issues where Deck overlays lose connection
-  // to the map when MapLibre recreates its canvas during reprojection.
-  const mapKey = `${projection}-${theme}-${
+  // Force a full remount of the BaseMap when theme/DPR changes..
+  const mapKey = `${theme}-${
     typeof window !== "undefined" ? window.devicePixelRatio : 1
   }`;
 
@@ -35,7 +32,6 @@ export function Map() {
     <BaseMap
       key={mapKey}
       mapStyle={`https://api.maptiler.com/maps/${mapTilerStyle}/style.json?key=${maptilerKey}`}
-      projection={projection}
       initialViewState={initialView}
       onMoveEnd={(e) => {
         const { latitude, longitude, zoom } = e.viewState;

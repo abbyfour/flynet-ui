@@ -2,14 +2,13 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import type { Coordinates } from "../util/mapUtil";
 import type { NewFlightProperties } from "./classes/flights/NewFlightProperties";
-import { AppTheme, MapProjection, type SidepanelWindows } from "./classes/ui";
+import { AppTheme, type SidepanelWindows } from "./classes/ui";
 
 export interface Thinking {
   message: string;
 }
 
 export interface UIState {
-  mapProjection: MapProjection;
   activeSidepanelWindow?: SidepanelWindows;
   theme: AppTheme;
   mapPosition?: Coordinates;
@@ -24,7 +23,6 @@ export interface UIState {
 }
 
 const initialState: UIState = {
-  mapProjection: MapProjection.Mercator,
   activeSidepanelWindow: undefined,
   theme: AppTheme.Light,
   mapPosition: undefined,
@@ -37,17 +35,13 @@ const initialState: UIState = {
 export const uiPersistConfig = {
   key: "ui",
   storage,
-  whitelist: ["mapProjection", "activeSidepanelWindow", "theme", "mapPosition"],
+  whitelist: ["activeSidepanelWindow", "theme", "mapPosition"],
 };
 
 const uiSlice = createSlice({
   name: "ui",
   initialState,
   reducers: {
-    setMapProjection(state: UIState, action: PayloadAction<MapProjection>) {
-      state.mapProjection = action.payload;
-    },
-
     setActiveSidepanelWindow(
       state: UIState,
       action: PayloadAction<SidepanelWindows>,
@@ -145,7 +139,6 @@ export const {
   closeActiveSidepanelWindow,
 
   setTheme,
-  setMapProjection,
   recordMapPosition,
 
   recordHighlightedAirport,
