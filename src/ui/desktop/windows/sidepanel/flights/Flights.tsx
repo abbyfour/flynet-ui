@@ -1,5 +1,11 @@
 import { useEffect } from "react";
 import type { Flight } from "../../../../../data/classes/flights/Flight";
+import {
+  clearNewFlight,
+  clearSelectedFlight,
+  openNewFlightForm,
+  recordFlightsListScrollPosition,
+} from "../../../../../data/flightsSlice";
 import { useGetFlightsQuery } from "../../../../../data/services/flights/flightsAPI";
 import {
   selectFlightsAsObjects,
@@ -7,12 +13,6 @@ import {
 } from "../../../../../data/services/flights/selectFlights";
 import { setSidepanelOptions } from "../../../../../data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "../../../../../data/store";
-import {
-  clearNewFlight,
-  clearSelectedFlight,
-  openNewFlightForm,
-  recordFlightsListScrollPosition,
-} from "../../../../../data/uiSlice";
 import { injectMap } from "../../../../../util/arrayUtil";
 import { Button } from "../../../../buttons/Button";
 import { MemoryFoamList } from "../../../../MemoryFoamList";
@@ -27,17 +27,17 @@ export function Flights() {
   const selectedFlight = useAppSelector(selectSelectedFlight);
   const { isLoading: flightsLoading, isError: flightsErrored } =
     useGetFlightsQuery();
-  const newFlight = useAppSelector((state) => state.ui.newFlight);
+  const newFlight = useAppSelector((state) => state.flights.newFlight);
   const dispatch = useAppDispatch();
 
   const flightsReady = !flightsLoading && !flightsErrored;
 
   const flights = useAppSelector(selectFlightsAsObjects);
   const highlightedRouteKey = useAppSelector(
-    (state) => state.ui.highlightedRouteKey,
+    (state) => state.flights.highlightedRouteKey,
   );
   const highlightedAirportId = useAppSelector(
-    (state) => state.ui.highlightedAirportId,
+    (state) => state.flights.highlightedAirportId,
   );
 
   useEffect(() => {

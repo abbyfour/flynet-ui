@@ -4,9 +4,9 @@ import type {
   AirportType,
 } from "../../../../../data/classes/flights/Airport";
 import type { Flight } from "../../../../../data/classes/flights/Flight";
+import { clearSelectedFlight } from "../../../../../data/flightsSlice";
 import { useDeleteFlightMutation } from "../../../../../data/services/flights/flightsAPI";
 import { useAppDispatch } from "../../../../../data/store";
-import { clearSelectedFlight } from "../../../../../data/uiSlice";
 import { joinClasses } from "../../../../../util/componentUtil";
 import { confirm } from "../../../../notices/Confirm";
 

@@ -2,6 +2,11 @@ import { type DeckProps, type PickingInfo } from "@deck.gl/core";
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import { useCallback } from "react";
 import { useControl } from "react-map-gl/maplibre";
+import {
+  clearHighlights,
+  recordHighlightedAirport,
+  recordHighlightedRoute,
+} from "../../data/flightsSlice";
 import { useGetFlightsQuery } from "../../data/services/flights/flightsAPI";
 import {
   selectAirportsFromFlights,
@@ -10,11 +15,6 @@ import {
   type GroupedRoute,
 } from "../../data/services/flights/selectFlights";
 import { useAppDispatch, useAppSelector } from "../../data/store";
-import {
-  clearHighlights,
-  recordHighlightedAirport,
-  recordHighlightedRoute,
-} from "../../data/uiSlice";
 import { AirportsLayer } from "./layers/AirportsLayer";
 import { RoutesLayer } from "./layers/RoutesLayer";
 import { MapTooltip } from "./MapTooltip";
@@ -44,7 +44,9 @@ export function DataLayers() {
 
   const routes = useAppSelector(selectRoutesFromFlights);
   const airports = useAppSelector(selectAirportsFromFlights);
-  const selectedFlightId = useAppSelector((state) => state.ui.selectedFlightId);
+  const selectedFlightId = useAppSelector(
+    (state) => state.flights.selectedFlightId,
+  );
   const currentUser = useAppSelector((state) => state.user.currentUser);
 
   const flightsReady = !flightsLoading && !flightsErrored && currentUser;

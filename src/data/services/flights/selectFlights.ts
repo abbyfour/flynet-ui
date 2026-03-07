@@ -112,7 +112,7 @@ export const selectAirportsFromFlights = createSelector(
  * Selects the currently selected flight object from the Redux store.
  */
 export const selectSelectedFlight = createSelector(
-  [selectFlightsAsObjects, (state) => state.ui.selectedFlightId],
+  [selectFlightsAsObjects, (state) => state.flights.selectedFlightId],
   (flights, selectedFlightId) =>
     flights.find((flight) => flight.id === selectedFlightId) || null,
 );

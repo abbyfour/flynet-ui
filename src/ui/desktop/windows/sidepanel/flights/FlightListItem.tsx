@@ -1,6 +1,6 @@
 import type { Flight } from "../../../../../data/classes/flights/Flight";
+import { setSelectedFlight } from "../../../../../data/flightsSlice";
 import { useAppDispatch } from "../../../../../data/store";
-import { setSelectedFlight } from "../../../../../data/uiSlice";
 import { joinClasses } from "../../../../../util/componentUtil";
 
 type FlightListItemProps = {
