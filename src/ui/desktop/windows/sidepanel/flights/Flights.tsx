@@ -1,4 +1,3 @@
-import { Button } from "@mantine/core";
 import { useEffect } from "react";
 import type { Flight } from "../../../../../data/classes/flights/Flight";
 import { useGetFlightsQuery } from "../../../../../data/services/flights/flightsAPI";
@@ -15,6 +14,7 @@ import {
   recordFlightsListScrollPosition,
 } from "../../../../../data/uiSlice";
 import { injectMap } from "../../../../../util/arrayUtil";
+import { Button } from "../../../../buttons/Button";
 import { MemoryFoamList } from "../../../../MemoryFoamList";
 import { AddFlight } from "./AddFlight/AddFlight";
 import { FlightListItem } from "./FlightListItem";
@@ -89,13 +89,7 @@ export function Flights() {
   return (
     <div className="Flights">
       {!newFlight && !selectedFlight && (
-        <Button
-          fullWidth
-          variant="outline"
-          color="dark"
-          onClick={handleAddFlight}
-          disabled={!flightsReady}
-        >
+        <Button onClick={handleAddFlight} disabled={!flightsReady}>
           Add flight
         </Button>
       )}

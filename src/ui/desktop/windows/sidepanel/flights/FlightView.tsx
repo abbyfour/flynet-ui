@@ -1,4 +1,3 @@
-import { Button } from "@mantine/core";
 import { m } from "../../../../../assets/text/messages";
 import type {
   Airport,
@@ -11,6 +10,7 @@ import { clearSelectedFlight } from "../../../../../data/uiSlice";
 import { joinClasses } from "../../../../../util/componentUtil";
 import { confirm } from "../../../../notices/Confirm";
 
+import { DeleteButton } from "../../../../buttons/DeleteButton";
 import { Toasts } from "../../../../notices/Toast";
 import { dispatchNotice } from "../../../../notices/dispatchNotice";
 import "./FlightView.scss";
@@ -115,16 +115,7 @@ export function FlightView({ flight }: FlightViewProps) {
         )}
       </div>
 
-      <Button
-        className="delete-button"
-        fullWidth
-        variant="outline"
-        color="red"
-        type="button"
-        onClick={handleDeleteFlight}
-      >
-        Delete
-      </Button>
+      <DeleteButton className="delete-button" onClick={handleDeleteFlight} />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Button, Fieldset } from "@mantine/core";
+import { Fieldset } from "@mantine/core";
 import { IconPlaneArrival, IconPlaneDeparture } from "@tabler/icons-react";
 import { useState } from "react";
 import { m } from "../../../../../../assets/text/messages";
@@ -7,6 +7,7 @@ import { useAddFlightMutation } from "../../../../../../data/services/flights/fl
 import type { AddFlightRequestBody } from "../../../../../../data/services/flights/types";
 import { useAppDispatch } from "../../../../../../data/store";
 import { clearNewFlight } from "../../../../../../data/uiSlice";
+import { SubmitButton } from "../../../../../buttons/SubmitButton";
 import { AirportInput } from "../../../../../forms/AirportInput";
 import { Input } from "../../../../../forms/Input";
 import { dispatchNotice } from "../../../../../notices/dispatchNotice";
@@ -173,15 +174,7 @@ export function AddFlight() {
 
         <br />
 
-        <Button
-          type="submit"
-          loading={isLoading}
-          fullWidth
-          variant="outline"
-          color="dark"
-        >
-          Add flight
-        </Button>
+        <SubmitButton loading={isLoading}>Add flight</SubmitButton>
       </form>
     </div>
   );

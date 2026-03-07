@@ -1,10 +1,11 @@
-import { Alert, Button } from "@mantine/core";
+import { Alert } from "@mantine/core";
 import { useState } from "react";
 import { useLazyGetFlightsQuery } from "../../../../data/services/flights/flightsAPI";
 import { useLoginMutation } from "../../../../data/services/usersAPI";
 import { useAppDispatch, useAppSelector } from "../../../../data/store";
 import { clearThinking, setPermanentThinking } from "../../../../data/uiSlice";
 import { saveUser } from "../../../../data/userSlice";
+import { SubmitButton } from "../../../buttons/SubmitButton";
 import { Input } from "../../../forms/Input";
 import { SidepanelContainer } from "../../SidepanelContainer";
 import "./LoginWindow.scss";
@@ -81,23 +82,17 @@ function LoginForm() {
         />
 
         {loginError && (
-          <Alert
-            className="login-error"
-            color="red"
-            // icon={<IconFaceIdError size={16} />}
-          >
+          <Alert className="login-error" color="red">
             Access denied.
           </Alert>
         )}
 
-        <Button
-          type="submit"
+        <SubmitButton
           loading={isLoggingIn}
-          variant="outline"
           disabled={!formData.username || !formData.password}
         >
           Login
-        </Button>
+        </SubmitButton>
       </form>
     </div>
   );
