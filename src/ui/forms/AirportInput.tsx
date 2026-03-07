@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { Combobox, Loader, Pill, PillsInput, useCombobox } from "@mantine/core";
+import { useState } from "react";
 import { Airport } from "../../data/classes/flights/Airport";
 import type { AirportProperties } from "../../data/classes/flights/NewFlightProperties";
 import { useLazyGetAirportByCodeQuery } from "../../data/services/flights/flightsAPI";
-import { Input, type BaseInputProps } from "./Input";
+import type { BaseInputProps } from "./Input";
 
 type AirportInputProps = BaseInputProps & {
   value: AirportProperties | undefined;
@@ -10,23 +11,25 @@ type AirportInputProps = BaseInputProps & {
 };
 
 export function AirportInput({ value, onChange, ...props }: AirportInputProps) {
-  const [code, setCode] = useState(value?.displayCode || "");
-  const [searchAirport, { data, isLoading, error }] =
-    useLazyGetAirportByCodeQuery();
+  const [code, setCode] = useState("");
+  const [searchAirport, { data, isLoading }] = useLazyGetAirportByCodeQuery();
+  const combobox = useCombobox();
 
-  useEffect(() => {
-    if (code.length >= 3 && !value) {
-      const timer = setTimeout(() => {
-        searchAirport(code);
-      }, 500);
+  const handleChange = (input: string) => {
+    setCode(input);
+    combobox.openDropdown();
 
-      return () => clearTimeout(timer);
+    if (input.length >= 3) {
+      searchAirport(input);
+    } else {
+      combobox.closeDropdown();
     }
-  }, [code, searchAirport, value]);
+  };
 
   const handleSelect = (airport: AirportProperties) => {
-    setCode(airport.displayCode);
+    setCode("");
     onChange?.(airport);
+    combobox.closeDropdown();
   };
 
   const handleClear = () => {
@@ -34,50 +37,60 @@ export function AirportInput({ value, onChange, ...props }: AirportInputProps) {
     onChange?.(undefined);
   };
 
-  if (value) {
-    return (
-      <div className="AirportSearch selected">
-        <label>{props.label}</label>
-        <div className="airport-pill">
-          <span className="code">{value.displayCode}</span>
-          <span className="name">{value.name}</span>
-          <button type="button" onClick={handleClear} className="clear-button">
-            x
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="AirportSearch">
-      <Input type="text" onChange={(v) => setCode(v ?? "")} {...props} />
+    <Combobox
+      store={combobox}
+      onOptionSubmit={(val) => {
+        if (data && data.displayCode === val) {
+          handleSelect(toProperties(data));
+        }
+      }}
+    >
+      <Combobox.Target>
+        <PillsInput
+          id={props.id}
+          label={props.label}
+          required={props.required}
+          disabled={props.disabled}
+          radius="xs"
+          className="Input"
+          rightSection={isLoading ? <Loader size="xs" /> : null}
+        >
+          <Pill.Group>
+            {value && (
+              <Pill withRemoveButton onRemove={handleClear}>
+                {value.displayCode} — {value.name}
+              </Pill>
+            )}
+            {!value && (
+              <PillsInput.Field
+                value={code}
+                onChange={(e) => handleChange(e.currentTarget.value)}
+                onFocus={() => data && combobox.openDropdown()}
+                onBlur={() => combobox.closeDropdown()}
+              />
+            )}
+          </Pill.Group>
+        </PillsInput>
+      </Combobox.Target>
 
-      {isLoading && <div className="loading">Searching...</div>}
-
-      {error && code.length >= 3 && (
-        <div className="error">No airport found for {code}</div>
-      )}
-
-      {data && !value && (
-        <div className="airport-dropdown">
-          <button
-            type="button"
-            onClick={() => handleSelect(toProperties(data))}
-            className="airport-option"
-            disabled={props.disabled}
-          >
-            <div className="airport-code">{data.displayCode}</div>
-            <div className="airport-details">
-              <div className="airport-name">{data.name}</div>
-              <div className="airport-location">
+      <Combobox.Dropdown>
+        <Combobox.Options>
+          {data ? (
+            <Combobox.Option value={data.displayCode}>
+              <strong>{data.displayCode}</strong> — {data.name}
+              <div style={{ fontSize: "0.8em", color: "gray" }}>
                 {data.city}, {data.isoCountry}
               </div>
-            </div>
-          </button>
-        </div>
-      )}
-    </div>
+            </Combobox.Option>
+          ) : (
+            <Combobox.Empty>
+              {code.length >= 3 ? "No airport found" : "Type to search..."}
+            </Combobox.Empty>
+          )}
+        </Combobox.Options>
+      </Combobox.Dropdown>
+    </Combobox>
   );
 }
 
