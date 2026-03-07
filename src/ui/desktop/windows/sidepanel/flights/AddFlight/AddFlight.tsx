@@ -38,46 +38,11 @@ export function AddFlight() {
   return (
     <div className="AddFlight">
       <form onSubmit={handleSubmit}>
-        <Input
-          type="text"
-          id="flightNumber"
-          label="Flight Number"
-          disabled={isLoading}
-          onChange={(value) =>
-            setNewFlightProperties((prev) => ({ ...prev, flightNumber: value }))
-          }
-        />
-
-        <br />
-
-        <Input
-          type="date"
-          id="date"
-          label="Date"
-          disabled={isLoading}
-          onChange={(value) =>
-            setNewFlightProperties((prev) => ({ ...prev, date: value }))
-          }
-        />
-
-        <br />
-
-        <Input
-          type="text"
-          id="airline"
-          label="Airline"
-          disabled={isLoading}
-          onChange={(value) =>
-            setNewFlightProperties((prev) => ({ ...prev, airline: value }))
-          }
-        />
-
-        <br />
-
-        <Fieldset legend="Route" radius={"xs"}>
+        <Fieldset className="route-fieldset" legend="Route" radius={"xs"}>
           <AirportInput
             id="origin"
             label="Origin"
+            required
             value={newFlightProperties.origin}
             disabled={isLoading}
             onChange={(value) =>
@@ -93,6 +58,7 @@ export function AddFlight() {
           <AirportInput
             id="destination"
             label="Destination"
+            required
             value={newFlightProperties.destination}
             disabled={isLoading}
             onChange={(value) =>
@@ -103,6 +69,40 @@ export function AddFlight() {
             }
           />
         </Fieldset>
+
+        <Input
+          type="date"
+          id="date"
+          label="Date"
+          disabled={isLoading}
+          onChange={(value) =>
+            setNewFlightProperties((prev) => ({ ...prev, date: value }))
+          }
+        />
+
+        <br />
+
+        <Input
+          type="text"
+          id="flightNumber"
+          label="Flight Number"
+          disabled={isLoading}
+          onChange={(value) =>
+            setNewFlightProperties((prev) => ({ ...prev, flightNumber: value }))
+          }
+        />
+
+        <br />
+
+        <Input
+          type="text"
+          id="airline"
+          label="Airline"
+          disabled={isLoading}
+          onChange={(value) =>
+            setNewFlightProperties((prev) => ({ ...prev, airline: value }))
+          }
+        />
 
         <br />
 
@@ -174,7 +174,14 @@ export function AddFlight() {
 
         <br />
 
-        <SubmitButton loading={isLoading}>Add flight</SubmitButton>
+        <SubmitButton
+          loading={isLoading}
+          disabled={
+            !newFlightProperties.origin || !newFlightProperties.destination
+          }
+        >
+          Add flight
+        </SubmitButton>
       </form>
     </div>
   );

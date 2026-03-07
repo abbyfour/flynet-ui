@@ -44,14 +44,14 @@
 
 .AirportDetails {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 0.5rem;
+  flex-direction: row;
+  gap: 0.3em;
+  align-items: flex-start;
 
-  .name {
-    display: inline-flex;
-    gap: 0.3em;
-    align-items: center;
+  .right {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
   }
 
   .subline {
