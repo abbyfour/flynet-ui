@@ -1,4 +1,5 @@
 import { Button as MantineButton } from "@mantine/core";
+import { joinClasses } from "../../util/componentUtil";
 
 export type ButtonProps = {
   id?: string;
@@ -21,6 +22,8 @@ export type ButtonProps = {
   loading?: boolean;
   disabled?: boolean;
 
+  icon?: React.ReactNode;
+
   onClick?: () => void;
 };
 
@@ -30,6 +33,7 @@ export function Button({
   variant = "outline",
   color = "dark",
   type = "button",
+  className,
   ...props
 }: ButtonProps) {
   return (
@@ -38,7 +42,9 @@ export function Button({
       fullWidth={fullWidth}
       variant={variant}
       color={color}
+      leftSection={props.icon}
       {...props}
+      className={joinClasses("Button", className)}
     >
       {children}
     </MantineButton>

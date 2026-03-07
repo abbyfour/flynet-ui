@@ -7,13 +7,34 @@
 
   .title {
     display: flex;
+    flex-direction: column;
     gap: 0.25rem;
-    align-items: center;
+    border-left: rgb(0, 0, 0) 3px solid;
+    padding-left: 0.5em;
 
     .flight-number {
       font-weight: 700;
       color: #222;
     }
+  }
+
+  .date,
+  .departure-time,
+  .arrival-time {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .time {
+    margin-top: 0.3em;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+  }
+
+  .notes {
+    white-space: pre-wrap;
   }
 
   h5 {
@@ -37,8 +58,10 @@
     }
   }
 
-  .delete-button {
+  .action-buttons {
     margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
   }
 }
 

@@ -1,9 +1,9 @@
 import { ActionIcon, Tooltip } from "@mantine/core";
 import { IconLogout2 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
+import { clearAllUIFlightData } from "../../../data/flightsSlice";
 import { clearFlightsCache } from "../../../data/services/flights/flightsAPI";
 import { useAppDispatch, useAppSelector } from "../../../data/store";
-import { clearAllUIFlightData } from "../../../data/uiSlice";
 import { clearUser } from "../../../data/userSlice";
 import { useEphemeralThinking } from "../../../util/thinkingUtil";
 import "./StatusBar.scss";

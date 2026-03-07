@@ -3,7 +3,7 @@ import { Airport, type APIAirport } from "../../classes/flights/Airport";
 import type { APIFlight } from "../../classes/flights/Flight";
 import type { APIFlightLog } from "../../classes/flights/FlightLog";
 import { baseFlynetQuery } from "../client";
-import type { AddFlightRequestBody } from "./types";
+import type { AddFlightRequestBody, EditFlightRequestBody } from "./types";
 
 const limit = 50;
 
@@ -107,6 +107,18 @@ export const flightsApi = createApi({
       }),
       invalidatesTags: [FlightsApiTags.Flights],
     }),
+
+    updateFlight: build.mutation<
+      void,
+      { flightId: number; updatedData: EditFlightRequestBody }
+    >({
+      query: ({ flightId, updatedData }) => ({
+        url: `flight_logs/${flightId}`,
+        method: "PUT",
+        body: updatedData,
+      }),
+      invalidatesTags: [FlightsApiTags.Flights],
+    }),
   }),
 });
 
@@ -116,6 +128,7 @@ export const {
   useLazyGetAirportByCodeQuery,
   useAddFlightMutation,
   useDeleteFlightMutation,
+  useUpdateFlightMutation,
 } = flightsApi;
 
 export const clearFlightsCache = () => flightsApi.util.resetApiState();

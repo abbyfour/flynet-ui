@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef, type ReactNode } from "react";
+import type { FlightsState } from "../data/flightsSlice";
 import { useAppSelector } from "../data/store";
-import type { UIState } from "../data/uiSlice";
 
 interface MemoryFoamListProps {
   /** Whether the list is currently visible */
   isVisible: boolean;
-  /** Redux state key to read scroll position from (must match a number field in UIState) */
-  storageKey: keyof UIState;
+  /** Redux state key to read scroll position from (must match a number field in FlightsState) */
+  storageKey: keyof FlightsState;
   /** Callback to dispatch when scroll position changes */
   onScroll: (position: number) => void;
   /** CSS class selector for the scrollable parent (defaults to ".SidepanelWindow") */
@@ -31,7 +31,7 @@ export function MemoryFoamList({
 }: MemoryFoamListProps) {
   const listRef = useRef<HTMLUListElement>(null);
   const scrollPosition = useAppSelector(
-    (state) => state.ui[storageKey] as number,
+    (state) => state.flights[storageKey] as number,
   );
   const scrollPositionRef = useRef(scrollPosition);
   scrollPositionRef.current = scrollPosition;

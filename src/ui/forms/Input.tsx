@@ -25,6 +25,7 @@ export interface BaseInputProps {
 
 type InputProps<T extends InputType> = BaseInputProps & {
   type: T;
+  value?: InputValue<T>;
 
   onChange?(value: InputValue<T>): void;
 };
@@ -34,6 +35,7 @@ export function Input<T extends InputType>({
   id,
   label,
   onChange,
+  value,
   required = false,
   placeholder = "",
   icon: leftSection,
@@ -58,6 +60,7 @@ export function Input<T extends InputType>({
       return (
         <TextInput
           {...sharedInputProps}
+          value={value as string | undefined}
           onChange={(e) => onChange?.(transformValue(type, e.target.value))}
         />
       );
@@ -67,6 +70,7 @@ export function Input<T extends InputType>({
           {...sharedInputProps}
           clearable={!required}
           maxDate={dayjs().add(2, "year").format("YYYY-MM-DD")}
+          value={value as Date | undefined}
           onChange={(date) =>
             onChange?.(transformValue(type, date ?? undefined))
           }
@@ -76,6 +80,7 @@ export function Input<T extends InputType>({
       return (
         <TimeInput
           {...sharedInputProps}
+          value={value as string | undefined}
           onChange={(e) =>
             onChange?.(transformValue(type, e.target.value ?? undefined))
           }
@@ -85,6 +90,7 @@ export function Input<T extends InputType>({
       return (
         <PasswordInput
           {...sharedInputProps}
+          value={value as string | undefined}
           onChange={(e) => onChange?.(transformValue(type, e.target.value))}
         />
       );
@@ -95,6 +101,7 @@ export function Input<T extends InputType>({
           autosize
           minRows={2}
           maxRows={4}
+          value={value as string | undefined}
           onChange={(e) => onChange?.(transformValue(type, e.target.value))}
         />
       );

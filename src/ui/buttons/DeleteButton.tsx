@@ -2,7 +2,6 @@ import { IconTrash } from "@tabler/icons-react";
 import { Button, type ButtonProps } from "./Button";
 
 import { joinClasses } from "../../util/componentUtil";
-import "./DeleteButton.scss";
 
 export function DeleteButton(props: ButtonProps) {
   return (
@@ -11,8 +10,9 @@ export function DeleteButton(props: ButtonProps) {
       color="red"
       {...props}
       className={joinClasses("DeleteButton", props.className)}
+      icon={<IconTrash size={16} />}
     >
-      <IconTrash size={16} /> {props.children || "Delete"}
+      {props.children || "Delete"}
     </Button>
   );
 }

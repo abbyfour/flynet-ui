@@ -6,6 +6,7 @@ import {
   type TypedUseSelectorHook,
 } from "react-redux";
 import { persistReducer, persistStore } from "redux-persist";
+import { flightsReducer } from "./flightsSlice";
 import { flightsApi } from "./services/flights/flightsAPI";
 import { usersApi } from "./services/usersAPI";
 import { sidepanelReducer } from "./sidepanelSlice";
@@ -15,7 +16,9 @@ import { userPersistConfig, userReducer } from "./userSlice";
 const rootReducer = combineReducers({
   ui: persistReducer(uiPersistConfig, uiReducer),
   user: persistReducer(userPersistConfig, userReducer),
+
   sidepanel: sidepanelReducer,
+  flights: flightsReducer,
 
   [usersApi.reducerPath]: usersApi.reducer,
   [flightsApi.reducerPath]: flightsApi.reducer,
