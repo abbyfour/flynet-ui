@@ -1,8 +1,6 @@
 import { ArcLayer } from "deck.gl";
 import type { Route } from "../../../data/classes/flights/Route";
-import { MapProjection } from "../../../data/classes/ui";
 import { type GroupedRoute } from "../../../data/services/flights/selectFlights";
-import { useAppSelector } from "../../../data/store";
 import type { RGB, RGBA } from "../style/colours";
 import { useColours } from "../style/useColours";
 
@@ -12,8 +10,6 @@ type RoutesLayerProps = {
 };
 
 export function RoutesLayer({ routes, selectedFlightId }: RoutesLayerProps) {
-  const projection = useAppSelector((state) => state.ui.mapProjection);
-
   const {
     flightLineColour: routeColour,
     flightLineHighlightColour: routeHighlightColour,
@@ -26,8 +22,7 @@ export function RoutesLayer({ routes, selectedFlightId }: RoutesLayerProps) {
     id: "routes-layer",
     greatCircle: true,
     getHeight: 0.05,
-    beforeId:
-      projection === MapProjection.Mercator ? "Place labels" : undefined,
+    beforeId: "Place labels",
     data: routes,
     pickable: true,
     autoHighlight: true,
