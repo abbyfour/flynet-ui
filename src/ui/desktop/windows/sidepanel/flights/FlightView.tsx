@@ -10,6 +10,8 @@ import { clearSelectedFlight } from "../../../../../data/uiSlice";
 import { joinClasses } from "../../../../../util/componentUtil";
 import { confirm } from "../../../../notices/Confirm";
 
+import { IconPencil } from "@tabler/icons-react";
+import { Button } from "../../../../buttons/Button";
 import { DeleteButton } from "../../../../buttons/DeleteButton";
 import { Toasts } from "../../../../notices/Toast";
 import { dispatchNotice } from "../../../../notices/dispatchNotice";
@@ -115,7 +117,10 @@ export function FlightView({ flight }: FlightViewProps) {
         )}
       </div>
 
-      <DeleteButton className="delete-button" onClick={handleDeleteFlight} />
+      <div className="action-buttons">
+        <Button icon={<IconPencil size={16} />}>Edit</Button>
+        <DeleteButton className="delete-button" onClick={handleDeleteFlight} />
+      </div>
     </div>
   );
 }
