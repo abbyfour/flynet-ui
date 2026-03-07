@@ -74,6 +74,7 @@ export function DataLayers() {
         AirportsLayer({ airports: flightsReady ? airports : [] }),
         RoutesLayer({ routes: flightsReady ? routes : [], selectedFlightId }),
       ]}
+      pickingRadius={15}
       getTooltip={getTooltip}
       onHover={onHover}
     />

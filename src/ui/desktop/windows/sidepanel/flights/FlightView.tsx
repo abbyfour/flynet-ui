@@ -129,14 +129,18 @@ function AirportDetails({
 }) {
   return (
     <div className={joinClasses("AirportDetails", className)}>
-      {<AirportCodePill airport={airport} />}
+      <div className="left">
+        <AirportCodePill airport={airport} />
+      </div>
 
-      <span className="name">{airport.name}</span>
+      <div className="right">
+        <span className="name">{airport.name}</span>
 
-      <span className="subline">
-        {displayAirportType(airport.type)} • {airport.city}, {airport.isoRegion}
-        , {airport.isoCountry}
-      </span>
+        <span className="subline">
+          {displayAirportType(airport.type)} • {airport.city},{" "}
+          {airport.isoRegion}, {airport.isoCountry}
+        </span>
+      </div>
     </div>
   );
 }

@@ -34,8 +34,7 @@ ${displayRoutesForAirport(object)}`,
 
   if (object && "route" in object) {
     return baseTooltip(
-      `<span style="font-weight: bold;">${displayRouteName(object.route)}</span>
-${displayFlightsOnRoute(object.flights)}`,
+      `<span style="font-weight: bold;">${displayRouteName(object.route)}</span>\n${displayFlightsOnRoute(object.flights)}`,
     );
   }
 
@@ -47,15 +46,15 @@ function displayRouteName(route: Route): string {
 }
 
 function displayFlightsOnRoute(flights: GroupedFlightDetails[]): string {
+  const displayedFlights = uniquify(
+    flights
+      .filter((f) => !!f.flightNumber)
+      .map((flight) => `  • ${flight.flightNumber}`),
+  );
+
   return (
-    `<span style="font-style: italic; font-size: 90%;">${flights.length} flight${flights.length !== 1 ? "s" : ""}</span>\n\n` +
-    uniquify(
-      flights
-        .filter((f) => !!f.flightNumber)
-        .map((flight) => `  • ${flight.flightNumber}`),
-    )
-      .sort()
-      .join("\n")
+    `<span style="font-style: italic; font-size: 90%;">${flights.length} flight${flights.length !== 1 ? "s" : ""}</span>${displayedFlights.length ? "\n\n" : ""}` +
+    displayedFlights.sort().join("\n")
   );
 }
 
