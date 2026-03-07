@@ -1,10 +1,11 @@
-import { Button } from "@mantine/core";
+import { Alert } from "@mantine/core";
 import { useState } from "react";
 import { useLazyGetFlightsQuery } from "../../../../data/services/flights/flightsAPI";
 import { useLoginMutation } from "../../../../data/services/usersAPI";
 import { useAppDispatch, useAppSelector } from "../../../../data/store";
 import { clearThinking, setPermanentThinking } from "../../../../data/uiSlice";
 import { saveUser } from "../../../../data/userSlice";
+import { SubmitButton } from "../../../buttons/SubmitButton";
 import { Input } from "../../../forms/Input";
 import { SidepanelContainer } from "../../SidepanelContainer";
 import "./LoginWindow.scss";
@@ -61,9 +62,10 @@ function LoginForm() {
           label="Username"
           placeholder="Enter your username"
           disabled={isLoggingIn}
-          onChange={(value) =>
-            setFormData((prev) => ({ ...prev, username: value || "" }))
-          }
+          onChange={(value) => {
+            setFormData((prev) => ({ ...prev, username: value || "" }));
+            setLoginError(null);
+          }}
         />
 
         <Input
@@ -73,21 +75,24 @@ function LoginForm() {
           label="Password"
           placeholder="Enter your password"
           disabled={isLoggingIn}
-          onChange={(value) =>
-            setFormData((prev) => ({ ...prev, password: value || "" }))
-          }
+          onChange={(value) => {
+            setFormData((prev) => ({ ...prev, password: value || "" }));
+            setLoginError(null);
+          }}
         />
 
-        {loginError && <p className="login-error">Login data fill issue</p>}
+        {loginError && (
+          <Alert className="login-error" color="red">
+            Access denied.
+          </Alert>
+        )}
 
-        <Button
-          type="submit"
+        <SubmitButton
           loading={isLoggingIn}
-          variant="outline"
           disabled={!formData.username || !formData.password}
         >
           Login
-        </Button>
+        </SubmitButton>
       </form>
     </div>
   );

@@ -1,11 +1,11 @@
-import { Dock } from "./lib/desktop/Dock";
-import { StatusBar } from "./lib/desktop/statusBar/StatusBar";
-import { ThemeToggle } from "./lib/desktop/themeToggle/ThemeToggle";
-import { LoginWindow } from "./lib/desktop/windows/login/LoginWindow";
-import { SidepanelWindow } from "./lib/desktop/windows/SidepanelWindow";
-import { ProjectionToggle } from "./lib/map/controls/ProjectionToggle";
-import { Map } from "./lib/map/Map";
-import { AppContext } from "./lib/uilib/AppContext";
+import { AppContext } from "./ui/AppContext";
+import { Dock } from "./ui/desktop/Dock";
+import { StatusBar } from "./ui/desktop/statusBar/StatusBar";
+import { ThemeToggle } from "./ui/desktop/themeToggle/ThemeToggle";
+import { LoginWindow } from "./ui/desktop/windows/login/LoginWindow";
+import { SidepanelWindow } from "./ui/desktop/windows/SidepanelWindow";
+import { ProjectionToggle } from "./ui/map/controls/ProjectionToggle";
+import { Map } from "./ui/map/Map";
 
 import "./styles.shim.ts";
 

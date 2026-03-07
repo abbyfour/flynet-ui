@@ -38,6 +38,7 @@ const RAW_RUNTIME_STATE =
           ["@luma.gl/core", "npm:9.2.6"],\
           ["@luma.gl/shadertools", "virtual:c813406e4e4f54cb822aec899ff57984d61280dd86a1f3c1c39710aad1eb8239f7d747bd4a19b1457aefa61f8f58a082db1028b510075d374fb251e4f1a433b9#npm:9.2.6"],\
           ["@mantine/core", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.3.15"],\
+          ["@mantine/dates", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.3.16"],\
           ["@mantine/hooks", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.3.15"],\
           ["@mantine/modals", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.3.15"],\
           ["@mantine/notifications", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.3.15"],\
@@ -50,6 +51,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react-toggle", "npm:4.0.5"],\
           ["@types/redux-persist", "npm:4.3.1"],\
           ["@vitejs/plugin-react-swc", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:4.2.2"],\
+          ["dayjs", "npm:1.11.19"],\
           ["deck.gl", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:9.2.6"],\
           ["eslint", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:9.39.2"],\
           ["eslint-plugin-react-hooks", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:7.0.1"],\
@@ -2197,6 +2199,45 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@mantine/dates", [\
+      ["npm:8.3.16", {\
+        "packageLocation": "../../.yarn/berry/cache/@mantine-dates-npm-8.3.16-4336d81207-10c0.zip/node_modules/@mantine/dates/",\
+        "packageDependencies": [\
+          ["@mantine/dates", "npm:8.3.16"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.3.16", {\
+        "packageLocation": "./.yarn/__virtual__/@mantine-dates-virtual-8144c09c35/3/.yarn/berry/cache/@mantine-dates-npm-8.3.16-4336d81207-10c0.zip/node_modules/@mantine/dates/",\
+        "packageDependencies": [\
+          ["@mantine/core", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.3.15"],\
+          ["@mantine/dates", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.3.16"],\
+          ["@mantine/hooks", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.3.15"],\
+          ["@types/dayjs", null],\
+          ["@types/mantine__core", null],\
+          ["@types/mantine__hooks", null],\
+          ["@types/react", "npm:19.2.8"],\
+          ["@types/react-dom", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:19.2.3"],\
+          ["clsx", "npm:2.1.1"],\
+          ["dayjs", "npm:1.11.19"],\
+          ["react", "npm:19.2.3"],\
+          ["react-dom", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:19.2.3"]\
+        ],\
+        "packagePeers": [\
+          "@mantine/core",\
+          "@mantine/hooks",\
+          "@types/dayjs",\
+          "@types/mantine__core",\
+          "@types/mantine__hooks",\
+          "@types/react-dom",\
+          "@types/react",\
+          "dayjs",\
+          "react-dom",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@mantine/hooks", [\
       ["npm:8.3.15", {\
         "packageLocation": "../../.yarn/berry/cache/@mantine-hooks-npm-8.3.15-7550a57fe4-10c0.zip/node_modules/@mantine/hooks/",\
@@ -4286,6 +4327,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["dayjs", [\
+      ["npm:1.11.19", {\
+        "packageLocation": "../../.yarn/berry/cache/dayjs-npm-1.11.19-7112eeb750-10c0.zip/node_modules/dayjs/",\
+        "packageDependencies": [\
+          ["dayjs", "npm:1.11.19"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["debug", [\
       ["npm:4.4.3", {\
         "packageLocation": "../../.yarn/berry/cache/debug-npm-4.4.3-0105c6123a-10c0.zip/node_modules/debug/",\
@@ -4860,6 +4910,7 @@ const RAW_RUNTIME_STATE =
           ["@luma.gl/core", "npm:9.2.6"],\
           ["@luma.gl/shadertools", "virtual:c813406e4e4f54cb822aec899ff57984d61280dd86a1f3c1c39710aad1eb8239f7d747bd4a19b1457aefa61f8f58a082db1028b510075d374fb251e4f1a433b9#npm:9.2.6"],\
           ["@mantine/core", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.3.15"],\
+          ["@mantine/dates", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.3.16"],\
           ["@mantine/hooks", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.3.15"],\
           ["@mantine/modals", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.3.15"],\
           ["@mantine/notifications", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.3.15"],\
@@ -4872,6 +4923,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react-toggle", "npm:4.0.5"],\
           ["@types/redux-persist", "npm:4.3.1"],\
           ["@vitejs/plugin-react-swc", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:4.2.2"],\
+          ["dayjs", "npm:1.11.19"],\
           ["deck.gl", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:9.2.6"],\
           ["eslint", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:9.39.2"],\
           ["eslint-plugin-react-hooks", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:7.0.1"],\

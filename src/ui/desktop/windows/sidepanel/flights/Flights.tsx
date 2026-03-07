@@ -1,4 +1,3 @@
-import { Button } from "@mantine/core";
 import { useEffect } from "react";
 import type { Flight } from "../../../../../data/classes/flights/Flight";
 import { useGetFlightsQuery } from "../../../../../data/services/flights/flightsAPI";
@@ -14,8 +13,9 @@ import {
   openNewFlightForm,
   recordFlightsListScrollPosition,
 } from "../../../../../data/uiSlice";
-import { MemoryFoamList } from "../../../../../lib/uilib/MemoryFoamList";
 import { injectMap } from "../../../../../util/arrayUtil";
+import { Button } from "../../../../buttons/Button";
+import { MemoryFoamList } from "../../../../MemoryFoamList";
 import { AddFlight } from "./AddFlight/AddFlight";
 import { FlightListItem } from "./FlightListItem";
 import "./Flights.scss";
@@ -44,7 +44,7 @@ export function Flights() {
     if (selectedFlight) {
       dispatch(
         setSidepanelOptions({
-          title: `Flight ${selectedFlight.flightNumber}`,
+          title: `Flight ${selectedFlight.flightNumber ?? "unknown"}`,
           onGoBack: () => dispatch(clearSelectedFlight()),
         }),
       );
@@ -58,7 +58,7 @@ export function Flights() {
     } else {
       dispatch(
         setSidepanelOptions({
-          title: "Add Flight",
+          title: "Add flight",
           onGoBack: () => dispatch(clearNewFlight()),
         }),
       );
@@ -89,14 +89,8 @@ export function Flights() {
   return (
     <div className="Flights">
       {!newFlight && !selectedFlight && (
-        <Button
-          fullWidth
-          variant="outline"
-          color="dark"
-          onClick={handleAddFlight}
-          disabled={!flightsReady}
-        >
-          Add Flight
+        <Button onClick={handleAddFlight} disabled={!flightsReady}>
+          Add flight
         </Button>
       )}
 
@@ -116,6 +110,7 @@ export function Flights() {
         onScroll={(position) =>
           dispatch(recordFlightsListScrollPosition(position))
         }
+        scrollableParentSelector=".sidepanel-scroll-area"
       >
         {injectMap(
           flights,

@@ -55,7 +55,9 @@ export function SidepanelWindow() {
         </span>
       </div>
 
-      <div className="content">{getSidepanelWindow(activeWindow) || <></>}</div>
+      <div className="content sidepanel-scroll-area">
+        {getSidepanelWindow(activeWindow) || <></>}
+      </div>
     </SidepanelContainer>
   ) : null;
 }

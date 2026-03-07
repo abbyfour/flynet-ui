@@ -2,24 +2,14 @@ import { useEffect, useState } from "react";
 import { Airport } from "../../data/classes/flights/Airport";
 import type { AirportProperties } from "../../data/classes/flights/NewFlightProperties";
 import { useLazyGetAirportByCodeQuery } from "../../data/services/flights/flightsAPI";
-import { Input } from "./Input";
+import { Input, type BaseInputProps } from "./Input";
 
-type AirportInputProps = {
-  id: string;
-  label: string;
+type AirportInputProps = BaseInputProps & {
   value: AirportProperties | undefined;
-  disabled?: boolean;
-
   onChange?: (value: AirportProperties | undefined) => void;
 };
 
-export function AirportInput({
-  id,
-  label,
-  value,
-  disabled = false,
-  onChange,
-}: AirportInputProps) {
+export function AirportInput({ value, onChange, ...props }: AirportInputProps) {
   const [code, setCode] = useState(value?.displayCode || "");
   const [searchAirport, { data, isLoading, error }] =
     useLazyGetAirportByCodeQuery();
@@ -47,7 +37,7 @@ export function AirportInput({
   if (value) {
     return (
       <div className="AirportSearch selected">
-        <label>{label}</label>
+        <label>{props.label}</label>
         <div className="airport-pill">
           <span className="code">{value.displayCode}</span>
           <span className="name">{value.name}</span>
@@ -61,13 +51,7 @@ export function AirportInput({
 
   return (
     <div className="AirportSearch">
-      <Input
-        type="text"
-        id={id}
-        label={label}
-        onChange={(v) => setCode(v ?? "")}
-        disabled={disabled}
-      />
+      <Input type="text" onChange={(v) => setCode(v ?? "")} {...props} />
 
       {isLoading && <div className="loading">Searching...</div>}
 
@@ -81,7 +65,7 @@ export function AirportInput({
             type="button"
             onClick={() => handleSelect(toProperties(data))}
             className="airport-option"
-            disabled={disabled}
+            disabled={props.disabled}
           >
             <div className="airport-code">{data.displayCode}</div>
             <div className="airport-details">

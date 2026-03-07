@@ -1261,6 +1261,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mantine/dates@npm:^8.3.16":
+  version: 8.3.16
+  resolution: "@mantine/dates@npm:8.3.16"
+  dependencies:
+    clsx: "npm:^2.1.1"
+  peerDependencies:
+    "@mantine/core": 8.3.16
+    "@mantine/hooks": 8.3.16
+    dayjs: ">=1.0.0"
+    react: ^18.x || ^19.x
+    react-dom: ^18.x || ^19.x
+  checksum: 10c0/0f12cece6a7b5b87c5b3177cebbc84457076a1bbc7b935589c2f1dc473edf927492fd862521f51b6e1464581f7dcb0dc5e020039e359feab6c99ef424e358dbd
+  languageName: node
+  linkType: hard
+
 "@mantine/hooks@npm:^8.3.15":
   version: 8.3.15
   resolution: "@mantine/hooks@npm:8.3.15"
@@ -2896,6 +2911,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dayjs@npm:^1.11.19":
+  version: 1.11.19
+  resolution: "dayjs@npm:1.11.19"
+  checksum: 10c0/7d8a6074a343f821f81ea284d700bd34ea6c7abbe8d93bce7aba818948957c1b7f56131702e5e890a5622cdfc05dcebe8aed0b8313bdc6838a594d7846b0b000
+  languageName: node
+  linkType: hard
+
 "debug@npm:4, debug@npm:^4.1.0, debug@npm:^4.3.1, debug@npm:^4.3.2, debug@npm:^4.3.4, debug@npm:^4.4.3":
   version: 4.4.3
   resolution: "debug@npm:4.4.3"
@@ -3411,6 +3433,7 @@ __metadata:
     "@luma.gl/core": "npm:^9.2.6"
     "@luma.gl/shadertools": "npm:^9.2.6"
     "@mantine/core": "npm:^8.3.15"
+    "@mantine/dates": "npm:^8.3.16"
     "@mantine/hooks": "npm:^8.3.15"
     "@mantine/modals": "npm:^8.3.15"
     "@mantine/notifications": "npm:^8.3.15"
@@ -3423,6 +3446,7 @@ __metadata:
     "@types/react-toggle": "npm:^4"
     "@types/redux-persist": "npm:^4.3.1"
     "@vitejs/plugin-react-swc": "npm:^4.2.2"
+    dayjs: "npm:^1.11.19"
     deck.gl: "npm:^9.2.6"
     eslint: "npm:^9.39.1"
     eslint-plugin-react-hooks: "npm:^7.0.1"
