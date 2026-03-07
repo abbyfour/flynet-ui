@@ -44,7 +44,7 @@ export function Flights() {
     if (selectedFlight) {
       dispatch(
         setSidepanelOptions({
-          title: `Flight ${selectedFlight.flightNumber}`,
+          title: `Flight ${selectedFlight.flightNumber ?? "unknown"}`,
           onGoBack: () => dispatch(clearSelectedFlight()),
         }),
       );
@@ -110,6 +110,7 @@ export function Flights() {
         onScroll={(position) =>
           dispatch(recordFlightsListScrollPosition(position))
         }
+        scrollableParentSelector=".sidepanel-scroll-area"
       >
         {injectMap(
           flights,

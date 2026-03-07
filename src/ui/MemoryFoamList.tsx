@@ -33,6 +33,8 @@ export function MemoryFoamList({
   const scrollPosition = useAppSelector(
     (state) => state.ui[storageKey] as number,
   );
+  const scrollPositionRef = useRef(scrollPosition);
+  scrollPositionRef.current = scrollPosition;
 
   const getScrollParent = useCallback(() => {
     return listRef.current?.closest(scrollableParentSelector);
@@ -45,9 +47,7 @@ export function MemoryFoamList({
     const scrollParent = getScrollParent();
     if (!scrollParent) return;
 
-    const handleScroll = () => {
-      onScroll(scrollParent.scrollTop);
-    };
+    const handleScroll = () => onScroll(scrollParent.scrollTop);
 
     scrollParent.addEventListener("scroll", handleScroll);
     return () => scrollParent.removeEventListener("scroll", handleScroll);
@@ -61,9 +61,9 @@ export function MemoryFoamList({
     if (!scrollParent) return;
 
     setTimeout(() => {
-      scrollParent.scrollTop = scrollPosition;
+      scrollParent.scrollTop = scrollPositionRef.current;
     }, 0);
-  }, [isVisible, scrollPosition, getScrollParent]);
+  }, [isVisible, getScrollParent]);
 
   return (
     <ul
