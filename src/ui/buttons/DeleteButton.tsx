@@ -5,8 +5,6 @@ import { joinClasses } from "../../util/componentUtil";
 import "./DeleteButton.scss";
 
 export function DeleteButton(props: ButtonProps) {
-  console.log(joinClasses("DeleteButton", props.className));
-
   return (
     <Button
       variant="outline"
