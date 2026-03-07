@@ -4,13 +4,21 @@ import type {
   AirportType,
 } from "../../../../../data/classes/flights/Airport";
 import type { Flight } from "../../../../../data/classes/flights/Flight";
-import { clearSelectedFlight } from "../../../../../data/flightsSlice";
+import {
+  clearSelectedFlight,
+  setEditingFlight,
+} from "../../../../../data/flightsSlice";
 import { useDeleteFlightMutation } from "../../../../../data/services/flights/flightsAPI";
 import { useAppDispatch } from "../../../../../data/store";
 import { joinClasses } from "../../../../../util/componentUtil";
 import { confirm } from "../../../../notices/Confirm";
 
-import { IconPencil } from "@tabler/icons-react";
+import {
+  IconCalendarFilled,
+  IconPencil,
+  IconPlaneArrivalFilled,
+  IconPlaneDepartureFilled,
+} from "@tabler/icons-react";
 import { Button } from "../../../../buttons/Button";
 import { DeleteButton } from "../../../../buttons/DeleteButton";
 import { Toasts } from "../../../../notices/Toast";
@@ -49,25 +57,42 @@ export function FlightView({ flight }: FlightViewProps) {
     }
   };
 
+  const handleEditFlight = () => {
+    dispatch(
+      setEditingFlight({ flightId: flight.id, draft: flight.toDraft() }),
+    );
+  };
+
   return (
     <div className="FlightView">
       <div className="content">
         <h4 className="title">
           {flight.flightNumber && (
             <>
-              <span className="flight-number">{flight.flightNumber}:</span>{" "}
+              <span className="flight-number">{flight.flightNumber}</span>
             </>
           )}
           {flight.origin.city} to {flight.destination.city}
         </h4>
 
         {flight.date && (
-          <div className="date">
-            <h5>Date:</h5>
-            {flight.date.toLocaleDateString()}{" "}
-            {flight.arrivalTime && flight.departureTime
-              ? `• ${flight.departureTime} -> ${flight.arrivalTime}`
-              : ""}
+          <div>
+            <div className="date">
+              <IconCalendarFilled size={16} />{" "}
+              {flight.date.toLocaleDateString()}{" "}
+            </div>
+
+            {flight.departureTime && flight.arrivalTime && (
+              <div className="time">
+                <div className="departure-time">
+                  <IconPlaneDepartureFilled size={16} /> {flight.departureTime}
+                </div>
+
+                <div className="arrival-time">
+                  <IconPlaneArrivalFilled size={16} /> {flight.arrivalTime}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -118,7 +143,9 @@ export function FlightView({ flight }: FlightViewProps) {
       </div>
 
       <div className="action-buttons">
-        <Button icon={<IconPencil size={16} />}>Edit</Button>
+        <Button icon={<IconPencil size={16} />} onClick={handleEditFlight}>
+          Edit
+        </Button>
         <DeleteButton className="delete-button" onClick={handleDeleteFlight} />
       </div>
     </div>

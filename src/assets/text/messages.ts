@@ -3,6 +3,13 @@ function random(...options: string[]) {
 }
 
 export const m = {
+  confirm: {
+    losingChanges: {
+      title: "Lose unsaved changes?",
+      text: "If you go back now, any changes you made will be ejected into space.",
+    },
+  },
+
   flight: {
     // addition
     couldNotBeAdded: "Flight could not be added — tower unresponsive.",
@@ -21,6 +28,10 @@ export const m = {
         "Flight removed — route cleared from the FMS.",
         "Flight removed — returning to the gate.",
       ),
+
+    // editing
+    couldNotBeUpdated: "Flight could not be updated — check with ground crew.",
+    updatedSuccessfully: "Flight updated — changes have been logged.",
   },
 
   statusBar: {

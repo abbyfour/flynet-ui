@@ -1,13 +1,13 @@
 import { Combobox, Loader, Pill, PillsInput, useCombobox } from "@mantine/core";
 import { useState } from "react";
 import { Airport } from "../../data/classes/flights/Airport";
-import type { AirportProperties } from "../../data/classes/flights/NewFlightProperties";
+import type { AirportDraft } from "../../data/classes/flights/FlightDraft";
 import { useLazyGetAirportByCodeQuery } from "../../data/services/flights/flightsAPI";
 import type { BaseInputProps } from "./Input";
 
 type AirportInputProps = BaseInputProps & {
-  value: AirportProperties | undefined;
-  onChange?: (value: AirportProperties | undefined) => void;
+  value: AirportDraft | undefined;
+  onChange?: (value: AirportDraft | undefined) => void;
 };
 
 export function AirportInput({ value, onChange, ...props }: AirportInputProps) {
@@ -26,7 +26,7 @@ export function AirportInput({ value, onChange, ...props }: AirportInputProps) {
     }
   };
 
-  const handleSelect = (airport: AirportProperties) => {
+  const handleSelect = (airport: AirportDraft) => {
     setCode("");
     onChange?.(airport);
     combobox.closeDropdown();
@@ -94,7 +94,7 @@ export function AirportInput({ value, onChange, ...props }: AirportInputProps) {
   );
 }
 
-function toProperties(airport: Airport): AirportProperties {
+function toProperties(airport: Airport): AirportDraft {
   return {
     displayCode: airport.displayCode,
     name: airport.name,

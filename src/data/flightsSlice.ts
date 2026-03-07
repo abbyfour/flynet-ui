@@ -1,12 +1,21 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { NewFlightProperties } from "./classes/flights/NewFlightProperties";
+import type { FlightDraft } from "./classes/flights/FlightDraft";
+
+type InProgressDraft = {
+  type: "new" | "edit";
+  // For editing
+  flightId?: number;
+  draft: FlightDraft;
+};
 
 export interface FlightsState {
   highlightedAirportId?: number;
   highlightedRouteKey?: string;
 
   selectedFlightId?: number;
-  newFlight?: NewFlightProperties;
+
+  inProgressDraft?: InProgressDraft;
+
   flightsListScrollPosition: number;
 }
 
@@ -14,7 +23,7 @@ const initialState: FlightsState = {
   highlightedAirportId: undefined,
   highlightedRouteKey: undefined,
   selectedFlightId: undefined,
-  newFlight: undefined,
+  inProgressDraft: undefined,
   flightsListScrollPosition: 0,
 };
 
@@ -54,21 +63,54 @@ const flightsSlice = createSlice({
       state.selectedFlightId = undefined;
     },
 
-    openNewFlightForm(state: FlightsState) {
-      state.newFlight = {};
-    },
-
+    // Drafting
     setNewFlight(
       state: FlightsState,
-      action: PayloadAction<NewFlightProperties | undefined>,
+      action: PayloadAction<FlightDraft | undefined>,
     ) {
-      state.newFlight = action.payload;
+      if (!action.payload) {
+        state.inProgressDraft = undefined;
+        return;
+      }
+
+      state.inProgressDraft = { type: "new", draft: action.payload };
     },
 
-    clearNewFlight(state: FlightsState) {
-      state.newFlight = undefined;
+    clearDraftingFlight(state: FlightsState) {
+      state.inProgressDraft = undefined;
     },
 
+    updateDraftingFlight(
+      state: FlightsState,
+      action: PayloadAction<Partial<FlightDraft>>,
+    ) {
+      if (!state.inProgressDraft) return;
+
+      state.inProgressDraft = {
+        ...state.inProgressDraft,
+        draft: {
+          ...state.inProgressDraft.draft,
+          ...action.payload,
+        },
+      } as InProgressDraft;
+    },
+
+    setEditingFlight(
+      state: FlightsState,
+      action: PayloadAction<
+        { flightId: number; draft: FlightDraft } | undefined
+      >,
+    ) {
+      if (!action.payload) {
+        state.inProgressDraft = undefined;
+        return;
+      }
+
+      const { flightId, draft } = action.payload;
+      state.inProgressDraft = { type: "edit", flightId, draft };
+    },
+
+    // Scroll position
     recordFlightsListScrollPosition(
       state: FlightsState,
       action: PayloadAction<number>,
@@ -76,9 +118,10 @@ const flightsSlice = createSlice({
       state.flightsListScrollPosition = action.payload;
     },
 
+    // Used for logout
     clearAllUIFlightData(state: FlightsState) {
       state.selectedFlightId = undefined;
-      state.newFlight = undefined;
+      state.inProgressDraft = undefined;
       state.flightsListScrollPosition = 0;
     },
   },
@@ -92,9 +135,10 @@ export const {
   setSelectedFlight,
   clearSelectedFlight,
 
-  openNewFlightForm,
   setNewFlight,
-  clearNewFlight,
+  setEditingFlight,
+  clearDraftingFlight,
+  updateDraftingFlight,
 
   recordFlightsListScrollPosition,
 

@@ -1,10 +1,11 @@
 import { useEffect } from "react";
+import { m } from "../../../../../assets/text/messages";
 import type { Flight } from "../../../../../data/classes/flights/Flight";
 import {
-  clearNewFlight,
+  clearDraftingFlight,
   clearSelectedFlight,
-  openNewFlightForm,
   recordFlightsListScrollPosition,
+  setNewFlight,
 } from "../../../../../data/flightsSlice";
 import { useGetFlightsQuery } from "../../../../../data/services/flights/flightsAPI";
 import {
@@ -16,7 +17,9 @@ import { useAppDispatch, useAppSelector } from "../../../../../data/store";
 import { injectMap } from "../../../../../util/arrayUtil";
 import { Button } from "../../../../buttons/Button";
 import { MemoryFoamList } from "../../../../MemoryFoamList";
-import { AddFlight } from "./AddFlight/AddFlight";
+import { confirm } from "../../../../notices/Confirm";
+import { AddFlight } from "./drafting/AddFlight";
+import { EditFlight } from "./drafting/EditFlight";
 import { FlightListItem } from "./FlightListItem";
 import "./Flights.scss";
 import { FlightSeparator } from "./FlightSeperator";
@@ -25,13 +28,7 @@ import { FlightView } from "./FlightView";
 export function Flights() {
   const currentUser = useAppSelector((state) => state.user.currentUser);
   const selectedFlight = useAppSelector(selectSelectedFlight);
-  const { isLoading: flightsLoading, isError: flightsErrored } =
-    useGetFlightsQuery();
-  const newFlight = useAppSelector((state) => state.flights.newFlight);
-  const dispatch = useAppDispatch();
-
-  const flightsReady = !flightsLoading && !flightsErrored;
-
+  const drafting = useAppSelector((state) => state.flights.inProgressDraft);
   const flights = useAppSelector(selectFlightsAsObjects);
   const highlightedRouteKey = useAppSelector(
     (state) => state.flights.highlightedRouteKey,
@@ -40,33 +37,62 @@ export function Flights() {
     (state) => state.flights.highlightedAirportId,
   );
 
+  const { isLoading: flightsLoading, isError: flightsErrored } =
+    useGetFlightsQuery();
+
+  const dispatch = useAppDispatch();
+
+  const flightsReady = !flightsLoading && !flightsErrored;
+
+  const goBackFromEdit = async () => {
+    console.log("goBackFromEdit called");
+
+    const confirmation = await confirm({
+      title: m.confirm.losingChanges.title,
+      children: <p>{m.confirm.losingChanges.text}</p>,
+      color: "red",
+      labels: { confirm: "Yes.", cancel: "Wait, no!" },
+    });
+
+    if (confirmation) {
+      dispatch(clearDraftingFlight());
+    }
+  };
+
   useEffect(() => {
-    if (selectedFlight) {
-      dispatch(
-        setSidepanelOptions({
-          title: `Flight ${selectedFlight.flightNumber ?? "unknown"}`,
-          onGoBack: () => dispatch(clearSelectedFlight()),
-        }),
-      );
-    } else if (!newFlight) {
-      dispatch(
-        setSidepanelOptions({
-          title: "Flights",
-          onGoBack: undefined,
-        }),
-      );
-    } else {
+    if (drafting?.type === "new") {
       dispatch(
         setSidepanelOptions({
           title: "Add flight",
-          onGoBack: () => dispatch(clearNewFlight()),
+          onGoBack: () => dispatch(clearDraftingFlight()),
+        }),
+      );
+    } else if (drafting?.type === "edit") {
+      dispatch(
+        setSidepanelOptions({
+          title: "Edit flight",
+          onGoBack: () => goBackFromEdit(),
+        }),
+      );
+    } else if (selectedFlight) {
+      dispatch(
+        setSidepanelOptions({
+          title: `Flight ${selectedFlight.flightNumber ?? ""}`,
+          onGoBack: () => dispatch(clearSelectedFlight()),
+        }),
+      );
+    } else if (!drafting) {
+      dispatch(
+        setSidepanelOptions({
+          title: `Flights${flights && flights.length ? ` (${flights.length})` : ""}`,
+          onGoBack: undefined,
         }),
       );
     }
-  }, [dispatch, newFlight, selectedFlight]);
+  }, [dispatch, drafting, selectedFlight, flights]);
 
   const handleAddFlight = () => {
-    dispatch(openNewFlightForm());
+    dispatch(setNewFlight({}));
   };
 
   const isHighlighted = (flight: Flight) =>
@@ -75,7 +101,7 @@ export function Flights() {
     highlightedAirportId === flight.route.destination.id;
 
   const isListVisible = Boolean(
-    flightsReady && !selectedFlight && !newFlight && flights && flights.length,
+    flightsReady && !selectedFlight && !drafting && flights && flights.length,
   );
 
   if (!currentUser) {
@@ -88,7 +114,7 @@ export function Flights() {
 
   return (
     <div className="Flights">
-      {!newFlight && !selectedFlight && (
+      {!drafting && !selectedFlight && (
         <Button onClick={handleAddFlight} disabled={!flightsReady}>
           Add flight
         </Button>
@@ -96,13 +122,15 @@ export function Flights() {
 
       {!flightsReady ? <p>Loading flights...</p> : <></>}
 
-      {flightsReady && selectedFlight && !newFlight ? (
+      {flightsReady && selectedFlight && !drafting ? (
         <FlightView flight={selectedFlight} />
       ) : (
         <></>
       )}
 
-      {newFlight ? <AddFlight /> : <></>}
+      {drafting?.type === "new" ? <AddFlight /> : <></>}
+
+      {drafting?.type === "edit" ? <EditFlight /> : <></>}
 
       <MemoryFoamList
         isVisible={isListVisible}

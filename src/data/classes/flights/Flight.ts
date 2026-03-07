@@ -1,8 +1,10 @@
 import type { Time } from "../../../util/types";
 import type { GroupedFlightDetails } from "../../services/flights/selectFlights";
+import type { APIDateString } from "../../services/flights/types";
 import type { UserProperties } from "../user";
 import { Airline } from "./Airline";
 import { Airport, type APIAirport } from "./Airport";
+import type { FlightDraft } from "./FlightDraft";
 import { Plane } from "./Plane";
 import { Route } from "./Route";
 
@@ -10,7 +12,7 @@ export interface APIFlight {
   id: number;
   flightNumber?: string;
   airline?: string;
-  date?: string;
+  date?: APIDateString;
 
   departureTime?: Time;
   arrivalTime?: Time;
@@ -94,6 +96,29 @@ export class Flight {
       id: this.id,
       flightNumber: this.flightNumber,
       route: this.route,
+    };
+  }
+
+  toDraft(): FlightDraft {
+    return {
+      flightNumber: this.flightNumber,
+      airline: this.airline?.name,
+      date: this.raw.date ? new Date(this.raw.date) : undefined,
+      departureTime: this.departureTime,
+      arrivalTime: this.arrivalTime,
+      planeModel: this.plane?.model,
+      planeRegistration: this.plane?.registration,
+      note: this.note,
+      origin: {
+        id: this.origin.id,
+        name: this.origin.name,
+        displayCode: this.origin.displayCode,
+      },
+      destination: {
+        id: this.destination.id,
+        name: this.destination.name,
+        displayCode: this.destination.displayCode,
+      },
     };
   }
 }
