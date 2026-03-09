@@ -8,7 +8,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../data/store";
 import { closeActiveSidepanelWindow } from "../../../data/uiSlice";
 import { SidepanelContainer } from "../SidepanelContainer";
-import { Flights } from "./sidepanel/flights/Flights";
+import { FlightsPanel } from "./sidepanel/flights/FlightsPanel";
 import { Social } from "./sidepanel/Friends";
 import { Profile } from "./sidepanel/Profile";
 import { Settings } from "./sidepanel/Settings";
@@ -65,7 +65,7 @@ export function SidepanelWindow() {
 function getSidepanelWindow(window: SidepanelWindows | undefined) {
   switch (window) {
     case SidepanelWindows.Flights:
-      return <Flights />;
+      return <FlightsPanel />;
     case SidepanelWindows.Friends:
       return <Social />;
     case SidepanelWindows.Profile:

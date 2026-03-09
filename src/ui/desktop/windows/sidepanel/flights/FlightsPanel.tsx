@@ -25,7 +25,7 @@ import "./Flights.scss";
 import { FlightSeparator } from "./FlightSeperator";
 import { FlightView } from "./FlightView";
 
-export function Flights() {
+export function FlightsPanel() {
   const currentUser = useAppSelector((state) => state.user.currentUser);
   const selectedFlight = useAppSelector(selectSelectedFlight);
   const drafting = useAppSelector((state) => state.flights.inProgressDraft);
