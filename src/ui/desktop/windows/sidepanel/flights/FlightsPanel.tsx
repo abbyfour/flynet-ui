@@ -1,11 +1,8 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { m } from "../../../../../assets/text/messages";
-import type { Flight } from "../../../../../data/classes/flights/Flight";
 import {
   clearDraftingFlight,
   clearSelectedFlight,
-  recordFlightsListScrollPosition,
-  setNewFlight,
 } from "../../../../../data/flightsSlice";
 import { useGetFlightsQuery } from "../../../../../data/services/flights/flightsAPI";
 import {
@@ -14,15 +11,10 @@ import {
 } from "../../../../../data/services/flights/selectFlights";
 import { setSidepanelOptions } from "../../../../../data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "../../../../../data/store";
-import { injectMap } from "../../../../../util/arrayUtil";
-import { Button } from "../../../../buttons/Button";
-import { MemoryFoamList } from "../../../../MemoryFoamList";
 import { confirm } from "../../../../notices/Confirm";
 import { AddFlight } from "./drafting/AddFlight";
 import { EditFlight } from "./drafting/EditFlight";
-import { FlightListItem } from "./FlightListItem";
-import "./Flights.scss";
-import { FlightSeparator } from "./FlightSeperator";
+import { FlightsList } from "./FlightsList";
 import { FlightView } from "./FlightView";
 
 export function FlightsPanel() {
@@ -30,23 +22,15 @@ export function FlightsPanel() {
   const selectedFlight = useAppSelector(selectSelectedFlight);
   const drafting = useAppSelector((state) => state.flights.inProgressDraft);
   const flights = useAppSelector(selectFlightsAsObjects);
-  const highlightedRouteKey = useAppSelector(
-    (state) => state.flights.highlightedRouteKey,
-  );
-  const highlightedAirportId = useAppSelector(
-    (state) => state.flights.highlightedAirportId,
-  );
 
   const { isLoading: flightsLoading, isError: flightsErrored } =
     useGetFlightsQuery();
 
-  const dispatch = useAppDispatch();
-
   const flightsReady = !flightsLoading && !flightsErrored;
 
-  const goBackFromEdit = async () => {
-    console.log("goBackFromEdit called");
+  const dispatch = useAppDispatch();
 
+  const goBackFromEdit = useCallback(async () => {
     const confirmation = await confirm({
       title: m.confirm.losingChanges.title,
       children: <p>{m.confirm.losingChanges.text}</p>,
@@ -57,7 +41,7 @@ export function FlightsPanel() {
     if (confirmation) {
       dispatch(clearDraftingFlight());
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     if (drafting?.type === "new") {
@@ -89,16 +73,7 @@ export function FlightsPanel() {
         }),
       );
     }
-  }, [dispatch, drafting, selectedFlight, flights]);
-
-  const handleAddFlight = () => {
-    dispatch(setNewFlight({}));
-  };
-
-  const isHighlighted = (flight: Flight) =>
-    highlightedRouteKey === flight.route.key ||
-    highlightedAirportId === flight.route.origin.id ||
-    highlightedAirportId === flight.route.destination.id;
+  }, [dispatch, drafting, selectedFlight, flights, goBackFromEdit]);
 
   const isListVisible = Boolean(
     flightsReady && !selectedFlight && !drafting && flights && flights.length,
@@ -112,67 +87,28 @@ export function FlightsPanel() {
     );
   }
 
+  const showAppropriateView = () => {
+    if (drafting?.type === "new") {
+      return <AddFlight />;
+    }
+
+    if (drafting?.type === "edit") {
+      return <EditFlight />;
+    }
+
+    if (selectedFlight && !drafting) {
+      return <FlightView flight={selectedFlight} />;
+    }
+
+    return <></>;
+  };
+
   return (
-    <div className="Flights">
-      {!drafting && !selectedFlight && (
-        <Button onClick={handleAddFlight} disabled={!flightsReady}>
-          Add flight
-        </Button>
-      )}
+    <div className="FlightsPanel">
+      {showAppropriateView()}
 
-      {!flightsReady ? <p>Loading flights...</p> : <></>}
-
-      {flightsReady && selectedFlight && !drafting ? (
-        <FlightView flight={selectedFlight} />
-      ) : (
-        <></>
-      )}
-
-      {drafting?.type === "new" ? <AddFlight /> : <></>}
-
-      {drafting?.type === "edit" ? <EditFlight /> : <></>}
-
-      <MemoryFoamList
-        isVisible={isListVisible}
-        storageKey="flightsListScrollPosition"
-        onScroll={(position) =>
-          dispatch(recordFlightsListScrollPosition(position))
-        }
-        scrollableParentSelector=".sidepanel-scroll-area"
-      >
-        {injectMap(
-          flights,
-          (flight) => (
-            <FlightListItem
-              key={`flight-${flight.id}`}
-              flight={flight}
-              highlighted={isHighlighted(flight)}
-            />
-          ),
-          (cur, prev) => {
-            if (cur.upcoming && !prev) {
-              return (
-                <FlightSeparator
-                  key={`separator-${cur.id}`}
-                  label={`Upcoming (${flights.filter((f) => f.upcoming).length})`}
-                />
-              );
-            } else if (
-              !cur.upcoming &&
-              (!prev ||
-                (prev.upcoming && !cur.upcoming) ||
-                cur.date?.getFullYear() !== prev.date?.getFullYear())
-            ) {
-              return (
-                <FlightSeparator
-                  key={`separator-${cur.id}`}
-                  label={`${cur.date?.getFullYear() || "No date"} (${flights.filter((f) => !f.upcoming && f.date?.getFullYear() === cur.date?.getFullYear()).length})`}
-                />
-              );
-            }
-          },
-        )}
-      </MemoryFoamList>
+      {/* Must remain rendered so the memory foam list can work */}
+      <FlightsList isVisible={isListVisible} />
     </div>
   );
 }

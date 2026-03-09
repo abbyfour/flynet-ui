@@ -17,6 +17,7 @@
   .header,
   .footer {
     color: gray;
+    font-weight: 500;
   }
 
   .header,
@@ -40,10 +41,18 @@
     display: flex;
     justify-content: space-between;
     gap: 0.5em;
+    align-items: center;
 
     .left {
       display: flex;
       gap: 0.5em;
+      align-items: center;
+
+      .route {
+        display: flex;
+        align-items: center;
+        gap: 0.25em;
+      }
     }
   }
 }

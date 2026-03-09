@@ -14,6 +14,7 @@ import { joinClasses } from "../../../../../util/componentUtil";
 import { confirm } from "../../../../notices/Confirm";
 
 import {
+  IconArrowMoveRight,
   IconCalendarFilled,
   IconPencil,
   IconPlaneArrivalFilled,
@@ -118,8 +119,10 @@ export function FlightView({ flight }: FlightViewProps) {
 
         <div className="route-details">
           <h5>Route:</h5>
-          {flight.route.origin.displayCode} -&gt;{" "}
-          {flight.route.destination.displayCode}
+          <span className="route">
+            {flight.route.origin.displayCode} <IconArrowMoveRight size={16} />{" "}
+            {flight.route.destination.displayCode}
+          </span>
         </div>
 
         <div className="airport-details">

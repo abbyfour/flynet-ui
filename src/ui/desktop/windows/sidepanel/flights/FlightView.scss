@@ -63,6 +63,14 @@
     display: flex;
     gap: 0.5rem;
   }
+
+  .route-details {
+    .route {
+      display: flex;
+      align-items: center;
+      gap: 0.3em;
+    }
+  }
 }
 
 .AirportDetails {
