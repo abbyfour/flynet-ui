@@ -6,6 +6,7 @@ import {
   clearHighlights,
   recordHighlightedAirport,
   recordHighlightedRoute,
+  setSelected,
 } from "../../data/flightsSlice";
 import { useGetFlightsQuery } from "../../data/services/flights/flightsAPI";
 import {
@@ -44,9 +45,7 @@ export function DataLayers() {
 
   const routes = useAppSelector(selectRoutesFromFlights);
   const airports = useAppSelector(selectAirportsFromFlights);
-  const selectedFlightId = useAppSelector(
-    (state) => state.flights.selectedFlightId,
-  );
+  const selected = useAppSelector((state) => state.flights.selected);
   const currentUser = useAppSelector((state) => state.user.currentUser);
 
   const flightsReady = !flightsLoading && !flightsErrored && currentUser;
@@ -70,15 +69,31 @@ export function DataLayers() {
     [dispatch],
   );
 
+  const onclick = useCallback(
+    ({ object }: PickingInfo<GroupedAirport | GroupedRoute>) => {
+      if (object && "route" in object) {
+        dispatch(setSelected({ type: "route", routeKey: object.route.key }));
+      } else if (object && "airport" in object) {
+        dispatch(
+          setSelected({ type: "airport", airportId: object.airport.id }),
+        );
+      } else {
+        dispatch(setSelected(undefined));
+      }
+    },
+    [dispatch],
+  );
+
   return (
     <DeckGLOverlay
       layers={[
         AirportsLayer({ airports: flightsReady ? airports : [] }),
-        RoutesLayer({ routes: flightsReady ? routes : [], selectedFlightId }),
+        RoutesLayer({ routes: flightsReady ? routes : [], selected }),
       ]}
       pickingRadius={15}
       getTooltip={getTooltip}
       onHover={onHover}
+      onClick={onclick}
     />
   );
 }

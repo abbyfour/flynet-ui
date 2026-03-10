@@ -1,15 +1,16 @@
 import { ArcLayer } from "deck.gl";
 import type { Route } from "../../../data/classes/flights/Route";
+import type { Selected } from "../../../data/flightsSlice";
 import { type GroupedRoute } from "../../../data/services/flights/selectFlights";
 import type { RGB, RGBA } from "../style/colours";
 import { useColours } from "../style/useColours";
 
 type RoutesLayerProps = {
   routes: GroupedRoute[];
-  selectedFlightId?: number | undefined;
+  selected?: Selected;
 };
 
-export function RoutesLayer({ routes, selectedFlightId }: RoutesLayerProps) {
+export function RoutesLayer({ routes, selected }: RoutesLayerProps) {
   const {
     flightLineColour: routeColour,
     flightLineHighlightColour: routeHighlightColour,
@@ -34,21 +35,21 @@ export function RoutesLayer({ routes, selectedFlightId }: RoutesLayerProps) {
     // Styles
     getWidth: 1.5,
 
-    getSourceColor: (d: GroupedRoute) => getRouteColour(d, selectedFlightId),
-    getTargetColor: (d: GroupedRoute) => getRouteColour(d, selectedFlightId),
+    getSourceColor: (d: GroupedRoute) => getRouteColour(d, selected),
+    getTargetColor: (d: GroupedRoute) => getRouteColour(d, selected),
 
     updateTriggers: {
-      getSourceColor: [selectedFlightId],
-      getTargetColor: [selectedFlightId],
+      getSourceColor: [selected],
+      getTargetColor: [selected],
     },
   } as any);
 }
 
 function routeColourer(routeColour: RGB, primaryTextColour: RGB) {
-  return (route: GroupedRoute, selectedFlightId?: number): RGBA | RGB => {
-    if (!selectedFlightId) return intensifyColour(route, routeColour);
+  return (route: GroupedRoute, selected?: Selected): RGBA | RGB => {
+    if (!selected) return intensifyColour(route, routeColour);
 
-    return routeIncludesFlight(route, selectedFlightId)
+    return routeIncludesFlight(route, selected)
       ? routeColour
       : [...primaryTextColour, 30];
   };
@@ -61,8 +62,19 @@ const intensifyColour = (route: GroupedRoute, colour: RGB): RGBA => {
   return [...colour, Math.round(intensity)];
 };
 
-const routeIncludesFlight = (route: GroupedRoute, flightId?: number) => {
-  if (!flightId) return false;
+const routeIncludesFlight = (route: GroupedRoute, selected?: Selected) => {
+  if (!selected) return false;
 
-  return route.flights.some((f) => f.id === flightId);
+  if (selected.type === "flight") {
+    return route.flights.some((f) => f.id === selected.flightId);
+  } else if (selected.type === "route") {
+    return route.route.key === selected.routeKey;
+  } else if (selected.type === "airport") {
+    return (
+      route.route.origin.id === selected.airportId ||
+      route.route.destination.id === selected.airportId
+    );
+  }
+
+  return false;
 };

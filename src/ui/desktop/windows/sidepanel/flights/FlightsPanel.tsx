@@ -2,24 +2,27 @@ import { useCallback, useEffect } from "react";
 import { m } from "../../../../../assets/text/messages";
 import {
   clearDraftingFlight,
-  clearSelectedFlight,
+  clearSelected,
 } from "../../../../../data/flightsSlice";
 import { useGetFlightsQuery } from "../../../../../data/services/flights/flightsAPI";
 import {
   selectFlightsAsObjects,
-  selectSelectedFlight,
+  selectSelectedFlights,
 } from "../../../../../data/services/flights/selectFlights";
 import { setSidepanelOptions } from "../../../../../data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "../../../../../data/store";
 import { confirm } from "../../../../notices/Confirm";
+import { AirportView } from "./AirportView";
 import { AddFlight } from "./drafting/AddFlight";
 import { EditFlight } from "./drafting/EditFlight";
 import { FlightsList } from "./FlightsList";
 import { FlightView } from "./FlightView";
+import { RouteView } from "./RouteView";
 
 export function FlightsPanel() {
   const currentUser = useAppSelector((state) => state.user.currentUser);
-  const selectedFlight = useAppSelector(selectSelectedFlight);
+  const selected = useAppSelector((state) => state.flights.selected);
+  const selectedFlights = useAppSelector(selectSelectedFlights);
   const drafting = useAppSelector((state) => state.flights.inProgressDraft);
   const flights = useAppSelector(selectFlightsAsObjects);
 
@@ -58,11 +61,25 @@ export function FlightsPanel() {
           onGoBack: () => goBackFromEdit(),
         }),
       );
-    } else if (selectedFlight) {
+    } else if (selectedFlights && selected && selected.type === "flight") {
       dispatch(
         setSidepanelOptions({
-          title: `Flight ${selectedFlight.flightNumber ?? ""}`,
-          onGoBack: () => dispatch(clearSelectedFlight()),
+          title: `Flight ${selectedFlights[0].flightNumber ?? ""}`,
+          onGoBack: () => dispatch(clearSelected()),
+        }),
+      );
+    } else if (selectedFlights && selected && selected.type === "route") {
+      dispatch(
+        setSidepanelOptions({
+          title: `Route ${selectedFlights[0].origin.displayCode} ↔ ${selectedFlights[0].destination.displayCode}`,
+          onGoBack: () => dispatch(clearSelected()),
+        }),
+      );
+    } else if (selectedFlights && selected && selected.type === "airport") {
+      dispatch(
+        setSidepanelOptions({
+          title: `Airport ${selectedFlights[0].origin.displayCode}`,
+          onGoBack: () => dispatch(clearSelected()),
         }),
       );
     } else if (!drafting) {
@@ -73,10 +90,14 @@ export function FlightsPanel() {
         }),
       );
     }
-  }, [dispatch, drafting, selectedFlight, flights, goBackFromEdit]);
+  }, [dispatch, drafting, selected, selectedFlights, flights, goBackFromEdit]);
 
   const isListVisible = Boolean(
-    flightsReady && !selectedFlight && !drafting && flights && flights.length,
+    flightsReady &&
+    (!selectedFlights || selectedFlights.length === 0) &&
+    !drafting &&
+    flights &&
+    flights.length,
   );
 
   if (!currentUser) {
@@ -96,8 +117,33 @@ export function FlightsPanel() {
       return <EditFlight />;
     }
 
-    if (selectedFlight && !drafting) {
-      return <FlightView flight={selectedFlight} />;
+    if (selected && selected.type === "route") {
+      return (
+        <RouteView
+          route={
+            flights.find((flight) => flight.route.key === selected.routeKey)
+              ?.route
+          }
+        />
+      );
+    }
+
+    if (selected && selected.type === "airport") {
+      return (
+        <AirportView
+          airport={
+            flights.find((flight) => flight.origin.id === selected.airportId)
+              ?.origin ||
+            flights.find(
+              (flight) => flight.destination.id === selected.airportId,
+            )?.destination
+          }
+        />
+      );
+    }
+
+    if (selectedFlights && selectedFlights.length === 1 && !drafting) {
+      return <FlightView flight={selectedFlights[0]} />;
     }
 
     return <></>;

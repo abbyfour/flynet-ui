@@ -8,21 +8,27 @@ type InProgressDraft = {
   draft: FlightDraft;
 };
 
+export type Selected =
+  | {
+      type: "flight";
+      flightId: number;
+    }
+  | { type: "route"; routeKey: string }
+  | { type: "airport"; airportId: number };
+
 export interface FlightsState {
   highlightedAirportId?: number;
   highlightedRouteKey?: string;
-
-  selectedFlightId?: number;
-
+  flightsListScrollPosition: number;
   inProgressDraft?: InProgressDraft;
 
-  flightsListScrollPosition: number;
+  selected?: Selected;
 }
 
 const initialState: FlightsState = {
   highlightedAirportId: undefined,
   highlightedRouteKey: undefined,
-  selectedFlightId: undefined,
+  selected: undefined,
   inProgressDraft: undefined,
   flightsListScrollPosition: 0,
 };
@@ -52,15 +58,29 @@ const flightsSlice = createSlice({
     },
 
     // Selected entities
+    /**
+     * @deprecated Use `setSelected({ type: "flight", flightId })` instead for consistency with other selected types
+     */
     setSelectedFlight(
       state: FlightsState,
       action: PayloadAction<number | undefined>,
     ) {
-      state.selectedFlightId = action.payload;
+      if (action.payload === undefined) {
+        state.selected = undefined;
+      } else {
+        state.selected = { type: "flight", flightId: action.payload };
+      }
     },
 
-    clearSelectedFlight(state: FlightsState) {
-      state.selectedFlightId = undefined;
+    setSelected(
+      state: FlightsState,
+      action: PayloadAction<Selected | undefined>,
+    ) {
+      state.selected = action.payload;
+    },
+
+    clearSelected(state: FlightsState) {
+      state.selected = undefined;
     },
 
     // Drafting
@@ -120,7 +140,7 @@ const flightsSlice = createSlice({
 
     // Used for logout
     clearAllUIFlightData(state: FlightsState) {
-      state.selectedFlightId = undefined;
+      state.selected = undefined;
       state.inProgressDraft = undefined;
       state.flightsListScrollPosition = 0;
     },
@@ -133,7 +153,8 @@ export const {
   clearHighlights,
 
   setSelectedFlight,
-  clearSelectedFlight,
+  setSelected,
+  clearSelected,
 
   setNewFlight,
   setEditingFlight,

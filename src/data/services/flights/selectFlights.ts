@@ -3,6 +3,7 @@ import { compareTimes } from "../../../util/types";
 import type { Airport } from "../../classes/flights/Airport";
 import { Flight } from "../../classes/flights/Flight";
 import { Route } from "../../classes/flights/Route";
+import type { AppRootState } from "../../store";
 import { flightsApi } from "./flightsAPI";
 
 export type GroupedFlightDetails = {
@@ -111,10 +112,20 @@ export const selectAirportsFromFlights = createSelector(
 /**
  * Selects the currently selected flight object from the Redux store.
  */
-export const selectSelectedFlight = createSelector(
-  [selectFlightsAsObjects, (state) => state.flights.selectedFlightId],
-  (flights, selectedFlightId) =>
-    flights.find((flight) => flight.id === selectedFlightId) || null,
+export const selectSelectedFlights = createSelector(
+  [selectFlightsAsObjects, (state: AppRootState) => state.flights.selected],
+  (flights, selection) =>
+    selection?.type === "flight"
+      ? flights.filter((flight) => flight.id === selection.flightId)
+      : selection?.type === "route"
+        ? flights.filter((flight) => flight.route.key === selection.routeKey)
+        : selection?.type === "airport"
+          ? flights.filter(
+              (flight) =>
+                flight.origin.id === selection.airportId ||
+                flight.destination.id === selection.airportId,
+            )
+          : null,
 );
 
 function sortFlights(a: Flight, b: Flight) {
