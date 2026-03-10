@@ -1,5 +1,5 @@
 import { ActionIcon } from "@mantine/core";
-import { IconChevronLeft, IconX } from "@tabler/icons-react";
+import { icons } from "../../../assets/text/icons";
 import { SidepanelWindows } from "../../../data/classes/ui";
 import {
   clearSidepanelOptions,
@@ -38,7 +38,7 @@ export function SidepanelWindow() {
       <div className="window-header">
         <div className="window-controls">
           <ActionIcon variant="transparent" color="dark" onClick={handleClose}>
-            <IconX size={20} />
+            {icons.actions.window.close(20)}
           </ActionIcon>
           {sidepanelOptions.onGoBack && (
             <ActionIcon
@@ -46,7 +46,7 @@ export function SidepanelWindow() {
               color="dark"
               onClick={handleGoback}
             >
-              <IconChevronLeft size={20} />
+              {icons.actions.window.back(20)}
             </ActionIcon>
           )}
         </div>

@@ -1,9 +1,9 @@
-import { IconArrowMoveRight } from "@tabler/icons-react";
 import type { Flight } from "../../../../../data/classes/flights/Flight";
 import { setSelectedFlight } from "../../../../../data/flightsSlice";
 import { useAppDispatch } from "../../../../../data/store";
 import { joinClasses } from "../../../../../util/componentUtil";
 
+import { icons } from "../../../../../assets/text/icons";
 import "./FlightListItem.scss";
 
 type FlightListItemProps = {
@@ -32,7 +32,7 @@ export function FlightListItem({ flight, highlighted }: FlightListItemProps) {
               <span className="flight-number">{flight.flightNumber}</span>
             )}
             <span className="route">
-              {flight.origin.displayCode} <IconArrowMoveRight size={16} />{" "}
+              {flight.origin.displayCode} {icons.flights.flightRoute(13)}
               {flight.destination.displayCode}
             </span>
           </div>

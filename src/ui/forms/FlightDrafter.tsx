@@ -1,5 +1,4 @@
 import { Fieldset } from "@mantine/core";
-import { IconPlaneArrival, IconPlaneDeparture } from "@tabler/icons-react";
 import type { FlightDraft } from "../../data/classes/flights/FlightDraft";
 import { updateDraftingFlight } from "../../data/flightsSlice";
 import { useAppDispatch, useAppSelector } from "../../data/store";
@@ -8,6 +7,7 @@ import { SubmitButton } from "../buttons/SubmitButton";
 import { AirportInput } from "./AirportInput";
 import { Input } from "./Input";
 
+import { icons } from "../../assets/text/icons";
 import "./FlightDrafter.scss";
 
 interface FlightDrafterProps {
@@ -95,7 +95,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
         label="Departure Time"
         disabled={isLoading}
         value={draft.departureTime as Time | undefined}
-        icon={<IconPlaneDeparture size={16} stroke={1.5} />}
+        icon={icons.flights.departure(16)}
         onChange={(value) => updateDraft({ departureTime: value })}
       />
 
@@ -107,7 +107,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
         label="Arrival Time"
         disabled={isLoading}
         value={draft.arrivalTime as Time | undefined}
-        icon={<IconPlaneArrival size={16} stroke={1.5} />}
+        icon={icons.flights.arrival(16)}
         onChange={(value) => updateDraft({ arrivalTime: value })}
       />
 

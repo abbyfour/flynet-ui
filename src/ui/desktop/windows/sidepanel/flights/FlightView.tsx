@@ -13,13 +13,7 @@ import { useAppDispatch } from "../../../../../data/store";
 import { joinClasses } from "../../../../../util/componentUtil";
 import { confirm } from "../../../../notices/Confirm";
 
-import {
-  IconArrowMoveRight,
-  IconCalendarFilled,
-  IconPencil,
-  IconPlaneArrivalFilled,
-  IconPlaneDepartureFilled,
-} from "@tabler/icons-react";
+import { icons } from "../../../../../assets/text/icons";
 import { Button } from "../../../../buttons/Button";
 import { DeleteButton } from "../../../../buttons/DeleteButton";
 import { Toasts } from "../../../../notices/Toast";
@@ -79,18 +73,17 @@ export function FlightView({ flight }: FlightViewProps) {
         {flight.date && (
           <div>
             <div className="date">
-              <IconCalendarFilled size={16} />{" "}
-              {flight.date.toLocaleDateString()}{" "}
+              {icons.flights.date(16)} {flight.date.toLocaleDateString()}{" "}
             </div>
 
             {flight.departureTime && flight.arrivalTime && (
               <div className="time">
                 <div className="departure-time">
-                  <IconPlaneDepartureFilled size={16} /> {flight.departureTime}
+                  {icons.flights.departure(16)} {flight.departureTime}
                 </div>
 
                 <div className="arrival-time">
-                  <IconPlaneArrivalFilled size={16} /> {flight.arrivalTime}
+                  {icons.flights.arrival(16)} {flight.arrivalTime}
                 </div>
               </div>
             )}
@@ -120,7 +113,7 @@ export function FlightView({ flight }: FlightViewProps) {
         <div className="route-details">
           <h5>Route:</h5>
           <span className="route">
-            {flight.route.origin.displayCode} <IconArrowMoveRight size={16} />{" "}
+            {flight.route.origin.displayCode} {icons.flights.flightRoute(16)}{" "}
             {flight.route.destination.displayCode}
           </span>
         </div>
@@ -146,7 +139,7 @@ export function FlightView({ flight }: FlightViewProps) {
       </div>
 
       <div className="action-buttons">
-        <Button icon={<IconPencil size={16} />} onClick={handleEditFlight}>
+        <Button icon={icons.actions.edit(16)} onClick={handleEditFlight}>
           Edit
         </Button>
         <DeleteButton className="delete-button" onClick={handleDeleteFlight} />
