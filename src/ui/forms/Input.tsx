@@ -1,6 +1,5 @@
 import { PasswordInput, Textarea, TextInput } from "@mantine/core";
-import { DateInput, TimeInput } from "@mantine/dates";
-import dayjs from "dayjs";
+import { TimeInput } from "@mantine/dates";
 import { type Time } from "../../util/types";
 import "./Input.scss";
 
@@ -66,16 +65,28 @@ export function Input<T extends InputType>({
       );
     case "date":
       return (
-        <DateInput
-          {...sharedInputProps}
-          clearable={!required}
-          maxDate={dayjs().add(2, "year").format("YYYY-MM-DD")}
-          value={value as Date | undefined}
-          onChange={(date) =>
-            onChange?.(transformValue(type, date ?? undefined))
-          }
-        />
+        <div className="date-input">
+          <label htmlFor={id} className="label">
+            {label}
+          </label>
+          <input
+            type="date"
+            {...sharedInputProps}
+            onChange={(e) => onChange?.(transformValue(type, e.target.value))}
+          />
+        </div>
       );
+    // return (
+    //   <DateInput
+    //     {...sharedInputProps}
+    //     clearable={!required}
+    //     maxDate={dayjs().add(2, "year").format("YYYY-MM-DD")}
+    //     value={value as Date | undefined}
+    //     onChange={(date) =>
+    //       onChange?.(transformValue(type, date ?? undefined))
+    //     }
+    //   />
+    // );
     case "time":
       return (
         <TimeInput
