@@ -1,5 +1,5 @@
 import type { Flight } from "../../../../../data/classes/flights/Flight";
-import { setSelectedFlight } from "../../../../../data/flightsSlice";
+import { setSelected } from "../../../../../data/flightsSlice";
 import { useAppDispatch } from "../../../../../data/store";
 import { joinClasses } from "../../../../../util/componentUtil";
 
@@ -15,7 +15,7 @@ export function FlightListItem({ flight, highlighted }: FlightListItemProps) {
   const dispatch = useAppDispatch();
 
   const handleOnClick = () => {
-    dispatch(setSelectedFlight(flight.id));
+    dispatch(setSelected({ type: "flight", flightId: flight.id }));
   };
 
   return (

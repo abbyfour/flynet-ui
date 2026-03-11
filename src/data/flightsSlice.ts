@@ -23,6 +23,7 @@ export interface FlightsState {
   inProgressDraft?: InProgressDraft;
 
   selected?: Selected;
+  selectionContext?: Extract<Selected, { type: "route" | "airport" }>;
 }
 
 const initialState: FlightsState = {
@@ -57,30 +58,32 @@ const flightsSlice = createSlice({
       state.highlightedRouteKey = undefined;
     },
 
-    // Selected entities
-    /**
-     * @deprecated Use `setSelected({ type: "flight", flightId })` instead for consistency with other selected types
-     */
-    setSelectedFlight(
-      state: FlightsState,
-      action: PayloadAction<number | undefined>,
-    ) {
-      if (action.payload === undefined) {
-        state.selected = undefined;
-      } else {
-        state.selected = { type: "flight", flightId: action.payload };
-      }
-    },
-
     setSelected(
       state: FlightsState,
       action: PayloadAction<Selected | undefined>,
     ) {
+      if (action.payload?.type === "flight") {
+        if (
+          state.selected?.type === "route" ||
+          state.selected?.type === "airport"
+        ) {
+          state.selectionContext = state.selected;
+        }
+      } else {
+        state.selectionContext = undefined;
+      }
+
       state.selected = action.payload;
     },
 
-    clearSelected(state: FlightsState) {
-      state.selected = undefined;
+    goBackInSelection(state: FlightsState) {
+      if (state.selected?.type === "flight" && state.selectionContext) {
+        state.selected = state.selectionContext;
+        state.selectionContext = undefined;
+      } else {
+        state.selected = undefined;
+        state.selectionContext = undefined;
+      }
     },
 
     // Drafting
@@ -141,6 +144,7 @@ const flightsSlice = createSlice({
     // Used for logout
     clearAllUIFlightData(state: FlightsState) {
       state.selected = undefined;
+      state.selectionContext = undefined;
       state.inProgressDraft = undefined;
       state.flightsListScrollPosition = 0;
     },
@@ -152,9 +156,8 @@ export const {
   recordHighlightedRoute,
   clearHighlights,
 
-  setSelectedFlight,
   setSelected,
-  clearSelected,
+  goBackInSelection,
 
   setNewFlight,
   setEditingFlight,

@@ -22,12 +22,12 @@ export function RouteView({ route }: { route: Route | undefined }) {
 
       <div className="airport-details">
         <div className="origin">
-          <h5>Origin:</h5>
+          <h5>Airport 1:</h5>
           <AirportDetails airport={route.origin} />
         </div>
 
         <div className="destination">
-          <h5>Destination:</h5>
+          <h5>Airport 2:</h5>
           <AirportDetails airport={route.destination} />
         </div>
       </div>

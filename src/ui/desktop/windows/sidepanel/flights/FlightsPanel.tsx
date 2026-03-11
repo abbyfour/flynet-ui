@@ -2,7 +2,7 @@ import { useCallback, useEffect } from "react";
 import { m } from "../../../../../assets/text/messages";
 import {
   clearDraftingFlight,
-  clearSelected,
+  goBackInSelection,
 } from "../../../../../data/flightsSlice";
 import { useGetFlightsQuery } from "../../../../../data/services/flights/flightsAPI";
 import {
@@ -65,21 +65,21 @@ export function FlightsPanel() {
       dispatch(
         setSidepanelOptions({
           title: `Flight ${selectedFlights[0].flightNumber ?? ""}`,
-          onGoBack: () => dispatch(clearSelected()),
+          onGoBack: () => dispatch(goBackInSelection()),
         }),
       );
     } else if (selectedFlights && selected && selected.type === "route") {
       dispatch(
         setSidepanelOptions({
           title: `Route ${selectedFlights[0].origin.displayCode} ↔ ${selectedFlights[0].destination.displayCode}`,
-          onGoBack: () => dispatch(clearSelected()),
+          onGoBack: () => dispatch(goBackInSelection()),
         }),
       );
     } else if (selectedFlights && selected && selected.type === "airport") {
       dispatch(
         setSidepanelOptions({
-          title: `Airport ${selectedFlights[0].origin.displayCode}`,
-          onGoBack: () => dispatch(clearSelected()),
+          title: `Airport ${selectedFlights[0].origin.id === selected.airportId ? selectedFlights[0].origin.displayCode : selectedFlights[0].destination.displayCode}`,
+          onGoBack: () => dispatch(goBackInSelection()),
         }),
       );
     } else if (!drafting) {

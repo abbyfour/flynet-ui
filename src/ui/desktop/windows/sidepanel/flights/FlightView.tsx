@@ -2,7 +2,7 @@ import { m } from "../../../../../assets/text/messages";
 import type { Airport } from "../../../../../data/classes/flights/Airport";
 import type { Flight } from "../../../../../data/classes/flights/Flight";
 import {
-  clearSelected,
+  goBackInSelection,
   setEditingFlight,
 } from "../../../../../data/flightsSlice";
 import { useDeleteFlightMutation } from "../../../../../data/services/flights/flightsAPI";
@@ -26,8 +26,6 @@ export function FlightView({ flight }: FlightViewProps) {
 
   const [deleteFlight] = useDeleteFlightMutation();
 
-  const goBack = () => dispatch(clearSelected());
-
   const handleDeleteFlight = async () => {
     const confirmation = await confirm({
       title: m.flight.confirmDeletion.title,
@@ -45,7 +43,7 @@ export function FlightView({ flight }: FlightViewProps) {
         dispatchNotice(Toasts.success(m.flight.deletedSuccessfully()));
       }
 
-      goBack();
+      dispatch(goBackInSelection());
     }
   };
 
