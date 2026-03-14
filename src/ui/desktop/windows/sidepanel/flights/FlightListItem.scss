@@ -1,6 +1,7 @@
 .FlightListItem {
   padding: 0.6em;
   cursor: pointer;
+  border-radius: 3px;
 
   &.highlighted,
   &:hover {
@@ -8,10 +9,6 @@
       // give the text a highlighter effect by adding a bright background color with some transparency
       background-size: 100% 100%;
     }
-  }
-
-  &:active {
-    background-color: rgba(255, 200, 0, 0.3);
   }
 
   .header,
@@ -25,16 +22,19 @@
     margin-bottom: 5px;
   }
 
-  .middle {
-    // Animated highlight that grows left-to-right
-    background-image: linear-gradient(
-      90deg,
-      rgba(255, 200, 0, 0.5) 0%,
-      rgba(255, 200, 0, 0.5) 100%
-    );
-    background-repeat: no-repeat;
-    background-size: 0% 100%;
-    transition: background-size 0.2s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transition: none;
+    transform: translateY(3px) translateX(5px);
+    box-shadow: none;
   }
 
   .header {
@@ -53,6 +53,12 @@
         align-items: center;
         gap: 0.25em;
       }
+    }
+
+    .right {
+      display: flex;
+      gap: 0.2em;
+      align-items: center;
     }
   }
 }

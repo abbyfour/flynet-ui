@@ -1,6 +1,6 @@
 import { ArcLayer } from "deck.gl";
 import type { Route } from "../../../data/classes/flights/Route";
-import type { Selected } from "../../../data/flightsSlice";
+import type { Selected } from "../../../data/classes/flightsStateTypes";
 import { type GroupedRoute } from "../../../data/services/flights/selectFlights";
 import type { RGB, RGBA } from "../style/colours";
 import { useColours } from "../style/useColours";
@@ -15,9 +15,14 @@ export function RoutesLayer({ routes, selected }: RoutesLayerProps) {
     flightLineColour: routeColour,
     flightLineHighlightColour: routeHighlightColour,
     primaryTextColour,
+    flightLineUpcomingColour: routeUpcomingColour,
   } = useColours();
 
-  const getRouteColour = routeColourer(routeColour, primaryTextColour);
+  const getRouteColour = routeColourer(
+    routeColour,
+    primaryTextColour,
+    routeUpcomingColour,
+  );
 
   return new ArcLayer<Route>({
     id: "routes-layer",
@@ -45,21 +50,37 @@ export function RoutesLayer({ routes, selected }: RoutesLayerProps) {
   } as any);
 }
 
-function routeColourer(routeColour: RGB, primaryTextColour: RGB) {
+function routeColourer(
+  routeColour: RGB,
+  primaryTextColour: RGB,
+  routeUpcomingColour: RGB,
+) {
   return (route: GroupedRoute, selected?: Selected): RGBA | RGB => {
-    if (!selected) return intensifyColour(route, routeColour);
+    if (!selected && routeIncludesUpcomingFlight(route)) {
+      return intensifyColour(route, routeUpcomingColour, 255 / 2);
+    }
+
+    if (!selected) {
+      return intensifyColour(route, routeColour);
+    }
 
     return routeIncludesFlight(route, selected)
-      ? routeColour
+      ? routeIncludesUpcomingFlight(route)
+        ? routeUpcomingColour
+        : routeColour
       : [...primaryTextColour, 30];
   };
 }
 
-const intensifyColour = (route: GroupedRoute, colour: RGB): RGBA => {
+const intensifyColour = (
+  route: GroupedRoute,
+  colour: RGB,
+  minimumOpacity?: number,
+): RGBA => {
   const intensity =
     route.flights.length === 1 ? 60 : Math.min(255, route.flights.length * 40);
 
-  return [...colour, Math.round(intensity)];
+  return [...colour, Math.max(intensity, minimumOpacity ?? 0)];
 };
 
 const routeIncludesFlight = (route: GroupedRoute, selected?: Selected) => {
@@ -77,4 +98,8 @@ const routeIncludesFlight = (route: GroupedRoute, selected?: Selected) => {
   }
 
   return false;
+};
+
+const routeIncludesUpcomingFlight = (route: GroupedRoute) => {
+  return route.flights.some((f) => f.date && f.date > new Date());
 };

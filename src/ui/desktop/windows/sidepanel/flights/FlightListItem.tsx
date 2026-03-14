@@ -3,6 +3,7 @@ import { setSelected } from "../../../../../data/flightsSlice";
 import { useAppDispatch } from "../../../../../data/store";
 import { joinClasses } from "../../../../../util/componentUtil";
 
+import { IconCircleFilled } from "@tabler/icons-react";
 import { icons } from "../../../../../assets/text/icons";
 import "./FlightListItem.scss";
 
@@ -20,7 +21,11 @@ export function FlightListItem({ flight, highlighted }: FlightListItemProps) {
 
   return (
     <div
-      className={joinClasses("FlightListItem", highlighted && "highlighted")}
+      className={joinClasses(
+        "FlightListItem",
+        highlighted && "highlighted",
+        flight.upcoming && "upcoming",
+      )}
       onClick={handleOnClick}
     >
       <div className="icon"></div>
@@ -37,7 +42,12 @@ export function FlightListItem({ flight, highlighted }: FlightListItemProps) {
             </span>
           </div>
 
-          <div className="right">{flight.date?.toDateString()}</div>
+          <div className="right">
+            {flight.upcoming && (
+              <IconCircleFilled size={8} color="rgb(133, 184, 51)" />
+            )}
+            {flight.date?.toDateString()}
+          </div>
         </div>
 
         <div className="middle">

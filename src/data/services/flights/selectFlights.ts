@@ -1,5 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { compareTimes } from "../../../util/types";
+import { flightFilter } from "../../classes/filters";
 import type { Airport } from "../../classes/flights/Airport";
 import { Flight } from "../../classes/flights/Flight";
 import { Route } from "../../classes/flights/Route";
@@ -10,6 +11,7 @@ export type GroupedFlightDetails = {
   id: number;
   flightNumber?: string;
   route: Route;
+  date?: Date;
 };
 
 const selectFlightsResult = flightsApi.endpoints.getFlights.select();
@@ -28,6 +30,15 @@ export const selectFlightsAsObjects = createSelector(selectFlights, (flights) =>
   ),
 );
 
+export const selectFilteredFlights = createSelector(
+  [selectFlightsAsObjects, (state: AppRootState) => state.flights.filters],
+  (flights, filters) => {
+    if (!filters) return flights;
+
+    return flights.filter(flightFilter(filters));
+  },
+);
+
 /**
  * Groups flights by their route (origin-destination pair). Each group contains the route and an array of flights that take that route.
  */
@@ -40,7 +51,7 @@ export type GroupedRoute = {
  * Selects and groups flights by their route (origin-destination pair). Each group contains the route and an array of flights that take that route.
  */
 export const selectRoutesFromFlights = createSelector(
-  selectFlightsAsObjects,
+  selectFilteredFlights,
   (flights): GroupedRoute[] => {
     if (!flights.length) return [];
 
@@ -75,7 +86,7 @@ export type GroupedAirport = {
  * Selects and groups flights by their associated airports (both origin and destination). Each group contains the airport and an array of flight details for flights that either depart from or arrive at that airport.
  */
 export const selectAirportsFromFlights = createSelector(
-  selectFlightsAsObjects,
+  selectFilteredFlights,
   (flights): GroupedAirport[] => {
     if (!flights.length) return [];
 

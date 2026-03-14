@@ -1,20 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { modifyFilters, type FlightsFilters } from "./classes/filters";
 import type { FlightDraft } from "./classes/flights/FlightDraft";
-
-type InProgressDraft = {
-  type: "new" | "edit";
-  // For editing
-  flightId?: number;
-  draft: FlightDraft;
-};
-
-export type Selected =
-  | {
-      type: "flight";
-      flightId: number;
-    }
-  | { type: "route"; routeKey: string }
-  | { type: "airport"; airportId: number };
+import type { InProgressDraft, Selected } from "./classes/flightsStateTypes";
 
 export interface FlightsState {
   highlightedAirportId?: number;
@@ -24,6 +11,7 @@ export interface FlightsState {
 
   selected?: Selected;
   selectionContext?: Extract<Selected, { type: "route" | "airport" }>;
+  filters?: FlightsFilters;
 }
 
 const initialState: FlightsState = {
@@ -32,6 +20,7 @@ const initialState: FlightsState = {
   selected: undefined,
   inProgressDraft: undefined,
   flightsListScrollPosition: 0,
+  filters: undefined,
 };
 
 const flightsSlice = createSlice({
@@ -147,6 +136,15 @@ const flightsSlice = createSlice({
       state.selectionContext = undefined;
       state.inProgressDraft = undefined;
       state.flightsListScrollPosition = 0;
+      state.filters = undefined;
+    },
+
+    // filters
+    updateFilters(
+      state: FlightsState,
+      action: PayloadAction<Partial<FlightsFilters>>,
+    ) {
+      state.filters = modifyFilters(state.filters, action.payload);
     },
   },
 });
@@ -167,5 +165,6 @@ export const {
   recordFlightsListScrollPosition,
 
   clearAllUIFlightData,
+  updateFilters,
 } = flightsSlice.actions;
 export const flightsReducer = flightsSlice.reducer;
