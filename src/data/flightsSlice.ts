@@ -1,30 +1,26 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { modifyFilters, type FlightsFilters } from "./classes/filters";
 import type { FlightDraft } from "./classes/flights/FlightDraft";
-
-type InProgressDraft = {
-  type: "new" | "edit";
-  // For editing
-  flightId?: number;
-  draft: FlightDraft;
-};
+import type { InProgressDraft, Selected } from "./classes/flightsStateTypes";
 
 export interface FlightsState {
   highlightedAirportId?: number;
   highlightedRouteKey?: string;
-
-  selectedFlightId?: number;
-
+  flightsListScrollPosition: number;
   inProgressDraft?: InProgressDraft;
 
-  flightsListScrollPosition: number;
+  selected?: Selected;
+  selectionContext?: Extract<Selected, { type: "route" | "airport" }>;
+  filters?: FlightsFilters;
 }
 
 const initialState: FlightsState = {
   highlightedAirportId: undefined,
   highlightedRouteKey: undefined,
-  selectedFlightId: undefined,
+  selected: undefined,
   inProgressDraft: undefined,
   flightsListScrollPosition: 0,
+  filters: undefined,
 };
 
 const flightsSlice = createSlice({
@@ -51,16 +47,32 @@ const flightsSlice = createSlice({
       state.highlightedRouteKey = undefined;
     },
 
-    // Selected entities
-    setSelectedFlight(
+    setSelected(
       state: FlightsState,
-      action: PayloadAction<number | undefined>,
+      action: PayloadAction<Selected | undefined>,
     ) {
-      state.selectedFlightId = action.payload;
+      if (action.payload?.type === "flight") {
+        if (
+          state.selected?.type === "route" ||
+          state.selected?.type === "airport"
+        ) {
+          state.selectionContext = state.selected;
+        }
+      } else {
+        state.selectionContext = undefined;
+      }
+
+      state.selected = action.payload;
     },
 
-    clearSelectedFlight(state: FlightsState) {
-      state.selectedFlightId = undefined;
+    goBackInSelection(state: FlightsState) {
+      if (state.selected?.type === "flight" && state.selectionContext) {
+        state.selected = state.selectionContext;
+        state.selectionContext = undefined;
+      } else {
+        state.selected = undefined;
+        state.selectionContext = undefined;
+      }
     },
 
     // Drafting
@@ -120,9 +132,19 @@ const flightsSlice = createSlice({
 
     // Used for logout
     clearAllUIFlightData(state: FlightsState) {
-      state.selectedFlightId = undefined;
+      state.selected = undefined;
+      state.selectionContext = undefined;
       state.inProgressDraft = undefined;
       state.flightsListScrollPosition = 0;
+      state.filters = undefined;
+    },
+
+    // filters
+    updateFilters(
+      state: FlightsState,
+      action: PayloadAction<Partial<FlightsFilters>>,
+    ) {
+      state.filters = modifyFilters(state.filters, action.payload);
     },
   },
 });
@@ -132,8 +154,8 @@ export const {
   recordHighlightedRoute,
   clearHighlights,
 
-  setSelectedFlight,
-  clearSelectedFlight,
+  setSelected,
+  goBackInSelection,
 
   setNewFlight,
   setEditingFlight,
@@ -143,5 +165,6 @@ export const {
   recordFlightsListScrollPosition,
 
   clearAllUIFlightData,
+  updateFilters,
 } = flightsSlice.actions;
 export const flightsReducer = flightsSlice.reducer;

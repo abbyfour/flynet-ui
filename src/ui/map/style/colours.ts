@@ -5,6 +5,8 @@ export const colours = {
   yellow: [255, 200, 0],
   red: [211, 47, 0],
   darkRed: [211, 47, 0],
+  pink: [209, 88, 201],
+  green: [133, 184, 51],
 
   white: [255, 255, 255],
   black: [0, 0, 0],
@@ -22,6 +24,7 @@ export const colourRoles = {
 
   flightLine: { light: "red", dark: "yellow" },
   flightLineHighlight: { light: "darkRed", dark: "white" },
+  flightLineUpcoming: "green",
   airportDot: { light: "black", dark: "white" },
 } satisfies Record<string, ColourKey | ThemedColourKey>;
 

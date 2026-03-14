@@ -64,18 +64,22 @@ export class Airport {
 
   // Codes
   get icaoCode(): string | undefined {
-    return this.raw.icaoCode;
+    return nullifyAirportCode(this.raw.icaoCode);
   }
 
   get iataCode(): string | undefined {
-    return this.raw.iataCode;
+    return nullifyAirportCode(this.raw.iataCode);
   }
 
   get localCode(): string | undefined {
-    return this.raw.localCode === "null" ? undefined : this.raw.localCode;
+    return nullifyAirportCode(this.raw.localCode);
   }
 
   get displayCode(): string {
-    return this.iataCode ?? this.icaoCode ?? this.raw.localCode ?? "???";
+    return this.iataCode || this.icaoCode || this.raw.localCode || "???";
   }
+}
+
+function nullifyAirportCode(code: string | undefined): string | undefined {
+  return code === "null" ? undefined : code;
 }

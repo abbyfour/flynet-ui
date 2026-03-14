@@ -1,7 +1,11 @@
 import type { Flight } from "../../../../../data/classes/flights/Flight";
-import { setSelectedFlight } from "../../../../../data/flightsSlice";
+import { setSelected } from "../../../../../data/flightsSlice";
 import { useAppDispatch } from "../../../../../data/store";
 import { joinClasses } from "../../../../../util/componentUtil";
+
+import { IconCircleFilled } from "@tabler/icons-react";
+import { icons } from "../../../../../assets/text/icons";
+import "./FlightListItem.scss";
 
 type FlightListItemProps = {
   flight: Flight;
@@ -12,12 +16,16 @@ export function FlightListItem({ flight, highlighted }: FlightListItemProps) {
   const dispatch = useAppDispatch();
 
   const handleOnClick = () => {
-    dispatch(setSelectedFlight(flight.id));
+    dispatch(setSelected({ type: "flight", flightId: flight.id }));
   };
 
   return (
     <div
-      className={joinClasses("FlightListItem", highlighted && "highlighted")}
+      className={joinClasses(
+        "FlightListItem",
+        highlighted && "highlighted",
+        flight.upcoming && "upcoming",
+      )}
       onClick={handleOnClick}
     >
       <div className="icon"></div>
@@ -29,11 +37,17 @@ export function FlightListItem({ flight, highlighted }: FlightListItemProps) {
               <span className="flight-number">{flight.flightNumber}</span>
             )}
             <span className="route">
-              {flight.origin.displayCode} -&gt; {flight.destination.displayCode}
+              {flight.origin.displayCode} {icons.flights.flightRoute(13)}
+              {flight.destination.displayCode}
             </span>
           </div>
 
-          <div className="right">{flight.date?.toDateString()}</div>
+          <div className="right">
+            {flight.upcoming && (
+              <IconCircleFilled size={8} color="rgb(133, 184, 51)" />
+            )}
+            {flight.date?.toDateString()}
+          </div>
         </div>
 
         <div className="middle">

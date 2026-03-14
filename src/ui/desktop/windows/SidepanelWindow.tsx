@@ -1,5 +1,5 @@
 import { ActionIcon } from "@mantine/core";
-import { IconChevronLeft, IconX } from "@tabler/icons-react";
+import { icons } from "../../../assets/text/icons";
 import { SidepanelWindows } from "../../../data/classes/ui";
 import {
   clearSidepanelOptions,
@@ -8,7 +8,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../data/store";
 import { closeActiveSidepanelWindow } from "../../../data/uiSlice";
 import { SidepanelContainer } from "../SidepanelContainer";
-import { Flights } from "./sidepanel/flights/Flights";
+import { FlightsPanel } from "./sidepanel/flights/FlightsPanel";
 import { Social } from "./sidepanel/Friends";
 import { Profile } from "./sidepanel/Profile";
 import { Settings } from "./sidepanel/Settings";
@@ -38,7 +38,7 @@ export function SidepanelWindow() {
       <div className="window-header">
         <div className="window-controls">
           <ActionIcon variant="transparent" color="dark" onClick={handleClose}>
-            <IconX size={20} />
+            {icons.actions.window.close(20)}
           </ActionIcon>
           {sidepanelOptions.onGoBack && (
             <ActionIcon
@@ -46,7 +46,7 @@ export function SidepanelWindow() {
               color="dark"
               onClick={handleGoback}
             >
-              <IconChevronLeft size={20} />
+              {icons.actions.window.back(20)}
             </ActionIcon>
           )}
         </div>
@@ -65,7 +65,7 @@ export function SidepanelWindow() {
 function getSidepanelWindow(window: SidepanelWindows | undefined) {
   switch (window) {
     case SidepanelWindows.Flights:
-      return <Flights />;
+      return <FlightsPanel />;
     case SidepanelWindows.Friends:
       return <Social />;
     case SidepanelWindows.Profile:

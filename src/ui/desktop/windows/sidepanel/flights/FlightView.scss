@@ -63,70 +63,12 @@
     display: flex;
     gap: 0.5rem;
   }
-}
 
-.AirportDetails {
-  display: flex;
-  flex-direction: row;
-  gap: 0.3em;
-  align-items: flex-start;
-
-  .right {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .subline {
-    font-size: 0.875rem;
-    color: gray;
-  }
-}
-
-.AirportCodePill {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  padding: 0.2rem 0.4rem;
-  background: rgb(255, 200, 0);
-  color: black;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  line-height: 1;
-  cursor: default;
-  width: min-content;
-
-  .tooltip {
-    position: absolute;
-    left: 0;
-    bottom: calc(100% + 0.4rem);
-    padding: 0.35rem 0.5rem;
-    border-radius: 0.35rem;
-    background: #111;
-    color: #fff;
-    font-size: 0.75rem;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition:
-      opacity 120ms ease,
-      transform 120ms ease;
-  }
-
-  .tooltip::after {
-    content: "";
-    position: absolute;
-    left: 0.75rem;
-    top: 100%;
-    transform: translateX(0);
-    border-width: 6px;
-    border-style: solid;
-    border-color: #111 transparent transparent transparent;
-  }
-
-  &:hover .tooltip,
-  &:focus-within .tooltip {
-    opacity: 1;
-    transform: translateY(-2px);
+  .route-details {
+    .route {
+      display: flex;
+      align-items: center;
+      gap: 0.3em;
+    }
   }
 }

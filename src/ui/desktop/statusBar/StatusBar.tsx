@@ -1,6 +1,6 @@
 import { ActionIcon, Tooltip } from "@mantine/core";
-import { IconLogout2 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
+import { icons } from "../../../assets/text/icons";
 import { clearAllUIFlightData } from "../../../data/flightsSlice";
 import { clearFlightsCache } from "../../../data/services/flights/flightsAPI";
 import { useAppDispatch, useAppSelector } from "../../../data/store";
@@ -45,7 +45,7 @@ export function StatusBar() {
 
           <Tooltip label="Logout" withArrow color="red">
             <ActionIcon variant="transparent" color="red" onClick={logout}>
-              <IconLogout2 size={20} />
+              {icons.actions.logout(20)}
             </ActionIcon>
           </Tooltip>
         </div>

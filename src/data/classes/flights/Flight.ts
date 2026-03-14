@@ -96,6 +96,7 @@ export class Flight {
       id: this.id,
       flightNumber: this.flightNumber,
       route: this.route,
+      date: this.date,
     };
   }
 

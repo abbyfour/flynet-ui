@@ -1,28 +1,20 @@
 import { m } from "../../../../../assets/text/messages";
-import type {
-  Airport,
-  AirportType,
-} from "../../../../../data/classes/flights/Airport";
+import type { Airport } from "../../../../../data/classes/flights/Airport";
 import type { Flight } from "../../../../../data/classes/flights/Flight";
 import {
-  clearSelectedFlight,
+  goBackInSelection,
   setEditingFlight,
 } from "../../../../../data/flightsSlice";
 import { useDeleteFlightMutation } from "../../../../../data/services/flights/flightsAPI";
 import { useAppDispatch } from "../../../../../data/store";
-import { joinClasses } from "../../../../../util/componentUtil";
 import { confirm } from "../../../../notices/Confirm";
 
-import {
-  IconCalendarFilled,
-  IconPencil,
-  IconPlaneArrivalFilled,
-  IconPlaneDepartureFilled,
-} from "@tabler/icons-react";
+import { icons } from "../../../../../assets/text/icons";
 import { Button } from "../../../../buttons/Button";
 import { DeleteButton } from "../../../../buttons/DeleteButton";
 import { Toasts } from "../../../../notices/Toast";
 import { dispatchNotice } from "../../../../notices/dispatchNotice";
+import { AirportDetails } from "./AirportDetails";
 import "./FlightView.scss";
 
 type FlightViewProps = {
@@ -33,8 +25,6 @@ export function FlightView({ flight }: FlightViewProps) {
   const dispatch = useAppDispatch();
 
   const [deleteFlight] = useDeleteFlightMutation();
-
-  const goBack = () => dispatch(clearSelectedFlight());
 
   const handleDeleteFlight = async () => {
     const confirmation = await confirm({
@@ -53,7 +43,7 @@ export function FlightView({ flight }: FlightViewProps) {
         dispatchNotice(Toasts.success(m.flight.deletedSuccessfully()));
       }
 
-      goBack();
+      dispatch(goBackInSelection());
     }
   };
 
@@ -78,18 +68,17 @@ export function FlightView({ flight }: FlightViewProps) {
         {flight.date && (
           <div>
             <div className="date">
-              <IconCalendarFilled size={16} />{" "}
-              {flight.date.toLocaleDateString()}{" "}
+              {icons.flights.date(16)} {flight.date.toLocaleDateString()}{" "}
             </div>
 
             {flight.departureTime && flight.arrivalTime && (
               <div className="time">
                 <div className="departure-time">
-                  <IconPlaneDepartureFilled size={16} /> {flight.departureTime}
+                  {icons.flights.departure(16)} {flight.departureTime}
                 </div>
 
                 <div className="arrival-time">
-                  <IconPlaneArrivalFilled size={16} /> {flight.arrivalTime}
+                  {icons.flights.arrival(16)} {flight.arrivalTime}
                 </div>
               </div>
             )}
@@ -118,8 +107,10 @@ export function FlightView({ flight }: FlightViewProps) {
 
         <div className="route-details">
           <h5>Route:</h5>
-          {flight.route.origin.displayCode} -&gt;{" "}
-          {flight.route.destination.displayCode}
+          <span className="route">
+            {flight.route.origin.displayCode} {icons.flights.flightRoute(16)}{" "}
+            {flight.route.destination.displayCode}
+          </span>
         </div>
 
         <div className="airport-details">
@@ -143,7 +134,7 @@ export function FlightView({ flight }: FlightViewProps) {
       </div>
 
       <div className="action-buttons">
-        <Button icon={<IconPencil size={16} />} onClick={handleEditFlight}>
+        <Button icon={icons.actions.edit(16)} onClick={handleEditFlight}>
           Edit
         </Button>
         <DeleteButton className="delete-button" onClick={handleDeleteFlight} />
@@ -152,32 +143,7 @@ export function FlightView({ flight }: FlightViewProps) {
   );
 }
 
-function AirportDetails({
-  airport,
-  className,
-}: {
-  airport: Airport;
-  className?: string;
-}) {
-  return (
-    <div className={joinClasses("AirportDetails", className)}>
-      <div className="left">
-        <AirportCodePill airport={airport} />
-      </div>
-
-      <div className="right">
-        <span className="name">{airport.name}</span>
-
-        <span className="subline">
-          {displayAirportType(airport.type)} • {airport.city},{" "}
-          {airport.isoRegion}, {airport.isoCountry}
-        </span>
-      </div>
-    </div>
-  );
-}
-
-function AirportCodePill({ airport }: { airport: Airport }) {
+export function AirportCodePill({ airport }: { airport: Airport }) {
   return (
     <div className="AirportCodePill">
       {airport.displayCode}
@@ -187,19 +153,4 @@ function AirportCodePill({ airport }: { airport: Airport }) {
       </span>
     </div>
   );
-}
-
-function displayAirportType(type: AirportType) {
-  switch (type) {
-    case "large_airport":
-      return "Large Airport";
-    case "medium_airport":
-      return "Medium Airport";
-    case "small_airport":
-      return "Small Airport";
-    case "seaplane_base":
-      return "Seaplane Base";
-    default:
-      return type;
-  }
 }

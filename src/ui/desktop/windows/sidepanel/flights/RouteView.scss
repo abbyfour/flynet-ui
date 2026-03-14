@@ -1,0 +1,43 @@
+.RouteView {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.3em;
+  }
+
+  h5 {
+    font-size: 70%;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #333;
+    text-decoration: underline;
+  }
+
+  .airport-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+    .origin,
+    .destination {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+
+  .flights {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .flight-count {
+      font-style: italic;
+    }
+  }
+}

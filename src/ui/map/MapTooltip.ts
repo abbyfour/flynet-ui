@@ -1,3 +1,5 @@
+import { renderToString } from "react-dom/server";
+import { icons } from "../../assets/text/icons";
 import type { Route } from "../../data/classes/flights/Route";
 import type {
   GroupedAirport,
@@ -34,7 +36,7 @@ ${displayRoutesForAirport(object)}`,
 
   if (object && "route" in object) {
     return baseTooltip(
-      `<span style="font-weight: bold;">${displayRouteName(object.route)}</span>\n${displayFlightsOnRoute(object.flights)}`,
+      `<span style="font-weight: bold; display: flex; align-items: center; gap: 0.4em">${displayRouteName(object.route)}</span>\n${displayFlightsOnRoute(object.flights)}`,
     );
   }
 
@@ -42,7 +44,7 @@ ${displayRoutesForAirport(object)}`,
 }
 
 function displayRouteName(route: Route): string {
-  return `${route.origin.displayCode} ↔ ${route.destination.displayCode}`;
+  return `${route.origin.displayCode} ${renderToString(icons.flights.route(20))} ${route.destination.displayCode}`;
 }
 
 function displayFlightsOnRoute(flights: GroupedFlightDetails[]): string {
