@@ -1,6 +1,5 @@
 import { compareObjects } from "../../../util/arrayUtil";
 import type { Time } from "../../../util/types";
-import type { GroupedFlightDetails } from "../../services/flights/selectFlights";
 import type { APIDateString } from "../../services/flights/types";
 import type { UserProperties } from "../user";
 import { Airline } from "./Airline";
@@ -90,15 +89,6 @@ export class Flight {
    */
   get upcoming(): boolean {
     return !!this.date && this.date > new Date();
-  }
-
-  asGroupedFlightDetails(): GroupedFlightDetails {
-    return {
-      id: this.id,
-      flightNumber: this.flightNumber,
-      route: this.route,
-      date: this.date,
-    };
   }
 
   toDraft(): FlightDraft {

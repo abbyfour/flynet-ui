@@ -7,12 +7,7 @@ import { Route } from "../../classes/flights/Route";
 import type { AppRootState } from "../../store";
 import { flightsApi } from "./flightsAPI";
 
-export type GroupedFlightDetails = {
-  id: number;
-  flightNumber?: string;
-  route: Route;
-  date?: Date;
-};
+export type GroupedFlightDetails = Flight;
 
 const selectFlightsResult = flightsApi.endpoints.getFlights.select();
 
@@ -65,9 +60,7 @@ export const selectRoutesFromFlights = createSelector(
         });
       }
 
-      byRoute
-        .get(flight.route.key)!
-        .flights.push(flight.asGroupedFlightDetails());
+      byRoute.get(flight.route.key)!.flights.push(flight);
     }
 
     return Array.from(byRoute.values());
@@ -100,9 +93,7 @@ export const selectAirportsFromFlights = createSelector(
         });
       }
 
-      airportsById
-        .get(flight.origin.id)!
-        .flights.push(flight.asGroupedFlightDetails());
+      airportsById.get(flight.origin.id)!.flights.push(flight);
 
       if (!airportsById.has(flight.destination.id)) {
         airportsById.set(flight.destination.id, {
@@ -111,9 +102,7 @@ export const selectAirportsFromFlights = createSelector(
         });
       }
 
-      airportsById
-        .get(flight.destination.id)!
-        .flights.push(flight.asGroupedFlightDetails());
+      airportsById.get(flight.destination.id)!.flights.push(flight);
     }
 
     return Array.from(airportsById.values());

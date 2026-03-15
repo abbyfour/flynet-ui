@@ -2,6 +2,7 @@ import { type DeckProps, type PickingInfo } from "@deck.gl/core";
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import { useCallback } from "react";
 import { useControl } from "react-map-gl/maplibre";
+import { SidepanelWindows } from "../../data/classes/ui";
 import {
   clearHighlights,
   recordHighlightedAirport,
@@ -16,6 +17,7 @@ import {
   type GroupedRoute,
 } from "../../data/services/flights/selectFlights";
 import { useAppDispatch, useAppSelector } from "../../data/store";
+import { setActiveSidepanelWindow } from "../../data/uiSlice";
 import { AirportsLayer } from "./layers/AirportsLayer";
 import { RoutesLayer } from "./layers/RoutesLayer";
 import { MapTooltip } from "./MapTooltip";
@@ -73,10 +75,12 @@ export function DataLayers() {
     ({ object }: PickingInfo<GroupedAirport | GroupedRoute>) => {
       if (object && "route" in object) {
         dispatch(setSelected({ type: "route", routeKey: object.route.key }));
+        dispatch(setActiveSidepanelWindow(SidepanelWindows.Flights));
       } else if (object && "airport" in object) {
         dispatch(
           setSelected({ type: "airport", airportId: object.airport.id }),
         );
+        dispatch(setActiveSidepanelWindow(SidepanelWindows.Flights));
       } else {
         dispatch(setSelected(undefined));
       }
