@@ -1,8 +1,7 @@
 import { PasswordInput, Textarea, TextInput } from "@mantine/core";
 import { TimeInput } from "@mantine/dates";
 import { IconCircleFilled } from "@tabler/icons-react";
-import { useState } from "react";
-import { joinClasses } from "../../util/componentUtil";
+import { useCallback, useState } from "react";
 import { type Time } from "../../util/types";
 import "./Input.scss";
 import { InputLabel } from "./InputLabel";
@@ -49,7 +48,7 @@ export function Input<T extends InputType>({
 }: InputProps<T>) {
   const [initialValue] = useState(value);
 
-  const hasValueChanged = () => {
+  const hasValueChanged = useCallback(() => {
     if (!fingerprinted) return false;
 
     if (
@@ -62,15 +61,13 @@ export function Input<T extends InputType>({
     }
 
     if (type === "date") {
-      console.log("Comparing dates:", value, initialValue);
-
       return value instanceof Date && initialValue instanceof Date
         ? value.getTime() !== initialValue.getTime()
         : value !== initialValue;
     }
 
     return value !== initialValue;
-  };
+  }, [fingerprinted, type, value, initialValue]);
 
   const sharedInputProps = {
     id,
@@ -87,10 +84,7 @@ export function Input<T extends InputType>({
     placeholder,
     leftSection,
     radius: "xs",
-    className: joinClasses(
-      "Input",
-      fingerprinted && hasValueChanged() && "changed",
-    ),
+    className: "Input",
   } as const;
 
   switch (type) {

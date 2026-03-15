@@ -48,9 +48,7 @@ export function FlightView({ flight }: FlightViewProps) {
   };
 
   const handleEditFlight = () => {
-    dispatch(
-      setEditingFlight({ flightId: flight.id, draft: flight.toDraft() }),
-    );
+    dispatch(setEditingFlight({ flightId: flight.id }));
   };
 
   return (

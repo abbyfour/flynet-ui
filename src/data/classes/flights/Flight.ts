@@ -1,3 +1,4 @@
+import { compareObjects } from "../../../util/arrayUtil";
 import type { Time } from "../../../util/types";
 import type { GroupedFlightDetails } from "../../services/flights/selectFlights";
 import type { APIDateString } from "../../services/flights/types";
@@ -121,5 +122,14 @@ export class Flight {
         displayCode: this.destination.displayCode,
       },
     };
+  }
+
+  isUnchangedFromDraft(draft?: FlightDraft): boolean {
+    if (!draft) return false;
+
+    return compareObjects(
+      draft as Record<string, unknown>,
+      this.toDraft() as Record<string, unknown>,
+    );
   }
 }

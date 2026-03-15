@@ -1,21 +1,31 @@
+import { useEffect } from "react";
 import { m } from "../../../../../../assets/text/messages";
 import { draftToNewRequest } from "../../../../../../data/classes/flights/FlightDraft";
 import { clearDraftingFlight } from "../../../../../../data/flightsSlice";
 import { useAddFlightMutation } from "../../../../../../data/services/flights/flightsAPI";
-import { useAppDispatch, useAppSelector } from "../../../../../../data/store";
+import { setSidepanelOptions } from "../../../../../../data/sidepanelSlice";
+import { useAppDispatch } from "../../../../../../data/store";
 import { FlightDrafter } from "../../../../../forms/FlightDrafter";
 import { dispatchNotice } from "../../../../../notices/dispatchNotice";
 import { Toasts } from "../../../../../notices/Toast";
 
 export function AddFlight() {
   const [addFlight, { isLoading }] = useAddFlightMutation();
-  const drafting = useAppSelector((state) => state.flights.inProgressDraft);
   const dispatch = useAppDispatch();
 
-  const handleSubmit = async () => {
-    if (!drafting) return;
+  useEffect(() => {
+    dispatch(
+      setSidepanelOptions({
+        title: "Add flight",
+        onGoBack: () => dispatch(clearDraftingFlight()),
+      }),
+    );
+  }, [dispatch]);
 
-    const result = await addFlight(draftToNewRequest(drafting.draft));
+  const handleSubmit = async (
+    draft: Parameters<typeof draftToNewRequest>[0],
+  ) => {
+    const result = await addFlight(draftToNewRequest(draft));
 
     if (result.error) {
       dispatchNotice(Toasts.error(m.flight.couldNotBeAdded));
@@ -28,7 +38,12 @@ export function AddFlight() {
 
   return (
     <div className="AddFlight">
-      <FlightDrafter isLoading={isLoading} onSubmit={handleSubmit} />
+      <FlightDrafter
+        initialDraft={{}}
+        isLoading={isLoading}
+        mode="new"
+        onSubmit={handleSubmit}
+      />
     </div>
   );
 }
