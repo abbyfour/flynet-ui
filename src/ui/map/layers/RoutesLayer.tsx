@@ -1,5 +1,4 @@
 import { ArcLayer } from "deck.gl";
-import type { Route } from "../../../data/classes/flights/Route";
 import type { Selected } from "../../../data/classes/flightsStateTypes";
 import { type GroupedRoute } from "../../../data/services/flights/selectFlights";
 import type { RGB, RGBA } from "../style/colours";
@@ -18,16 +17,22 @@ export function RoutesLayer({ routes, selected }: RoutesLayerProps) {
     flightLineUpcomingColour: routeUpcomingColour,
   } = useColours();
 
+  const maxRouteFlights = routes.length
+    ? Math.max(...routes.map((route) => route.flights.length))
+    : 0;
+
   const getRouteColour = routeColourer(
     routeColour,
     primaryTextColour,
     routeUpcomingColour,
+    maxRouteFlights,
   );
 
-  return new ArcLayer<Route>({
+  return new ArcLayer<GroupedRoute>({
     id: "routes-layer",
     greatCircle: true,
     getHeight: 0.05,
+    // @ts-expect-error MapLibre overlay accepts beforeId even though ArcLayer types omit it.
     beforeId: "Place labels",
     data: routes,
     pickable: true,
@@ -47,21 +52,27 @@ export function RoutesLayer({ routes, selected }: RoutesLayerProps) {
       getSourceColor: [selected],
       getTargetColor: [selected],
     },
-  } as any);
+  });
 }
 
 function routeColourer(
   routeColour: RGB,
   primaryTextColour: RGB,
   routeUpcomingColour: RGB,
+  maxRouteFlights: number,
 ) {
   return (route: GroupedRoute, selected?: Selected): RGBA | RGB => {
     if (!selected && routeIncludesUpcomingFlight(route)) {
-      return intensifyColour(route, routeUpcomingColour, 255 / 2);
+      return intensifyColour(
+        route,
+        routeUpcomingColour,
+        maxRouteFlights,
+        255 / 2,
+      );
     }
 
     if (!selected) {
-      return intensifyColour(route, routeColour);
+      return intensifyColour(route, routeColour, maxRouteFlights);
     }
 
     return routeIncludesFlight(route, selected)
@@ -75,10 +86,18 @@ function routeColourer(
 const intensifyColour = (
   route: GroupedRoute,
   colour: RGB,
+  maxRouteFlights: number,
   minimumOpacity?: number,
 ): RGBA => {
+  const cappedMaxFlights = Math.min(Math.max(maxRouteFlights, 1), 10);
+
+  // On sparse datasets, keep routes readable by rendering them fully bright.
   const intensity =
-    route.flights.length === 1 ? 60 : Math.min(255, route.flights.length * 40);
+    cappedMaxFlights <= 2
+      ? 255
+      : Math.round(
+          (Math.min(route.flights.length, 10) / cappedMaxFlights) * 255,
+        );
 
   return [...colour, Math.max(intensity, minimumOpacity ?? 0)];
 };
