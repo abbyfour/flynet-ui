@@ -1,7 +1,6 @@
 import { Fieldset } from "@mantine/core";
+import { useEffect, useState } from "react";
 import type { FlightDraft } from "../../data/classes/flights/FlightDraft";
-import { updateDraftingFlight } from "../../data/flightsSlice";
-import { useAppDispatch, useAppSelector } from "../../data/store";
 import type { Time } from "../../util/types";
 import { SubmitButton } from "../buttons/SubmitButton";
 import { AirportInput } from "./AirportInput";
@@ -11,25 +10,41 @@ import { icons } from "../../assets/text/icons";
 import "./FlightDrafter.scss";
 
 interface FlightDrafterProps {
-  onSubmit: () => void;
+  initialDraft: FlightDraft;
+  onSubmit: (draft: FlightDraft) => void;
+  onDraftChange?: (draft: FlightDraft) => void;
   isLoading: boolean;
+  mode: "new" | "edit";
 }
 
-export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
-  const { draft, type } = useAppSelector(
-    (state) => state.flights.inProgressDraft,
-  ) ?? { draft: {} as FlightDraft, type: "new" };
+export function FlightDrafter({
+  initialDraft,
+  onSubmit,
+  onDraftChange,
+  isLoading,
+  mode,
+}: FlightDrafterProps) {
+  const [draft, setDraft] = useState<FlightDraft>(initialDraft);
 
-  const dispatch = useAppDispatch();
+  useEffect(() => {
+    setDraft(initialDraft);
+  }, [initialDraft]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    onSubmit();
+    onSubmit(draft);
   };
 
   const updateDraft = (updatedFields: Partial<FlightDraft>) => {
-    dispatch(updateDraftingFlight(updatedFields));
+    setDraft((currentDraft) => {
+      const nextDraft = {
+        ...currentDraft,
+        ...updatedFields,
+      };
+
+      onDraftChange?.(nextDraft);
+      return nextDraft;
+    });
   };
 
   return (
@@ -42,6 +57,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
           value={draft.origin}
           disabled={isLoading}
           onChange={(value) => updateDraft({ origin: value })}
+          fingerprinted={mode === "edit"}
         />
 
         <br />
@@ -53,6 +69,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
           value={draft.destination}
           disabled={isLoading}
           onChange={(value) => updateDraft({ destination: value })}
+          fingerprinted={mode === "edit"}
         />
       </Fieldset>
 
@@ -63,6 +80,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
         value={draft.date}
         disabled={isLoading}
         onChange={(value) => updateDraft({ date: value })}
+        fingerprinted={mode === "edit"}
       />
 
       <br />
@@ -74,6 +92,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
         value={draft.flightNumber}
         disabled={isLoading}
         onChange={(value) => updateDraft({ flightNumber: value })}
+        fingerprinted={mode === "edit"}
       />
 
       <br />
@@ -85,6 +104,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
         value={draft.airline}
         disabled={isLoading}
         onChange={(value) => updateDraft({ airline: value })}
+        fingerprinted={mode === "edit"}
       />
 
       <br />
@@ -97,6 +117,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
         value={draft.departureTime as Time | undefined}
         icon={icons.flights.departure(16)}
         onChange={(value) => updateDraft({ departureTime: value })}
+        fingerprinted={mode === "edit"}
       />
 
       <br />
@@ -109,6 +130,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
         value={draft.arrivalTime as Time | undefined}
         icon={icons.flights.arrival(16)}
         onChange={(value) => updateDraft({ arrivalTime: value })}
+        fingerprinted={mode === "edit"}
       />
 
       <br />
@@ -120,6 +142,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
         disabled={isLoading}
         value={draft.planeModel as string | undefined}
         onChange={(value) => updateDraft({ planeModel: value })}
+        fingerprinted={mode === "edit"}
       />
 
       <br />
@@ -131,17 +154,20 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
         disabled={isLoading}
         value={draft.planeRegistration as string | undefined}
         onChange={(value) => updateDraft({ planeRegistration: value })}
+        fingerprinted={mode === "edit"}
       />
 
       <br />
 
       <Input
+        required
         type="longtext"
         id="notes"
         label="Notes"
         disabled={isLoading}
         value={draft.note as string | undefined}
         onChange={(value) => updateDraft({ note: value })}
+        fingerprinted={mode === "edit"}
       />
 
       <br />
@@ -152,7 +178,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
         loading={isLoading}
         disabled={!draft.origin || !draft.destination}
       >
-        {type === "new" ? "Add flight" : "Save changes"}
+        {mode === "new" ? "Add flight" : "Save changes"}
       </SubmitButton>
     </form>
   );

@@ -1,6 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { modifyFilters, type FlightsFilters } from "./classes/filters";
-import type { FlightDraft } from "./classes/flights/FlightDraft";
 import type { InProgressDraft, Selected } from "./classes/flightsStateTypes";
 
 export interface FlightsState {
@@ -76,50 +75,25 @@ const flightsSlice = createSlice({
     },
 
     // Drafting
-    setNewFlight(
-      state: FlightsState,
-      action: PayloadAction<FlightDraft | undefined>,
-    ) {
-      if (!action.payload) {
-        state.inProgressDraft = undefined;
-        return;
-      }
-
-      state.inProgressDraft = { type: "new", draft: action.payload };
+    setNewFlight(state: FlightsState) {
+      state.inProgressDraft = { type: "new" };
     },
 
     clearDraftingFlight(state: FlightsState) {
       state.inProgressDraft = undefined;
     },
 
-    updateDraftingFlight(
-      state: FlightsState,
-      action: PayloadAction<Partial<FlightDraft>>,
-    ) {
-      if (!state.inProgressDraft) return;
-
-      state.inProgressDraft = {
-        ...state.inProgressDraft,
-        draft: {
-          ...state.inProgressDraft.draft,
-          ...action.payload,
-        },
-      } as InProgressDraft;
-    },
-
     setEditingFlight(
       state: FlightsState,
-      action: PayloadAction<
-        { flightId: number; draft: FlightDraft } | undefined
-      >,
+      action: PayloadAction<{ flightId: number } | undefined>,
     ) {
       if (!action.payload) {
         state.inProgressDraft = undefined;
         return;
       }
 
-      const { flightId, draft } = action.payload;
-      state.inProgressDraft = { type: "edit", flightId, draft };
+      const { flightId } = action.payload;
+      state.inProgressDraft = { type: "edit", flightId };
     },
 
     // Scroll position
@@ -160,7 +134,6 @@ export const {
   setNewFlight,
   setEditingFlight,
   clearDraftingFlight,
-  updateDraftingFlight,
 
   recordFlightsListScrollPosition,
 

@@ -1,7 +1,10 @@
 import { PasswordInput, Textarea, TextInput } from "@mantine/core";
 import { TimeInput } from "@mantine/dates";
+import { IconCircleFilled } from "@tabler/icons-react";
+import { useCallback, useState } from "react";
 import { type Time } from "../../util/types";
 import "./Input.scss";
+import { InputLabel } from "./InputLabel";
 
 type InputType = "text" | "date" | "time" | "longtext" | "password";
 
@@ -20,6 +23,7 @@ export interface BaseInputProps {
   required?: boolean;
   placeholder?: string;
   icon?: React.ReactNode;
+  fingerprinted?: boolean;
 }
 
 type InputProps<T extends InputType> = BaseInputProps & {
@@ -40,14 +44,43 @@ export function Input<T extends InputType>({
   icon: leftSection,
 
   disabled = false,
+  fingerprinted = false,
 }: InputProps<T>) {
+  const [initialValue] = useState(value);
+
+  const hasValueChanged = useCallback(() => {
+    if (!fingerprinted) return false;
+
+    if (
+      type === "text" ||
+      type === "longtext" ||
+      type === "password" ||
+      type === "time"
+    ) {
+      return (value ?? "") !== (initialValue ?? "");
+    }
+
+    if (type === "date") {
+      return value instanceof Date && initialValue instanceof Date
+        ? value.getTime() !== initialValue.getTime()
+        : value !== initialValue;
+    }
+
+    return value !== initialValue;
+  }, [fingerprinted, type, value, initialValue]);
+
   const sharedInputProps = {
     id,
-    required,
     disabled,
 
     // aesthetics
-    label,
+    label: (
+      <InputLabel
+        label={label}
+        changed={hasValueChanged()}
+        required={required}
+      />
+    ),
     placeholder,
     leftSection,
     radius: "xs",
@@ -66,12 +99,16 @@ export function Input<T extends InputType>({
     case "date":
       return (
         <div className="date-input">
-          <label htmlFor={id} className="label">
+          <label htmlFor={id} className="input-label">
             {label}
+            {hasValueChanged() && (
+              <IconCircleFilled size={6} color="rgb(72, 128, 207)" />
+            )}
           </label>
           <input
             type="date"
             {...sharedInputProps}
+            value={value ? (value as Date).toISOString().split("T")[0] : ""}
             onChange={(e) => onChange?.(transformValue(type, e.target.value))}
           />
         </div>

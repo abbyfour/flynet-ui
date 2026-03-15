@@ -1,11 +1,6 @@
-import type { FlightDraft } from "./flights/FlightDraft";
-
-export type InProgressDraft = {
-  type: "new" | "edit";
-  // For editing
-  flightId?: number;
-  draft: FlightDraft;
-};
+export type InProgressDraft =
+  | { type: "new" }
+  | { type: "edit"; flightId: number };
 
 export type Selected =
   | {

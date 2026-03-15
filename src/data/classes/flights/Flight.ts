@@ -1,5 +1,5 @@
+import { compareObjects } from "../../../util/arrayUtil";
 import type { Time } from "../../../util/types";
-import type { GroupedFlightDetails } from "../../services/flights/selectFlights";
 import type { APIDateString } from "../../services/flights/types";
 import type { UserProperties } from "../user";
 import { Airline } from "./Airline";
@@ -91,15 +91,6 @@ export class Flight {
     return !!this.date && this.date > new Date();
   }
 
-  asGroupedFlightDetails(): GroupedFlightDetails {
-    return {
-      id: this.id,
-      flightNumber: this.flightNumber,
-      route: this.route,
-      date: this.date,
-    };
-  }
-
   toDraft(): FlightDraft {
     return {
       flightNumber: this.flightNumber,
@@ -121,5 +112,14 @@ export class Flight {
         displayCode: this.destination.displayCode,
       },
     };
+  }
+
+  isUnchangedFromDraft(draft?: FlightDraft): boolean {
+    if (!draft) return false;
+
+    return compareObjects(
+      draft as Record<string, unknown>,
+      this.toDraft() as Record<string, unknown>,
+    );
   }
 }

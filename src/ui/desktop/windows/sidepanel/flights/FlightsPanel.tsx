@@ -1,9 +1,5 @@
-import { useCallback, useEffect } from "react";
-import { m } from "../../../../../assets/text/messages";
-import {
-  clearDraftingFlight,
-  goBackInSelection,
-} from "../../../../../data/flightsSlice";
+import { useEffect } from "react";
+import { goBackInSelection } from "../../../../../data/flightsSlice";
 import { useGetFlightsQuery } from "../../../../../data/services/flights/flightsAPI";
 import {
   selectFlightsAsObjects,
@@ -11,7 +7,6 @@ import {
 } from "../../../../../data/services/flights/selectFlights";
 import { setSidepanelOptions } from "../../../../../data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "../../../../../data/store";
-import { confirm } from "../../../../notices/Confirm";
 import { AirportView } from "./AirportView";
 import { AddFlight } from "./drafting/AddFlight";
 import { EditFlight } from "./drafting/EditFlight";
@@ -33,35 +28,10 @@ export function FlightsPanel() {
 
   const dispatch = useAppDispatch();
 
-  const goBackFromEdit = useCallback(async () => {
-    const confirmation = await confirm({
-      title: m.confirm.losingChanges.title,
-      children: <p>{m.confirm.losingChanges.text}</p>,
-      color: "red",
-      labels: { confirm: "Yes.", cancel: "Wait, no!" },
-    });
-
-    if (confirmation) {
-      dispatch(clearDraftingFlight());
-    }
-  }, [dispatch]);
-
   useEffect(() => {
-    if (drafting?.type === "new") {
-      dispatch(
-        setSidepanelOptions({
-          title: "Add flight",
-          onGoBack: () => dispatch(clearDraftingFlight()),
-        }),
-      );
-    } else if (drafting?.type === "edit") {
-      dispatch(
-        setSidepanelOptions({
-          title: "Edit flight",
-          onGoBack: () => goBackFromEdit(),
-        }),
-      );
-    } else if (selectedFlights && selected && selected.type === "flight") {
+    if (drafting?.type) return;
+
+    if (selectedFlights && selected && selected.type === "flight") {
       dispatch(
         setSidepanelOptions({
           title: `Flight ${selectedFlights[0].flightNumber ?? ""}`,
@@ -82,7 +52,7 @@ export function FlightsPanel() {
           onGoBack: () => dispatch(goBackInSelection()),
         }),
       );
-    } else if (!drafting) {
+    } else {
       dispatch(
         setSidepanelOptions({
           title: `Flights${flights && flights.length ? ` (${flights.length})` : ""}`,
@@ -90,7 +60,7 @@ export function FlightsPanel() {
         }),
       );
     }
-  }, [dispatch, drafting, selected, selectedFlights, flights, goBackFromEdit]);
+  }, [dispatch, drafting?.type, selected, selectedFlights, flights]);
 
   const isListVisible = Boolean(
     flightsReady &&

@@ -33,7 +33,7 @@ export function FlightsList({ isVisible = true }: FlightsListProps) {
   const filters = useAppSelector((state) => state.flights.filters);
 
   const handleAddFlight = () => {
-    dispatch(setNewFlight({}));
+    dispatch(setNewFlight());
   };
 
   const { isLoading: flightsLoading, isError: flightsErrored } =

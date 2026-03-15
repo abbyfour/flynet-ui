@@ -1,23 +1,83 @@
+import { useEffect, useMemo, useRef } from "react";
 import { m } from "../../../../../../assets/text/messages";
 import { draftToNewRequest } from "../../../../../../data/classes/flights/FlightDraft";
 import { clearDraftingFlight } from "../../../../../../data/flightsSlice";
 import { useUpdateFlightMutation } from "../../../../../../data/services/flights/flightsAPI";
+import { selectFlightsAsObjects } from "../../../../../../data/services/flights/selectFlights";
+import { setSidepanelOptions } from "../../../../../../data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "../../../../../../data/store";
+import { findFlightFromID } from "../../../../../../util/flights";
 import { FlightDrafter } from "../../../../../forms/FlightDrafter";
+import { confirm } from "../../../../../notices/Confirm";
 import { dispatchNotice } from "../../../../../notices/dispatchNotice";
 import { Toasts } from "../../../../../notices/Toast";
 
 export function EditFlight() {
   const [updateFlight, { isLoading }] = useUpdateFlightMutation();
   const drafting = useAppSelector((state) => state.flights.inProgressDraft);
+  const flights = useAppSelector(selectFlightsAsObjects);
   const dispatch = useAppDispatch();
+  const initialDraft = useMemo(
+    () =>
+      drafting?.type === "edit"
+        ? findFlightFromID(flights, drafting.flightId)?.toDraft() || {}
+        : {},
+    [drafting, flights],
+  );
+  const latestDraftRef = useRef(initialDraft);
+  const editingFlightRef = useRef(
+    drafting?.type === "edit"
+      ? findFlightFromID(flights, drafting.flightId)
+      : undefined,
+  );
 
-  const handleSubmit = async () => {
-    if (!drafting || !drafting.flightId) return;
+  useEffect(() => {
+    latestDraftRef.current = initialDraft;
+  }, [initialDraft]);
+
+  useEffect(() => {
+    editingFlightRef.current =
+      drafting?.type === "edit"
+        ? findFlightFromID(flights, drafting.flightId)
+        : undefined;
+  }, [drafting, flights]);
+
+  useEffect(() => {
+    const goBackFromEdit = async () => {
+      const flight = editingFlightRef.current;
+      if (!flight || flight.isUnchangedFromDraft(latestDraftRef.current)) {
+        dispatch(clearDraftingFlight());
+        return;
+      }
+
+      const confirmation = await confirm({
+        title: m.confirm.losingChanges.title,
+        children: <p>{m.confirm.losingChanges.text}</p>,
+        color: "red",
+        labels: { confirm: "Yes.", cancel: "Wait, no!" },
+      });
+
+      if (confirmation) {
+        dispatch(clearDraftingFlight());
+      }
+    };
+
+    dispatch(
+      setSidepanelOptions({
+        title: "Edit flight",
+        onGoBack: () => goBackFromEdit(),
+      }),
+    );
+  }, [dispatch, drafting]);
+
+  const handleSubmit = async (
+    draft: Parameters<typeof draftToNewRequest>[0],
+  ) => {
+    if (drafting?.type !== "edit") return;
 
     const result = await updateFlight({
       flightId: drafting.flightId,
-      updatedData: draftToNewRequest(drafting.draft),
+      updatedData: draftToNewRequest(draft),
     });
 
     if (result.error) {
@@ -31,7 +91,15 @@ export function EditFlight() {
 
   return (
     <div className="AddFlight">
-      <FlightDrafter isLoading={isLoading} onSubmit={handleSubmit} />
+      <FlightDrafter
+        initialDraft={initialDraft}
+        isLoading={isLoading}
+        mode="edit"
+        onDraftChange={(draft) => {
+          latestDraftRef.current = draft;
+        }}
+        onSubmit={handleSubmit}
+      />
     </div>
   );
 }
