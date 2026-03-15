@@ -13,9 +13,14 @@ import "./FlightDrafter.scss";
 interface FlightDrafterProps {
   onSubmit: () => void;
   isLoading: boolean;
+  editing?: boolean;
 }
 
-export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
+export function FlightDrafter({
+  onSubmit,
+  isLoading,
+  editing,
+}: FlightDrafterProps) {
   const { draft, type } = useAppSelector(
     (state) => state.flights.inProgressDraft,
   ) ?? { draft: {} as FlightDraft, type: "new" };
@@ -42,6 +47,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
           value={draft.origin}
           disabled={isLoading}
           onChange={(value) => updateDraft({ origin: value })}
+          fingerprinted={editing}
         />
 
         <br />
@@ -53,6 +59,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
           value={draft.destination}
           disabled={isLoading}
           onChange={(value) => updateDraft({ destination: value })}
+          fingerprinted={editing}
         />
       </Fieldset>
 
@@ -63,6 +70,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
         value={draft.date}
         disabled={isLoading}
         onChange={(value) => updateDraft({ date: value })}
+        fingerprinted={editing}
       />
 
       <br />
@@ -74,6 +82,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
         value={draft.flightNumber}
         disabled={isLoading}
         onChange={(value) => updateDraft({ flightNumber: value })}
+        fingerprinted={editing}
       />
 
       <br />
@@ -85,6 +94,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
         value={draft.airline}
         disabled={isLoading}
         onChange={(value) => updateDraft({ airline: value })}
+        fingerprinted={editing}
       />
 
       <br />
@@ -97,6 +107,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
         value={draft.departureTime as Time | undefined}
         icon={icons.flights.departure(16)}
         onChange={(value) => updateDraft({ departureTime: value })}
+        fingerprinted={editing}
       />
 
       <br />
@@ -109,6 +120,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
         value={draft.arrivalTime as Time | undefined}
         icon={icons.flights.arrival(16)}
         onChange={(value) => updateDraft({ arrivalTime: value })}
+        fingerprinted={editing}
       />
 
       <br />
@@ -120,6 +132,7 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
         disabled={isLoading}
         value={draft.planeModel as string | undefined}
         onChange={(value) => updateDraft({ planeModel: value })}
+        fingerprinted={editing}
       />
 
       <br />
@@ -131,17 +144,20 @@ export function FlightDrafter({ onSubmit, isLoading }: FlightDrafterProps) {
         disabled={isLoading}
         value={draft.planeRegistration as string | undefined}
         onChange={(value) => updateDraft({ planeRegistration: value })}
+        fingerprinted={editing}
       />
 
       <br />
 
       <Input
+        required
         type="longtext"
         id="notes"
         label="Notes"
         disabled={isLoading}
         value={draft.note as string | undefined}
         onChange={(value) => updateDraft({ note: value })}
+        fingerprinted={editing}
       />
 
       <br />

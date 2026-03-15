@@ -4,16 +4,29 @@ import { Airport } from "../../data/classes/flights/Airport";
 import type { AirportDraft } from "../../data/classes/flights/FlightDraft";
 import { useLazyGetAirportByCodeQuery } from "../../data/services/flights/flightsAPI";
 import type { BaseInputProps } from "./Input";
+import { InputLabel } from "./InputLabel";
 
 type AirportInputProps = BaseInputProps & {
   value: AirportDraft | undefined;
   onChange?: (value: AirportDraft | undefined) => void;
 };
 
-export function AirportInput({ value, onChange, ...props }: AirportInputProps) {
+export function AirportInput({
+  value,
+  onChange,
+  fingerprinted,
+  ...props
+}: AirportInputProps) {
   const [code, setCode] = useState("");
   const [searchAirport, { data, isLoading }] = useLazyGetAirportByCodeQuery();
   const combobox = useCombobox();
+  const [initialValue] = useState(value);
+
+  const hasValueChanged = () => {
+    if (!fingerprinted) return false;
+
+    return value?.displayCode !== initialValue?.displayCode;
+  };
 
   const handleChange = (input: string) => {
     setCode(input);
@@ -49,8 +62,13 @@ export function AirportInput({ value, onChange, ...props }: AirportInputProps) {
       <Combobox.Target>
         <PillsInput
           id={props.id}
-          label={props.label}
-          required={props.required}
+          label={
+            <InputLabel
+              label={props.label}
+              changed={hasValueChanged()}
+              required={props.required}
+            />
+          }
           disabled={props.disabled}
           radius="xs"
           className="Input"

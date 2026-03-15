@@ -1,0 +1,10 @@
+.InputLabel {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+
+  .required {
+    color: rgb(255, 54, 54);
+    font-size: 12px;
+  }
+}

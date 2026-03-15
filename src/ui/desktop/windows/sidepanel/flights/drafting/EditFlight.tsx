@@ -31,7 +31,7 @@ export function EditFlight() {
 
   return (
     <div className="AddFlight">
-      <FlightDrafter isLoading={isLoading} onSubmit={handleSubmit} />
+      <FlightDrafter isLoading={isLoading} onSubmit={handleSubmit} editing />
     </div>
   );
 }
