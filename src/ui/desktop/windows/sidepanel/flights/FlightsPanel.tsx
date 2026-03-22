@@ -5,6 +5,7 @@ import {
   selectFlightsAsObjects,
   selectSelectedFlights,
 } from "../../../../../data/services/flights/selectFlights";
+import { useGetTailsManifestQuery } from "../../../../../data/services/tails";
 import { setSidepanelOptions } from "../../../../../data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "../../../../../data/store";
 import { AirportView } from "./AirportView";
@@ -23,6 +24,8 @@ export function FlightsPanel() {
 
   const { isLoading: flightsLoading, isError: flightsErrored } =
     useGetFlightsQuery();
+
+  useGetTailsManifestQuery(); // fire and forget — just warms the cache
 
   const flightsReady = !flightsLoading && !flightsErrored;
 

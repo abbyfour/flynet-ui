@@ -1,6 +1,6 @@
-import { Tooltip } from "@mantine/core";
 import { IconCircleFilled } from "@tabler/icons-react";
-import { getAirlineTailSvg } from "../../../../../assets/tails/airlineTailSvgs";
+
+import { AirlineTail } from "../../../../../assets/tails/AirlineTail";
 import { icons } from "../../../../../assets/text/icons";
 import type { Flight } from "../../../../../data/classes/flights/Flight";
 import { setSelected } from "../../../../../data/flightsSlice";
@@ -20,18 +20,6 @@ export function FlightListItem({ flight, highlighted }: FlightListItemProps) {
     dispatch(setSelected({ type: "flight", flightId: flight.id }));
   };
 
-  const tailSvgFile = getAirlineTailSvg(flight.airline?.name);
-
-  // Render SVG if found
-  const tailIcon = tailSvgFile ? (
-    <Tooltip label={flight.airline?.name || "Unknown Airline"} openDelay={500}>
-      <img
-        src={tailSvgFile}
-        alt={flight.airline?.name + " tail"}
-        className="tail-svg"
-      />
-    </Tooltip>
-  ) : null;
   return (
     <div
       className={joinClasses(
@@ -41,7 +29,13 @@ export function FlightListItem({ flight, highlighted }: FlightListItemProps) {
       )}
       onClick={handleOnClick}
     >
-      <div className="icon">{tailIcon}</div>
+      <div className="icon">
+        <AirlineTail
+          key={flight.id}
+          airline={flight.airline}
+          flightNumber={flight.flightNumber}
+        />
+      </div>
 
       <div className="details">
         <div className="header text-small">

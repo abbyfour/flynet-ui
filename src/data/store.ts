@@ -8,6 +8,7 @@ import {
 import { persistReducer, persistStore } from "redux-persist";
 import { flightsReducer } from "./flightsSlice";
 import { flightsApi } from "./services/flights/flightsAPI";
+import { tailsApi } from "./services/tails";
 import { usersApi } from "./services/usersAPI";
 import { sidepanelReducer } from "./sidepanelSlice";
 import { uiPersistConfig, uiReducer } from "./uiSlice";
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
 
   [usersApi.reducerPath]: usersApi.reducer,
   [flightsApi.reducerPath]: flightsApi.reducer,
+  [tailsApi.reducerPath]: tailsApi.reducer,
 });
 
 export const store = configureStore({
@@ -32,7 +34,8 @@ export const store = configureStore({
       serializableCheck: false, // redux-persist needs this
     })
       .concat(usersApi.middleware)
-      .concat(flightsApi.middleware),
+      .concat(flightsApi.middleware)
+      .concat(tailsApi.middleware),
 });
 
 setupListeners(store.dispatch);
