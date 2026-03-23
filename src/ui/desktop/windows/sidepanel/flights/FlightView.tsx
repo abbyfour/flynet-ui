@@ -16,6 +16,7 @@ import { Toasts } from "../../../../notices/Toast";
 import { dispatchNotice } from "../../../../notices/dispatchNotice";
 import { AirportDetails } from "./AirportDetails";
 import "./FlightView.scss";
+import { AirlineDisplay } from "./components/AirlineDisplay";
 
 type FlightViewProps = {
   flight: Flight;
@@ -86,7 +87,12 @@ export function FlightView({ flight }: FlightViewProps) {
         {flight.airline && (
           <div className="airline-details">
             <h5>Airline:</h5>
-            {flight.airline.name}
+
+            <AirlineDisplay
+              airline={flight.airline}
+              flightNumber={flight.flightNumber}
+              noTooltip
+            />
           </div>
         )}
 

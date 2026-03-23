@@ -13,9 +13,14 @@ import notailIcon from "./notail.svg";
 type AirlineTailProps = {
   airline: Airline | undefined;
   flightNumber: string | undefined;
+  noTooltip?: boolean;
 };
 
-export function AirlineTail({ airline, flightNumber }: AirlineTailProps) {
+export function AirlineTail({
+  airline,
+  flightNumber,
+  noTooltip,
+}: AirlineTailProps) {
   const { data: tails } = useGetTailsManifestQuery();
 
   const airlineName = airline?.name ?? null;
@@ -30,7 +35,11 @@ export function AirlineTail({ airline, flightNumber }: AirlineTailProps) {
       : noAirlineIcon;
 
   return (
-    <Tooltip label={airline?.name || "Unknown Airline"} openDelay={500}>
+    <Tooltip
+      label={airline?.name || "Unknown Airline"}
+      openDelay={500}
+      disabled={noTooltip || !airline}
+    >
       <img src={imgSrc} alt={airline?.name + " tail"} className="AirlineTail" />
     </Tooltip>
   );
