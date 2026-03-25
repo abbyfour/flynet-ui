@@ -1,14 +1,16 @@
 import { icons } from "../../../../../assets/text/icons";
 import type { Route } from "../../../../../data/classes/flights/Route";
+import { setSelected } from "../../../../../data/flightsSlice";
 import { selectSelectedFlights } from "../../../../../data/services/flights/selectFlights";
-import { useAppSelector } from "../../../../../data/store";
-import { AirportDetails } from "./AirportDetails";
+import { useAppDispatch, useAppSelector } from "../../../../../data/store";
+import { AirportDisplay } from "./components/AirportDisplay";
 import { FlightListItem } from "./FlightListItem";
 
 import "./RouteView.scss";
 
 export function RouteView({ route }: { route: Route | undefined }) {
   const flights = useAppSelector((state) => selectSelectedFlights(state));
+  const dispatch = useAppDispatch();
 
   if (!route || !flights || flights.length === 0) {
     return <></>;
@@ -23,12 +25,34 @@ export function RouteView({ route }: { route: Route | undefined }) {
       <div className="airport-details">
         <div className="origin">
           <h5>Airport 1:</h5>
-          <AirportDetails airport={route.origin} />
+          <AirportDisplay
+            airport={route.origin}
+            onClick={() =>
+              route.origin &&
+              dispatch(
+                setSelected({
+                  type: "airport",
+                  airportId: route.origin.id,
+                }),
+              )
+            }
+          />
         </div>
 
         <div className="destination">
           <h5>Airport 2:</h5>
-          <AirportDetails airport={route.destination} />
+          <AirportDisplay
+            airport={route.destination}
+            onClick={() =>
+              route.destination &&
+              dispatch(
+                setSelected({
+                  type: "airport",
+                  airportId: route.destination.id,
+                }),
+              )
+            }
+          />
         </div>
       </div>
 

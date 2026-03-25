@@ -2,11 +2,11 @@ import type { Airport } from "../../../../../data/classes/flights/Airport";
 import { selectSelectedFlights } from "../../../../../data/services/flights/selectFlights";
 import { useAppSelector } from "../../../../../data/store";
 import { FlightListItem } from "./FlightListItem";
-import { AirportCodePill } from "./FlightView";
 
 import { uniquifyBy } from "../../../../../util/arrayUtil";
 import { displayAirportType } from "../../../../../util/flights";
 import "./AirportView.scss";
+import { AirportCodePill } from "./components/AirportDisplay";
 
 export function AirportView({ airport }: { airport: Airport | undefined }) {
   const flights = useAppSelector((state) => selectSelectedFlights(state));
