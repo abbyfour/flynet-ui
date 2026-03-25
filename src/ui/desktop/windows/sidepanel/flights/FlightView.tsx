@@ -4,6 +4,7 @@ import type { Flight } from "../../../../../data/classes/flights/Flight";
 import {
   goBackInSelection,
   setEditingFlight,
+  setSelected,
 } from "../../../../../data/flightsSlice";
 import { useDeleteFlightMutation } from "../../../../../data/services/flights/flightsAPI";
 import { useAppDispatch } from "../../../../../data/store";
@@ -91,7 +92,15 @@ export function FlightView({ flight }: FlightViewProps) {
             <AirlineDisplay
               airline={flight.airline}
               flightNumber={flight.flightNumber}
-              noTooltip
+              onClick={() =>
+                flight.airline &&
+                dispatch(
+                  setSelected({
+                    type: "airline",
+                    airlineId: flight.airline!.name,
+                  }),
+                )
+              }
             />
           </div>
         )}

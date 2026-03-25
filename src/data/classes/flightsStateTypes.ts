@@ -8,4 +8,5 @@ export type Selected =
       flightId: number;
     }
   | { type: "route"; routeKey: string }
-  | { type: "airport"; airportId: number };
+  | { type: "airport"; airportId: number }
+  | { type: "airline"; airlineId: string };

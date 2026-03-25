@@ -9,6 +9,7 @@ import { useGetTailsManifestQuery } from "../../../../../data/services/tails";
 import { setSidepanelOptions } from "../../../../../data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "../../../../../data/store";
 import { AirportView } from "./AirportView";
+import { AirlineView } from "./components/AirlineView";
 import { AddFlight } from "./drafting/AddFlight";
 import { EditFlight } from "./drafting/EditFlight";
 import { FlightsList } from "./FlightsList";
@@ -52,6 +53,13 @@ export function FlightsPanel() {
       dispatch(
         setSidepanelOptions({
           title: `Airport ${selectedFlights[0].origin.id === selected.airportId ? selectedFlights[0].origin.displayCode : selectedFlights[0].destination.displayCode}`,
+          onGoBack: () => dispatch(goBackInSelection()),
+        }),
+      );
+    } else if (selectedFlights && selected && selected.type === "airline") {
+      dispatch(
+        setSidepanelOptions({
+          title: `Airline ${selectedFlights[0].airline?.name ?? "N/A"}`,
           onGoBack: () => dispatch(goBackInSelection()),
         }),
       );
@@ -110,6 +118,18 @@ export function FlightsPanel() {
             flights.find(
               (flight) => flight.destination.id === selected.airportId,
             )?.destination
+          }
+        />
+      );
+    }
+
+    if (selected && selected.type === "airline") {
+      return (
+        <AirlineView
+          airline={
+            flights.find(
+              (flight) => flight.airline?.name === selected.airlineId,
+            )?.airline
           }
         />
       );

@@ -9,7 +9,10 @@ export interface FlightsState {
   inProgressDraft?: InProgressDraft;
 
   selected?: Selected;
-  selectionContext?: Extract<Selected, { type: "route" | "airport" }>;
+  selectionContext?: Extract<
+    Selected,
+    { type: "route" | "airport" | "airline" }
+  >;
   filters?: FlightsFilters;
 }
 
@@ -53,7 +56,8 @@ const flightsSlice = createSlice({
       if (action.payload?.type === "flight") {
         if (
           state.selected?.type === "route" ||
-          state.selected?.type === "airport"
+          state.selected?.type === "airport" ||
+          state.selected?.type === "airline"
         ) {
           state.selectionContext = state.selected;
         }

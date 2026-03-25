@@ -105,7 +105,9 @@ const intensifyColour = (
 const routeIncludesFlight = (route: GroupedRoute, selected?: Selected) => {
   if (!selected) return false;
 
-  if (selected.type === "flight") {
+  if (selected.type === "airline") {
+    return route.flights.some((f) => f.airline?.name === selected.airlineId);
+  } else if (selected.type === "flight") {
     return route.flights.some((f) => f.id === selected.flightId);
   } else if (selected.type === "route") {
     return route.route.key === selected.routeKey;

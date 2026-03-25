@@ -125,7 +125,11 @@ export const selectSelectedFlights = createSelector(
                 flight.origin.id === selection.airportId ||
                 flight.destination.id === selection.airportId,
             )
-          : null,
+          : selection?.type === "airline"
+            ? flights.filter(
+                (flight) => flight?.airline?.name === selection.airlineId,
+              )
+            : null,
 );
 
 function sortFlights(a: Flight, b: Flight) {
