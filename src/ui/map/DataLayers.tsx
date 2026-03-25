@@ -5,6 +5,7 @@ import { useControl } from "react-map-gl/maplibre";
 import { SidepanelWindows } from "../../data/classes/ui";
 import {
   clearHighlights,
+  clearSelection,
   recordHighlightedAirport,
   recordHighlightedRoute,
   setSelected,
@@ -82,7 +83,7 @@ export function DataLayers() {
         );
         dispatch(setActiveSidepanelWindow(SidepanelWindows.Flights));
       } else {
-        dispatch(setSelected(undefined));
+        dispatch(clearSelection());
       }
     },
     [dispatch],

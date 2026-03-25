@@ -1,5 +1,5 @@
 import { ArcLayer } from "deck.gl";
-import type { Selected } from "../../../data/classes/flightsStateTypes";
+import type { Selected } from "../../../data/services/SelectionHistory";
 import { type GroupedRoute } from "../../../data/services/flights/selectFlights";
 import type { RGB, RGBA } from "../style/colours";
 import { useColours } from "../style/useColours";
