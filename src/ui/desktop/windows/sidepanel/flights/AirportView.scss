@@ -5,9 +5,18 @@
 
   .title {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.3em;
+    flex-direction: column;
+    gap: 0.25rem;
+    border-left: rgb(0, 0, 0) 3px solid;
+    padding-left: 0.5em;
+    font-size: 1.44rem;
+    font-weight: 500;
+
+    .airline-code {
+      color: #222;
+      font-weight: normal;
+      font-size: 1rem;
+    }
   }
 
   h5 {

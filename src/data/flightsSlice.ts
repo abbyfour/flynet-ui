@@ -1,6 +1,12 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { modifyFilters, type FlightsFilters } from "./classes/filters";
-import type { InProgressDraft, Selected } from "./classes/flightsStateTypes";
+import type { InProgressDraft } from "./classes/flightsStateTypes";
+import {
+  addToSelectionHistory,
+  popFromSelectionHistory,
+  type Selected,
+  type SelectionHistory,
+} from "./services/SelectionHistory";
 
 export interface FlightsState {
   highlightedAirportId?: number;
@@ -9,7 +15,7 @@ export interface FlightsState {
   inProgressDraft?: InProgressDraft;
 
   selected?: Selected;
-  selectionContext?: Extract<Selected, { type: "route" | "airport" }>;
+  selectionContext?: SelectionHistory;
   filters?: FlightsFilters;
 }
 
@@ -50,28 +56,26 @@ const flightsSlice = createSlice({
       state: FlightsState,
       action: PayloadAction<Selected | undefined>,
     ) {
-      if (action.payload?.type === "flight") {
-        if (
-          state.selected?.type === "route" ||
-          state.selected?.type === "airport"
-        ) {
-          state.selectionContext = state.selected;
-        }
-      } else {
-        state.selectionContext = undefined;
+      if (state.selected) {
+        state.selectionContext = addToSelectionHistory(
+          state.selectionContext ?? [],
+          state.selected,
+        );
       }
 
       state.selected = action.payload;
     },
 
     goBackInSelection(state: FlightsState) {
-      if (state.selected?.type === "flight" && state.selectionContext) {
-        state.selected = state.selectionContext;
-        state.selectionContext = undefined;
-      } else {
-        state.selected = undefined;
-        state.selectionContext = undefined;
-      }
+      const [selection, rest] = popFromSelectionHistory(state.selectionContext);
+
+      state.selected = selection;
+      state.selectionContext = rest;
+    },
+
+    clearSelection(state: FlightsState) {
+      state.selected = undefined;
+      state.selectionContext = undefined;
     },
 
     // Drafting
@@ -130,7 +134,7 @@ export const {
 
   setSelected,
   goBackInSelection,
-
+  clearSelection,
   setNewFlight,
   setEditingFlight,
   clearDraftingFlight,

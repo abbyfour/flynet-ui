@@ -33,12 +33,18 @@ export function SidepanelWindow() {
     }
   };
 
+  const handleGoHome = () => {
+    if (sidepanelOptions.onGoHome) {
+      sidepanelOptions.onGoHome();
+    }
+  };
+
   return activeWindow ? (
     <SidepanelContainer align="left" className="SidepanelWindow">
       <div className="window-header">
         <div className="window-controls">
           <ActionIcon variant="transparent" color="dark" onClick={handleClose}>
-            {icons.actions.window.close(20)}
+            {icons.actions.window.close(18)}
           </ActionIcon>
           {sidepanelOptions.onGoBack && (
             <ActionIcon
@@ -46,7 +52,16 @@ export function SidepanelWindow() {
               color="dark"
               onClick={handleGoback}
             >
-              {icons.actions.window.back(20)}
+              {icons.actions.window.back(18)}
+            </ActionIcon>
+          )}
+          {sidepanelOptions.onGoHome && (
+            <ActionIcon
+              variant="transparent"
+              color="dark"
+              onClick={handleGoHome}
+            >
+              {icons.actions.window.home(16)}
             </ActionIcon>
           )}
         </div>

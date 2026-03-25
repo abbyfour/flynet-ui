@@ -1,38 +1,29 @@
-.AirportDetails {
-  display: flex;
-  flex-direction: row;
-  gap: 0.3em;
-  align-items: flex-start;
+.AirportCodePill {
+  display: inline-flex;
+  align-items: center;
+  background-color: #ffebc3;
+  margin-right: 0.5em;
 
-  .right {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+  border-left: 4px solid #f5b800;
+  border-radius: 4px;
+
+  font-family: var(--monospace);
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: 0.03em;
+
+  &.md {
+    font-size: 1rem;
+    padding: 6px 8px;
   }
 
-  .subline {
-    font-size: 0.875rem;
-    color: gray;
+  &.sm {
+    font-size: 0.8rem;
+    padding: 5px 7px;
   }
 }
 
 .AirportCodePill {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  padding: 0.2rem 0.4rem;
-  background: rgb(255, 200, 0);
-  color: black;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  line-height: 1;
-  cursor: default;
-  width: min-content;
-
-  font-family: "Cousine", monospace;
-  font-weight: 600;
-  opacity: 0.8;
-
   .tooltip {
     position: absolute;
     left: 0;

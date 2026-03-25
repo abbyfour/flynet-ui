@@ -18,6 +18,14 @@
     }
   }
 
+  h5 {
+    font-size: 90%;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #333;
+    text-decoration: underline;
+  }
+
   .date,
   .departure-time,
   .arrival-time {
@@ -35,14 +43,6 @@
 
   .notes {
     white-space: pre-wrap;
-  }
-
-  h5 {
-    font-size: 70%;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    color: #333;
-    text-decoration: underline;
   }
 
   .airport-details {

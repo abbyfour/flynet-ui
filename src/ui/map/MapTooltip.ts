@@ -28,6 +28,7 @@ export function MapTooltip(object?: GroupedAirport | GroupedRoute) {
   if (object && "airport" in object) {
     return baseTooltip(
       `<span style="font-weight: bold;">${object.airport.name}</span> (${object.airport.displayCode})
+    <span style="font-style: italic; font-size: 90%;">${object.airport.city}, ${object.airport.isoCountry}</span>
 <span style="font-style: italic; font-size: 90%;">${object.flights.length} flight${object.flights.length !== 1 ? "s" : ""}</span>
 
 ${displayRoutesForAirport(object)}`,

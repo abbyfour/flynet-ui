@@ -1,9 +1,9 @@
 import { m } from "../../../../../assets/text/messages";
-import type { Airport } from "../../../../../data/classes/flights/Airport";
 import type { Flight } from "../../../../../data/classes/flights/Flight";
 import {
   goBackInSelection,
   setEditingFlight,
+  setSelected,
 } from "../../../../../data/flightsSlice";
 import { useDeleteFlightMutation } from "../../../../../data/services/flights/flightsAPI";
 import { useAppDispatch } from "../../../../../data/store";
@@ -14,9 +14,9 @@ import { Button } from "../../../../buttons/Button";
 import { DeleteButton } from "../../../../buttons/DeleteButton";
 import { Toasts } from "../../../../notices/Toast";
 import { dispatchNotice } from "../../../../notices/dispatchNotice";
-import { AirportDetails } from "./AirportDetails";
 import "./FlightView.scss";
 import { AirlineDisplay } from "./components/AirlineDisplay";
+import { AirportDisplay } from "./components/AirportDisplay";
 
 type FlightViewProps = {
   flight: Flight;
@@ -91,7 +91,15 @@ export function FlightView({ flight }: FlightViewProps) {
             <AirlineDisplay
               airline={flight.airline}
               flightNumber={flight.flightNumber}
-              noTooltip
+              onClick={() =>
+                flight.airline &&
+                dispatch(
+                  setSelected({
+                    type: "airline",
+                    airlineId: flight.airline!.name,
+                  }),
+                )
+              }
             />
           </div>
         )}
@@ -120,12 +128,38 @@ export function FlightView({ flight }: FlightViewProps) {
         <div className="airport-details">
           <div className="origin">
             <h5>Origin:</h5>
-            {AirportDetails({ airport: flight.origin })}
+            {
+              <AirportDisplay
+                airport={flight.origin}
+                onClick={() =>
+                  flight.origin &&
+                  dispatch(
+                    setSelected({
+                      type: "airport",
+                      airportId: flight.origin.id,
+                    }),
+                  )
+                }
+              />
+            }
           </div>
 
           <div className="destination">
             <h5>Destination:</h5>
-            {AirportDetails({ airport: flight.destination })}
+            {
+              <AirportDisplay
+                airport={flight.destination}
+                onClick={() =>
+                  flight.destination &&
+                  dispatch(
+                    setSelected({
+                      type: "airport",
+                      airportId: flight.destination.id,
+                    }),
+                  )
+                }
+              />
+            }
           </div>
         </div>
 
@@ -143,18 +177,6 @@ export function FlightView({ flight }: FlightViewProps) {
         </Button>
         <DeleteButton className="delete-button" onClick={handleDeleteFlight} />
       </div>
-    </div>
-  );
-}
-
-export function AirportCodePill({ airport }: { airport: Airport }) {
-  return (
-    <div className="AirportCodePill">
-      {airport.displayCode}
-      <span className="tooltip">
-        IATA: {airport.iataCode || "N/A"} | ICAO: {airport.icaoCode || "N/A"} |
-        Local: {airport.localCode || "N/A"}
-      </span>
     </div>
   );
 }

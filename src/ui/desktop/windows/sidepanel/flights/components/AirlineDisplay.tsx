@@ -6,13 +6,18 @@ import "./AirlineDisplay.scss";
 type AirlineDisplayProps = {
   airline: Airline;
   flightNumber?: string;
+  onClick?: () => void;
 };
 
-export function AirlineDisplay({ airline, flightNumber }: AirlineDisplayProps) {
+export function AirlineDisplay({
+  airline,
+  flightNumber,
+  onClick,
+}: AirlineDisplayProps) {
   const iataCode = flightNumber?.substring(0, 2) ?? null;
 
   return (
-    <div className="AirlineDisplay">
+    <div className="AirlineDisplay" onClick={onClick}>
       <AirlineTail
         key={flightNumber || airline.name}
         airline={airline}

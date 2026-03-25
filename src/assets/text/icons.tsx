@@ -4,6 +4,7 @@ import {
   IconCalendar,
   IconCheck,
   IconChevronLeft,
+  IconHome2Filled,
   IconLogout2,
   IconPencil,
   IconPlaneArrivalFilled,
@@ -22,6 +23,7 @@ export const icons = {
     window: {
       back: (size = 16) => <IconChevronLeft size={size} />,
       close: (size = 16) => <IconX size={size} />,
+      home: (size = 16) => <IconHome2Filled size={size} />,
     },
   },
 

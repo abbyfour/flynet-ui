@@ -1,3 +1,5 @@
+import { regionNamesInEnglish } from "../../../util/iso";
+
 export interface APIAirport {
   airportName: string;
 
@@ -29,7 +31,10 @@ export class Airport {
   }
 
   get name(): string {
-    return this.raw.airportName;
+    return this.raw.airportName.endsWith(" International Airport") ||
+      this.raw.airportName.endsWith(" Intercontinental Airport")
+      ? this.raw.airportName.slice(0, -8)
+      : this.raw.airportName;
   }
 
   get coords(): [number, number] {
@@ -41,7 +46,7 @@ export class Airport {
   }
 
   get isoCountry(): string {
-    return this.raw.isoCountry;
+    return regionNamesInEnglish.of(this.raw.isoCountry) || this.raw.isoCountry;
   }
 
   get isoRegion(): string {
