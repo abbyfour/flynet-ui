@@ -5,6 +5,7 @@ import { FlightListItem } from "./FlightListItem";
 
 import { uniquifyBy } from "../../../../../util/arrayUtil";
 import { displayAirportType } from "../../../../../util/flights";
+import { regionNamesInEnglish } from "../../../../../util/iso";
 import "./AirportView.scss";
 import { AirportCodePill } from "./components/AirportDisplay";
 
@@ -17,17 +18,20 @@ export function AirportView({ airport }: { airport: Airport | undefined }) {
 
   return (
     <div className="AirportView">
-      <h4 className="title">{airport.name}</h4>
-
-      <div className="code">
-        <h5>Code:</h5>
-        <AirportCodePill airport={airport} />
-      </div>
+      <h4 className="title">
+        {airport.name}
+        {airport.iataCode && (
+          <>
+            <span className="airline-code">{airport.iataCode}</span>
+          </>
+        )}
+      </h4>
 
       <div className="location">
         <h5>Location:</h5>
         <span>
-          {airport.city}, {airport.isoRegion}, {airport.isoCountry}
+          {airport.city}, {airport.isoRegion},{" "}
+          {regionNamesInEnglish.of(airport.isoCountry)}
         </span>
       </div>
 

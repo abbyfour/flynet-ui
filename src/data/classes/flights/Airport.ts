@@ -29,7 +29,10 @@ export class Airport {
   }
 
   get name(): string {
-    return this.raw.airportName;
+    return this.raw.airportName.endsWith(" International Airport") ||
+      this.raw.airportName.endsWith(" Intercontinental Airport")
+      ? this.raw.airportName.slice(0, -8)
+      : this.raw.airportName;
   }
 
   get coords(): [number, number] {

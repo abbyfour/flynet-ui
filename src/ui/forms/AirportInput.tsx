@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Airport } from "../../data/classes/flights/Airport";
 import type { AirportDraft } from "../../data/classes/flights/FlightDraft";
 import { useLazyGetAirportByCodeQuery } from "../../data/services/flights/flightsAPI";
+import { regionNamesInEnglish } from "../../util/iso";
 import type { BaseInputProps } from "./Input";
 import { InputLabel } from "./InputLabel";
 
@@ -98,7 +99,7 @@ export function AirportInput({
             <Combobox.Option value={data.displayCode}>
               <strong>{data.displayCode}</strong> — {data.name}
               <div style={{ fontSize: "0.8em", color: "gray" }}>
-                {data.city}, {data.isoCountry}
+                {data.city}, {regionNamesInEnglish.of(data.isoCountry)}
               </div>
             </Combobox.Option>
           ) : (
