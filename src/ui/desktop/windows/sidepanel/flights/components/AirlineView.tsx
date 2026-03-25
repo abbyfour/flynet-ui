@@ -15,44 +15,48 @@ export function AirlineView({ airline }: { airline: Airline | undefined }) {
 
   return (
     <div className="AirlineView">
-      <h4 className="title">{airline.name}</h4>
+      <div className="content">
+        <h4 className="title">
+          {airline.name}
+          {airline.iataCode && (
+            <>
+              <span className="airline-code">{airline.iataCode}</span>
+            </>
+          )}
+        </h4>
 
-      <div className="code">
-        <h5>Code:</h5>
-        <span>{airline.iataCode || "N/A"}</span>
-      </div>
+        <div className="planes">
+          <h5>Planes:</h5>
 
-      <div className="planes">
-        <h5>Planes:</h5>
-
-        <ul className="planes-list">
-          {uniquifyBy(
-            flights.filter((flight) => flight.airline),
-            (a) => a.plane?.model,
-          )
-            .sort(
-              (a, b) =>
-                a.plane?.model?.localeCompare(b.plane?.model ?? "") ?? 0,
+          <ul className="planes-list">
+            {uniquifyBy(
+              flights.filter((flight) => !!flight.airline),
+              (a) => a.plane?.model,
             )
-            .map((flight) => (
-              <li key={flight.id}>{flight.plane?.model || "N/A"}</li>
+              .sort(
+                (a, b) =>
+                  a.plane?.model?.localeCompare(b.plane?.model ?? "") ?? 0,
+              )
+              .map((flight) => (
+                <li key={flight.id}>{flight.plane?.model}</li>
+              ))}
+          </ul>
+        </div>
+
+        <div>
+          <h5>Flights:</h5>
+
+          <p className="flight-count">
+            {flights.length} flights for this airline
+          </p>
+        </div>
+
+        <div className="flights">
+          <div className="flight-list">
+            {flights.map((flight) => (
+              <FlightListItem key={flight.id} flight={flight} />
             ))}
-        </ul>
-      </div>
-
-      <div>
-        <h5>Flights:</h5>
-
-        <p className="flight-count">
-          {flights.length} flights for this airline
-        </p>
-      </div>
-
-      <div className="flights">
-        <div className="flight-list">
-          {flights.map((flight) => (
-            <FlightListItem key={flight.id} flight={flight} />
-          ))}
+          </div>
         </div>
       </div>
     </div>
