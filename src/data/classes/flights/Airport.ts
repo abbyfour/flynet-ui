@@ -1,3 +1,5 @@
+import { regionNamesInEnglish } from "../../../util/iso";
+
 export interface APIAirport {
   airportName: string;
 
@@ -44,7 +46,7 @@ export class Airport {
   }
 
   get isoCountry(): string {
-    return this.raw.isoCountry;
+    return regionNamesInEnglish.of(this.raw.isoCountry) || this.raw.isoCountry;
   }
 
   get isoRegion(): string {

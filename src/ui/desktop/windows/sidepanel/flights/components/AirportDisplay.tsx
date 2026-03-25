@@ -1,6 +1,7 @@
 import type { Airport } from "../../../../../../data/classes/flights/Airport";
 import { joinClasses } from "../../../../../../util/componentUtil";
 import { displayAirportType } from "../../../../../../util/flights";
+import { AirportCodePill } from "./AirportCodePill";
 
 import "./AirportDisplay.scss";
 
@@ -8,17 +9,19 @@ type AirportDisplayProps = {
   airport: Airport;
   className?: string;
   onClick?: () => void;
+  minimal?: boolean;
 };
 
 export function AirportDisplay({
   airport,
   className,
   onClick,
+  minimal = false,
 }: AirportDisplayProps) {
-  return (
+  return !minimal ? (
     <div className={joinClasses("AirportDetails", className)} onClick={onClick}>
       <div className="left">
-        <AirportCodePill airport={airport} />
+        <AirportCodePill airport={airport} size="md" />
       </div>
 
       <div className="right">
@@ -30,17 +33,9 @@ export function AirportDisplay({
         </span>
       </div>
     </div>
-  );
-}
-
-export function AirportCodePill({ airport }: { airport: Airport }) {
-  return (
-    <div className="AirportCodePill">
-      {airport.displayCode}
-      <span className="tooltip">
-        IATA: {airport.iataCode || "N/A"} | ICAO: {airport.icaoCode || "N/A"} |
-        Local: {airport.localCode || "N/A"}
-      </span>
+  ) : (
+    <div className="AirportDetails minimal" onClick={onClick}>
+      <AirportCodePill airport={airport} size="sm" /> {airport.city}
     </div>
   );
 }

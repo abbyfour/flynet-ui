@@ -1,15 +1,16 @@
 import type { Airport } from "../../../../../data/classes/flights/Airport";
 import { selectSelectedFlights } from "../../../../../data/services/flights/selectFlights";
-import { useAppSelector } from "../../../../../data/store";
+import { useAppDispatch, useAppSelector } from "../../../../../data/store";
 import { FlightListItem } from "./FlightListItem";
 
+import { setSelected } from "../../../../../data/flightsSlice";
 import { uniquifyBy } from "../../../../../util/arrayUtil";
 import { displayAirportType } from "../../../../../util/flights";
-import { regionNamesInEnglish } from "../../../../../util/iso";
 import "./AirportView.scss";
-import { AirportCodePill } from "./components/AirportDisplay";
+import { AirportDisplay } from "./components/AirportDisplay";
 
 export function AirportView({ airport }: { airport: Airport | undefined }) {
+  const dispatch = useAppDispatch();
   const flights = useAppSelector((state) => selectSelectedFlights(state));
 
   if (!airport || !flights || flights.length === 0) {
@@ -30,8 +31,7 @@ export function AirportView({ airport }: { airport: Airport | undefined }) {
       <div className="location">
         <h5>Location:</h5>
         <span>
-          {airport.city}, {airport.isoRegion},{" "}
-          {regionNamesInEnglish.of(airport.isoCountry)}
+          {airport.city}, {airport.isoRegion}, {airport.isoCountry}
         </span>
       </div>
 
@@ -48,7 +48,7 @@ export function AirportView({ airport }: { airport: Airport | undefined }) {
       </div>
 
       <div className="destinations">
-        <h5>Destinations:</h5>
+        <h5>Your destinations:</h5>
         <div className="destinations-list">
           {uniquifyBy(
             flights
@@ -66,9 +66,16 @@ export function AirportView({ airport }: { airport: Airport | undefined }) {
           )
             .sort((a, b) => a.city.localeCompare(b.city))
             .map((airport) => (
-              <span className="destination" key={airport.id}>
-                <AirportCodePill airport={airport} /> {airport.city}
-              </span>
+              <AirportDisplay
+                key={airport.id}
+                airport={airport}
+                minimal
+                onClick={() =>
+                  dispatch(
+                    setSelected({ type: "airport", airportId: airport.id }),
+                  )
+                }
+              />
             ))}
         </div>
       </div>
