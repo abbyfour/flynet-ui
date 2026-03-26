@@ -129,7 +129,16 @@ export const selectSelectedFlights = createSelector(
             ? flights.filter(
                 (flight) => flight?.airline?.name === selection.airlineId,
               )
-            : null,
+            : selection?.type === "plane"
+              ? flights.filter(
+                  (flight) => flight?.plane?.model === selection.planeId,
+                )
+              : selection?.type === "registration"
+                ? flights.filter(
+                    (flight) =>
+                      flight?.plane?.registration === selection.registration,
+                  )
+                : null,
 );
 
 function sortFlights(a: Flight, b: Flight) {

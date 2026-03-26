@@ -4,6 +4,7 @@ import {
   IconCalendar,
   IconCheck,
   IconChevronLeft,
+  IconExternalLink,
   IconHome2Filled,
   IconLogout2,
   IconPencil,
@@ -21,6 +22,7 @@ export const icons = {
     delete_: (size = 16) => <IconTrash size={size} />,
     submit: (size = 16) => <IconCheck size={size} />,
     logout: (size = 16) => <IconLogout2 size={size} />,
+    externalLink: (size = 16) => <IconExternalLink size={size} />,
 
     window: {
       back: (size = 16) => <IconChevronLeft size={size} />,

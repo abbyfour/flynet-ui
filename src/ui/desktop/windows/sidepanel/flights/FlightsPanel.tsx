@@ -13,6 +13,8 @@ import { setSidepanelOptions } from "../../../../../data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "../../../../../data/store";
 import { AirportView } from "./AirportView";
 import { AirlineView } from "./components/AirlineView";
+import { PlaneView } from "./components/PlaneView";
+import { RegistrationView } from "./components/RegistrationView";
 import { AddFlight } from "./drafting/AddFlight";
 import { EditFlight } from "./drafting/EditFlight";
 import { FlightsList } from "./FlightsList";
@@ -70,6 +72,26 @@ export function FlightsPanel() {
       dispatch(
         setSidepanelOptions({
           title: `Airline ${selectedFlights[0].airline?.name ?? "N/A"}`,
+          onGoBack: () => dispatch(goBackInSelection()),
+          onGoHome,
+        }),
+      );
+    } else if (selectedFlights && selected && selected.type === "plane") {
+      dispatch(
+        setSidepanelOptions({
+          title: `Plane ${selectedFlights[0].plane?.manufacturerModel ?? "N/A"}`,
+          onGoBack: () => dispatch(goBackInSelection()),
+          onGoHome,
+        }),
+      );
+    } else if (
+      selectedFlights &&
+      selected &&
+      selected.type === "registration"
+    ) {
+      dispatch(
+        setSidepanelOptions({
+          title: `Registration ${selectedFlights[0].plane?.registration ?? "N/A"}`,
           onGoBack: () => dispatch(goBackInSelection()),
           onGoHome,
         }),
@@ -145,6 +167,27 @@ export function FlightsPanel() {
           }
         />
       );
+    }
+
+    if (selected && selected.type === "plane") {
+      return (
+        <PlaneView
+          plane={
+            flights.find((flight) => flight.plane?.model === selected.planeId)
+              ?.plane
+          }
+        />
+      );
+    }
+
+    if (selected && selected.type === "registration") {
+      const plane = flights.find(
+        (flight) => flight.plane?.registration === selected.registration,
+      )?.plane;
+
+      if (plane) {
+        return <RegistrationView plane={plane} />;
+      }
     }
 
     if (selectedFlights && selectedFlights.length === 1 && !drafting) {

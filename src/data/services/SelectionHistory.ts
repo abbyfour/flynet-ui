@@ -7,7 +7,9 @@ export type Selected =
     }
   | { type: "route"; routeKey: string }
   | { type: "airport"; airportId: number }
-  | { type: "airline"; airlineId: string };
+  | { type: "airline"; airlineId: string }
+  | { type: "plane"; planeId: string }
+  | { type: "registration"; registration: string };
 
 export type SelectionHistory = Array<Selected>;
 

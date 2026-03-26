@@ -17,6 +17,7 @@ import { dispatchNotice } from "../../../../notices/dispatchNotice";
 import "./FlightView.scss";
 import { AirlineDisplay } from "./components/displays/AirlineDisplay";
 import { AirportDisplay } from "./components/displays/AirportDisplay";
+import { PlaneDisplay } from "./components/displays/PlaneDisplay";
 import { RouteDisplay } from "./components/displays/RouteDisplay";
 
 type FlightViewProps = {
@@ -150,13 +151,27 @@ export function FlightView({ flight }: FlightViewProps) {
         {flight.plane && (
           <div className="plane-details">
             <h5>Plane:</h5>
-            {flight.plane
-              ? `${flight.plane.model || "unknown model"}${
-                  flight.plane?.registration
-                    ? ` • ${flight.plane?.registration}`
-                    : ""
-                }`
-              : "Unknown Plane"}
+            <PlaneDisplay
+              plane={flight.plane}
+              onClick={() =>
+                flight.plane?.model &&
+                dispatch(
+                  setSelected({
+                    type: "plane",
+                    planeId: flight.plane.model,
+                  }),
+                )
+              }
+              onRegistrationClick={() =>
+                flight.plane?.registration &&
+                dispatch(
+                  setSelected({
+                    type: "registration",
+                    registration: flight.plane!.registration!,
+                  }),
+                )
+              }
+            />
           </div>
         )}
 

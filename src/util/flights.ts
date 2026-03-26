@@ -22,3 +22,15 @@ export function findFlightFromID(
 ): Flight | undefined {
   return id ? flights.find((flight) => flight.id === id) : undefined;
 }
+
+export function planespottersLink(reg: string) {
+  return `https://www.planespotters.net/search?q=+${reg}`;
+}
+
+export function jetphotosLink(reg: string) {
+  return `https://www.jetphotos.com/registration/${reg}`;
+}
+
+export function flightawareLink(reg: string) {
+  return `https://www.flightaware.com/live/flight/${reg}`;
+}

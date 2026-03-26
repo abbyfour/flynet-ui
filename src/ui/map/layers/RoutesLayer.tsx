@@ -116,6 +116,12 @@ const routeIncludesFlight = (route: GroupedRoute, selected?: Selected) => {
       route.route.origin.id === selected.airportId ||
       route.route.destination.id === selected.airportId
     );
+  } else if (selected.type === "plane") {
+    return route.flights.some((f) => f.plane?.model === selected.planeId);
+  } else if (selected.type === "registration") {
+    return route.flights.some(
+      (f) => f.plane?.registration === selected.registration,
+    );
   }
 
   return false;

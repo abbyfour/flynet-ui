@@ -1,0 +1,157 @@
+.PlaneDisplay {
+  display: grid;
+  padding-bottom: 2.5em;
+  margin-top: 1em;
+  > * {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .tag:first-child {
+    z-index: 10;
+  }
+
+  .tag.registration-tag {
+    z-index: 9;
+    transform: rotate(10deg);
+    transform-origin: top left;
+    margin-left: 0.8em;
+
+    .tag-text {
+      margin-top: 3.2rem;
+      margin-left: 6.5rem;
+      right: 0;
+      text-align: right;
+
+      .reg-label {
+        color: rgb(55, 55, 55);
+        font-size: 0.8rem;
+      }
+
+      .registration-value {
+        font-size: 1.2rem;
+        font-family: var(--monospace);
+        font-weight: 400;
+        color: rgb(27, 27, 27);
+      }
+    }
+  }
+
+  transition: transform 0.3s ease;
+
+  .tag-img {
+    transition: filter 0.3s ease;
+  }
+
+  &:hover {
+    transform: translateX(5px);
+    cursor: pointer;
+
+    .tag-img {
+      filter: drop-shadow(0 4px 8px rgba(156, 156, 156, 0.2));
+      transition: filter 0.3s ease;
+    }
+  }
+
+  .tag:not(.registration-tag) {
+    transition: transform 0.3s ease;
+
+    &:active {
+      transition: none;
+      transform: translateY(3px) translateX(5px);
+      filter: none;
+      .tag-img {
+        filter: none;
+        transition: none;
+      }
+    }
+  }
+
+  .tag.registration-tag {
+    transition: transform 0.3s ease;
+
+    .tag-img {
+      transition: filter 0.3s ease;
+    }
+
+    &:hover {
+      cursor: pointer;
+      transform: rotate(15deg);
+
+      .tag-img {
+        filter: drop-shadow(0 4px 8px rgba(156, 156, 156, 0.2));
+        transition: filter 0.3s ease;
+      }
+    }
+
+    &:active {
+      transition: none;
+      transform: rotate(15deg) translateY(3px);
+      filter: none;
+      .tag-img {
+        filter: none;
+        transition: none;
+      }
+    }
+  }
+
+  .tag {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.25rem;
+    width: fit-content;
+    height: fit-content;
+
+    img {
+      width: 60%;
+    }
+
+    // put the contents on top of each other
+    display: grid;
+    > * {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .tag-text {
+      margin-left: 2.5em;
+      display: flex;
+      flex-direction: column;
+      width: fit-content;
+      z-index: 1;
+    }
+
+    // Model
+    .tag-text {
+      .manufacturer,
+      .model {
+        width: fit-content;
+      }
+
+      .manufacturer {
+        font-size: 1rem;
+      }
+
+      .model {
+        font-weight: bold;
+
+        &.short-name {
+          font-size: 1.7rem;
+        }
+
+        &.medium-name {
+          font-size: 1.3rem;
+        }
+
+        &.long-name {
+          font-size: 1.1rem;
+        }
+
+        &.default-name {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}
