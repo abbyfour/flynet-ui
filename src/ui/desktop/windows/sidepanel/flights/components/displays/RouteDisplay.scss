@@ -4,7 +4,7 @@
   align-items: center;
   background: white;
   padding: 0.5em;
-  width: 70%;
+  width: 90%;
 
   .iata {
     font-family: var(--monospace);
@@ -31,7 +31,7 @@
   }
 
   .line {
-    min-width: 30%;
+    flex-grow: 1;
     height: 4px;
     background: linear-gradient(to left, #ffb700, #ffb70000);
   }
