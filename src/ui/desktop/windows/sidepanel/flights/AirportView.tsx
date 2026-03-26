@@ -7,7 +7,7 @@ import { setSelected } from "../../../../../data/flightsSlice";
 import { uniquifyBy } from "../../../../../util/arrayUtil";
 import { displayAirportType } from "../../../../../util/flights";
 import "./AirportView.scss";
-import { AirportDisplay } from "./components/AirportDisplay";
+import { AirportDisplay } from "./components/displays/AirportDisplay";
 
 export function AirportView({ airport }: { airport: Airport | undefined }) {
   const dispatch = useAppDispatch();

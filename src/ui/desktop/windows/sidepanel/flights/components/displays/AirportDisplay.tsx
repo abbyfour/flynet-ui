@@ -1,6 +1,6 @@
-import type { Airport } from "../../../../../../data/classes/flights/Airport";
-import { joinClasses } from "../../../../../../util/componentUtil";
-import { displayAirportType } from "../../../../../../util/flights";
+import type { Airport } from "../../../../../../../data/classes/flights/Airport";
+import { joinClasses } from "../../../../../../../util/componentUtil";
+import { displayAirportType } from "../../../../../../../util/flights";
 import { AirportCodePill } from "./AirportCodePill";
 
 import "./AirportDisplay.scss";

@@ -1,5 +1,5 @@
 import { ActionIcon } from "@mantine/core";
-import { icons } from "../../../assets/text/icons";
+import { icons } from "../../../assets/icons/icons";
 import { SidepanelWindows } from "../../../data/classes/ui";
 import {
   clearSidepanelOptions,

@@ -9,14 +9,15 @@ import { useDeleteFlightMutation } from "../../../../../data/services/flights/fl
 import { useAppDispatch } from "../../../../../data/store";
 import { confirm } from "../../../../notices/Confirm";
 
-import { icons } from "../../../../../assets/text/icons";
+import { icons } from "../../../../../assets/icons/icons";
 import { Button } from "../../../../buttons/Button";
 import { DeleteButton } from "../../../../buttons/DeleteButton";
 import { Toasts } from "../../../../notices/Toast";
 import { dispatchNotice } from "../../../../notices/dispatchNotice";
 import "./FlightView.scss";
-import { AirlineDisplay } from "./components/AirlineDisplay";
-import { AirportDisplay } from "./components/AirportDisplay";
+import { AirlineDisplay } from "./components/displays/AirlineDisplay";
+import { AirportDisplay } from "./components/displays/AirportDisplay";
+import { RouteDisplay } from "./components/displays/RouteDisplay";
 
 type FlightViewProps = {
   flight: Flight;
@@ -84,6 +85,48 @@ export function FlightView({ flight }: FlightViewProps) {
           </div>
         )}
 
+        <div className="route-details">
+          <h5>Route:</h5>
+          <RouteDisplay
+            route={flight.route}
+            onClick={() =>
+              dispatch(
+                flight.route &&
+                  setSelected({
+                    type: "route",
+                    routeKey: flight.route?.key,
+                  }),
+              )
+            }
+          />
+
+          <AirportDisplay
+            airport={flight.origin}
+            onClick={() =>
+              flight.origin &&
+              dispatch(
+                setSelected({
+                  type: "airport",
+                  airportId: flight.origin.id,
+                }),
+              )
+            }
+          />
+
+          <AirportDisplay
+            airport={flight.destination}
+            onClick={() =>
+              flight.destination &&
+              dispatch(
+                setSelected({
+                  type: "airport",
+                  airportId: flight.destination.id,
+                }),
+              )
+            }
+          />
+        </div>
+
         {flight.airline && (
           <div className="airline-details">
             <h5>Airline:</h5>
@@ -116,52 +159,6 @@ export function FlightView({ flight }: FlightViewProps) {
               : "Unknown Plane"}
           </div>
         )}
-
-        <div className="route-details">
-          <h5>Route:</h5>
-          <span className="route">
-            {flight.route.origin.displayCode} {icons.flights.flightRoute(16)}{" "}
-            {flight.route.destination.displayCode}
-          </span>
-        </div>
-
-        <div className="airport-details">
-          <div className="origin">
-            <h5>Origin:</h5>
-            {
-              <AirportDisplay
-                airport={flight.origin}
-                onClick={() =>
-                  flight.origin &&
-                  dispatch(
-                    setSelected({
-                      type: "airport",
-                      airportId: flight.origin.id,
-                    }),
-                  )
-                }
-              />
-            }
-          </div>
-
-          <div className="destination">
-            <h5>Destination:</h5>
-            {
-              <AirportDisplay
-                airport={flight.destination}
-                onClick={() =>
-                  flight.destination &&
-                  dispatch(
-                    setSelected({
-                      type: "airport",
-                      airportId: flight.destination.id,
-                    }),
-                  )
-                }
-              />
-            }
-          </div>
-        </div>
 
         {flight.note && (
           <div className="notes">

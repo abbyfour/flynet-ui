@@ -1,5 +1,5 @@
-import { AirlineTail } from "../../../../../../assets/tails/AirlineTail";
-import type { Airline } from "../../../../../../data/classes/flights/Airline";
+import { AirlineTail } from "../../../../../../../assets/tails/AirlineTail";
+import type { Airline } from "../../../../../../../data/classes/flights/Airline";
 
 import "./AirlineDisplay.scss";
 

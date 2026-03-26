@@ -13,6 +13,8 @@ import {
   IconX,
 } from "@tabler/icons-react";
 
+import CustomPlaneIcon from "./plane.svg";
+
 export const icons = {
   actions: {
     edit: (size = 16) => <IconPencil size={size} />,
@@ -33,5 +35,9 @@ export const icons = {
     date: (size = 16) => <IconCalendar size={size} />,
     flightRoute: (size = 16) => <IconArrowRight size={size} />,
     route: (size = 16) => <IconArrowsLeftRight size={size} />,
+
+    plane: (size = 16) => (
+      <img src={CustomPlaneIcon} style={{ width: size, height: size }} />
+    ),
   },
 } as const;

@@ -1,9 +1,9 @@
-import { icons } from "../../../../../assets/text/icons";
+import { icons } from "../../../../../assets/icons/icons";
 import type { Route } from "../../../../../data/classes/flights/Route";
 import { setSelected } from "../../../../../data/flightsSlice";
 import { selectSelectedFlights } from "../../../../../data/services/flights/selectFlights";
 import { useAppDispatch, useAppSelector } from "../../../../../data/store";
-import { AirportDisplay } from "./components/AirportDisplay";
+import { AirportDisplay } from "./components/displays/AirportDisplay";
 import { FlightListItem } from "./FlightListItem";
 
 import "./RouteView.scss";

@@ -1,5 +1,5 @@
 import { renderToString } from "react-dom/server";
-import { icons } from "../../assets/text/icons";
+import { icons } from "../../assets/icons/icons";
 import type { Route } from "../../data/classes/flights/Route";
 import type {
   GroupedAirport,

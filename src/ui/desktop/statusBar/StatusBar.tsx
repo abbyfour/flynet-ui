@@ -1,6 +1,6 @@
 import { ActionIcon, Tooltip } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { icons } from "../../../assets/text/icons";
+import { icons } from "../../../assets/icons/icons";
 import { clearAllUIFlightData } from "../../../data/flightsSlice";
 import { clearFlightsCache } from "../../../data/services/flights/flightsAPI";
 import { useAppDispatch, useAppSelector } from "../../../data/store";
