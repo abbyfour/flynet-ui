@@ -1,7 +1,7 @@
 import { IconCircleFilled } from "@tabler/icons-react";
 
+import { icons } from "../../../../../assets/icons/icons";
 import { AirlineTail } from "../../../../../assets/tails/AirlineTail";
-import { icons } from "../../../../../assets/text/icons";
 import type { Flight } from "../../../../../data/classes/flights/Flight";
 import { setSelected } from "../../../../../data/flightsSlice";
 import { useAppDispatch } from "../../../../../data/store";

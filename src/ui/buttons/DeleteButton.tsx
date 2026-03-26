@@ -1,6 +1,6 @@
 import { Button, type ButtonProps } from "./Button";
 
-import { icons } from "../../assets/text/icons";
+import { icons } from "../../assets/icons/icons";
 import { joinClasses } from "../../util/componentUtil";
 
 export function DeleteButton(props: ButtonProps) {

@@ -1,7 +1,7 @@
 .RouteView {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.7rem;
 
   .title {
     display: flex;
@@ -13,7 +13,6 @@
   h5 {
     font-size: 70%;
     font-weight: 600;
-    margin-bottom: 0.25rem;
     color: #333;
     text-decoration: underline;
   }
@@ -21,13 +20,12 @@
   .airport-details {
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 0.5em;
 
     .origin,
     .destination {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
     }
   }
 

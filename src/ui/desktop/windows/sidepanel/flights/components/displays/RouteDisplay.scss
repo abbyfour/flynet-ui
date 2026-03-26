@@ -1,0 +1,59 @@
+.RouteDisplay {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: white;
+  padding: 0.5em;
+  width: 70%;
+
+  .iata {
+    font-family: var(--monospace);
+    font-size: 120%;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1;
+    letter-spacing: 0.03em;
+  }
+
+  .terminus {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    margin: 0 5px;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: grey;
+  }
+
+  .line {
+    min-width: 30%;
+    height: 4px;
+    background: linear-gradient(to left, #ffb700, #ffb70000);
+  }
+
+  .plane {
+    margin-left: 5px;
+    margin-top: 2px;
+  }
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 8px rgba(156, 156, 156, 0.2);
+    cursor: pointer;
+  }
+
+  &:active {
+    transition: none;
+    transform: translateY(3px) translateX(5px);
+    box-shadow: none;
+  }
+}

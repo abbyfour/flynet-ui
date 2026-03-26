@@ -6,7 +6,7 @@ import { SubmitButton } from "../buttons/SubmitButton";
 import { AirportInput } from "./AirportInput";
 import { Input } from "./Input";
 
-import { icons } from "../../assets/text/icons";
+import { icons } from "../../assets/icons/icons";
 import "./FlightDrafter.scss";
 
 interface FlightDrafterProps {
