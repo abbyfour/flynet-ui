@@ -6,8 +6,10 @@ import { clearFlightsCache } from "../../../data/services/flights/flightsAPI";
 import { useAppDispatch, useAppSelector } from "../../../data/store";
 import { clearUser } from "../../../data/userSlice";
 import { useEphemeralThinking } from "../../../util/thinkingUtil";
-import "./StatusBar.scss";
 import { Thinking } from "./Thinking";
+
+import logo from "../../../assets/icons/flynet-icon.svg";
+import "./StatusBar.scss";
 
 export function StatusBar() {
   const [now, setNow] = useState(() => new Date());
@@ -32,7 +34,10 @@ export function StatusBar() {
   return (
     <div className="StatusBar">
       <div className="logo">
-        <p className="text">✈ FlyNet</p>
+        <div className="text">
+          <img src={logo} alt="FlyNet Logo" />
+          flynet
+        </div>
 
         <Thinking thinking={thinking} />
       </div>
