@@ -1,5 +1,4 @@
-# ✈ Flynet
-*Oh the places you'll fly!*
+![Flynet Banner](./banner.svg)
 
 Flynet is a web-based flight visualization tool built on an interactive map, letting you log your flights and share them with the people you fly with.
 
