@@ -21,9 +21,9 @@ export function AirportView({ airport }: { airport: Airport | undefined }) {
     <div className="AirportView">
       <h4 className="title">
         {airport.name}
-        {airport.iataCode && (
+        {airport.displayCode && (
           <>
-            <span className="airline-code">{airport.iataCode}</span>
+            <span className="airline-code">{airport.displayCode}</span>
           </>
         )}
       </h4>

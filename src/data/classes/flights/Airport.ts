@@ -23,7 +23,8 @@ export type AirportType =
   | "large_airport"
   | "medium_airport"
   | "small_airport"
-  | "seaplane_base";
+  | "seaplane_base"
+  | "heliport";
 
 export class Airport {
   constructor(private raw: APIAirport) {

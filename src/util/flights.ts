@@ -11,6 +11,8 @@ export function displayAirportType(type: AirportType) {
       return "Small Airport";
     case "seaplane_base":
       return "Seaplane Base";
+    case "heliport":
+      return "Heliport";
     default:
       return type;
   }
