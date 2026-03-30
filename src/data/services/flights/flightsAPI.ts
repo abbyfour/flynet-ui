@@ -1,7 +1,7 @@
+import { Airport, type APIAirport } from "@data/classes/flights/Airport";
+import type { APIFlight } from "@data/classes/flights/Flight";
+import type { APIFlightLog } from "@data/classes/flights/FlightLog";
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { Airport, type APIAirport } from "../../classes/flights/Airport";
-import type { APIFlight } from "../../classes/flights/Flight";
-import type { APIFlightLog } from "../../classes/flights/FlightLog";
 import { baseFlynetQuery } from "../client";
 import type { AddFlightRequestBody, EditFlightRequestBody } from "./types";
 

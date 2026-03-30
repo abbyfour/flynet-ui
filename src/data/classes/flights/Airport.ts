@@ -1,4 +1,4 @@
-import { regionNamesInEnglish } from "../../../util/iso";
+import { regionNamesInEnglish } from "@util/iso";
 
 export interface APIAirport {
   airportName: string;

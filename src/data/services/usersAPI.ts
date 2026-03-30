@@ -1,9 +1,9 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
 import type {
   ExtendedUserProperties,
   UserProperties,
   UserWithToken,
-} from "../classes/user";
+} from "@data/classes/user";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseFlynetQuery } from "./client";
 
 export const usersApi = createApi({

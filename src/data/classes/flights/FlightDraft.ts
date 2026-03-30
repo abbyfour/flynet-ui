@@ -1,5 +1,5 @@
-import type { Time } from "../../../util/types";
-import type { AddFlightRequestBody } from "../../services/flights/types";
+import type { AddFlightRequestBody } from "@data/services/flights/types";
+import type { Time } from "@util/types";
 
 export interface FlightDraft {
   flightNumber?: string;

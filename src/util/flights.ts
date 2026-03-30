@@ -1,5 +1,5 @@
-import type { AirportType } from "../data/classes/flights/Airport";
-import type { Flight } from "../data/classes/flights/Flight";
+import type { AirportType } from "@data/classes/flights/Airport";
+import type { Flight } from "@data/classes/flights/Flight";
 
 export function displayAirportType(type: AirportType) {
   switch (type) {
