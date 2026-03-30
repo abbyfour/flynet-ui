@@ -17,8 +17,8 @@ export function PlaneView({ plane }: { plane: Plane | undefined }) {
     <div className="PlaneView">
       <div className="content">
         <h4 className="title">
-          <span>{plane.manufacturer}</span>
-          <span className="subtitle">{plane.manufacturerModel}</span>
+          <span className="subtitle">{plane.manufacturer}</span>
+          <span>{plane.manufacturerModel}</span>
         </h4>
 
         <div className="airlines">
@@ -39,13 +39,11 @@ export function PlaneView({ plane }: { plane: Plane | undefined }) {
           </ul>
         </div>
 
-        <div>
+        <div className="flights">
           <h5 className="tiny-header">Flights:</h5>
 
           <p className="flight-count">{flights.length} flights on this plane</p>
-        </div>
 
-        <div className="flights">
           <div className="flight-list">
             {flights.map((flight) => (
               <FlightListItem key={flight.id} flight={flight} />

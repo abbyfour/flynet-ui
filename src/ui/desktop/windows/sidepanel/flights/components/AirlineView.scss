@@ -6,4 +6,9 @@
   .content {
     @include vertical-content;
   }
+
+  .flights {
+    @include vertical-content;
+    gap: var(--gap-xs);
+  }
 }

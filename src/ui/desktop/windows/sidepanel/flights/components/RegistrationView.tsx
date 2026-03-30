@@ -27,7 +27,7 @@ export function RegistrationView({ plane }: RegistrationViewProps) {
       <div className="content">
         <h4 className="title">
           {plane.registration}
-          <span className="plane-model">{plane.model}</span>
+          <span className="subtitle">{plane.model}</span>
         </h4>
 
         <div>
@@ -60,15 +60,13 @@ export function RegistrationView({ plane }: RegistrationViewProps) {
           </div>
         </div>
 
-        <div>
+        <div className="flights">
           <h5 className="tiny-header">Flights:</h5>
 
           <p className="flight-count">
             {flights.length} flights on this aircraft
           </p>
-        </div>
 
-        <div className="flights">
           <div className="flight-list">
             {flights.map((flight) => (
               <FlightListItem key={flight.id} flight={flight} />

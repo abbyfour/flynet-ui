@@ -39,8 +39,7 @@
   }
 
   .flights {
-    display: flex;
-    flex-direction: column;
+    @include vertical-content;
     gap: var(--gap-sm);
   }
 

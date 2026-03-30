@@ -43,7 +43,7 @@ export function AirlineView({ airline }: { airline: Airline | undefined }) {
           </ul>
         </div>
 
-        <div>
+        <div className="flights">
           <h5 className="tiny-header">Flights:</h5>
 
           <p className="flight-count">
@@ -51,12 +51,10 @@ export function AirlineView({ airline }: { airline: Airline | undefined }) {
           </p>
         </div>
 
-        <div className="flights">
-          <div className="flight-list">
-            {flights.map((flight) => (
-              <FlightListItem key={flight.id} flight={flight} />
-            ))}
-          </div>
+        <div className="flight-list">
+          {flights.map((flight) => (
+            <FlightListItem key={flight.id} flight={flight} />
+          ))}
         </div>
       </div>
     </div>
