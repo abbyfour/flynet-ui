@@ -7,8 +7,8 @@
     position: relative;
     color: var(--accent-contrast);
 
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
+    padding-top: var(--gap-sm);
+    padding-bottom: var(--gap-sm);
 
     .window-controls {
       position: absolute;
@@ -25,7 +25,7 @@
 
     .window-title {
       white-space: nowrap;
-      font-weight: 700;
+      font-weight: var(--weight-bold);
       letter-spacing: 0.08em;
       text-transform: uppercase;
       font-size: 0.8rem;
@@ -39,7 +39,7 @@
     min-width: 350px;
     background: var(--white);
     color: var(--black);
-    padding: var(--gap-sm);
+    padding: var(--gap-md);
   }
 
   &.no-padding {
