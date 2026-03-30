@@ -10,6 +10,7 @@ type AirportDisplayProps = {
   className?: string;
   onClick?: () => void;
   minimal?: boolean;
+  noHover?: boolean;
 };
 
 export function AirportDisplay({
@@ -17,9 +18,17 @@ export function AirportDisplay({
   className,
   onClick,
   minimal = false,
+  noHover = false,
 }: AirportDisplayProps) {
   return !minimal ? (
-    <div className={joinClasses("AirportDetails", className)} onClick={onClick}>
+    <div
+      className={joinClasses(
+        "AirportDetails",
+        className,
+        noHover ? "no-hover" : "",
+      )}
+      onClick={onClick}
+    >
       <div className="left">
         <AirportCodePill airport={airport} size="md" />
       </div>

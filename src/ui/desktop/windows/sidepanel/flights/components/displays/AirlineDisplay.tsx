@@ -7,17 +7,22 @@ type AirlineDisplayProps = {
   airline: Airline;
   flightNumber?: string;
   onClick?: () => void;
+  noHover?: boolean;
 };
 
 export function AirlineDisplay({
   airline,
   flightNumber,
   onClick,
+  noHover = false,
 }: AirlineDisplayProps) {
   const iataCode = flightNumber?.substring(0, 2) ?? null;
 
   return (
-    <div className="AirlineDisplay" onClick={onClick}>
+    <div
+      className={`AirlineDisplay ${noHover ? "no-hover" : ""}`}
+      onClick={onClick}
+    >
       <AirlineTail
         key={flightNumber || airline.name}
         airline={airline}

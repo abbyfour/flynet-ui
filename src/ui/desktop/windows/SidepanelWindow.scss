@@ -27,11 +27,17 @@
   }
 
   .content {
-    padding: 0.5em;
     overflow: scroll;
     max-height: 85vh;
-    width: 20vw;
+    width: 23vw;
     min-width: 350px;
     background: white;
+    padding: 0.5em;
+  }
+
+  &.no-padding {
+    .content {
+      padding: 0;
+    }
   }
 }

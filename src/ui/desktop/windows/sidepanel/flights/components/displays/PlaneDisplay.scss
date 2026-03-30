@@ -37,64 +37,6 @@
     }
   }
 
-  transition: transform 0.3s ease;
-
-  .tag-img {
-    transition: filter 0.3s ease;
-  }
-
-  &:hover {
-    transform: translateX(5px);
-    cursor: pointer;
-
-    .tag-img {
-      filter: drop-shadow(0 4px 8px rgba(156, 156, 156, 0.2));
-      transition: filter 0.3s ease;
-    }
-  }
-
-  .tag:not(.registration-tag) {
-    transition: transform 0.3s ease;
-
-    &:active {
-      transition: none;
-      transform: translateY(3px) translateX(5px);
-      filter: none;
-      .tag-img {
-        filter: none;
-        transition: none;
-      }
-    }
-  }
-
-  .tag.registration-tag {
-    transition: transform 0.3s ease;
-
-    .tag-img {
-      transition: filter 0.3s ease;
-    }
-
-    &:hover {
-      cursor: pointer;
-      transform: rotate(15deg);
-
-      .tag-img {
-        filter: drop-shadow(0 4px 8px rgba(156, 156, 156, 0.2));
-        transition: filter 0.3s ease;
-      }
-    }
-
-    &:active {
-      transition: none;
-      transform: rotate(15deg) translateY(3px);
-      filter: none;
-      .tag-img {
-        filter: none;
-        transition: none;
-      }
-    }
-  }
-
   .tag {
     display: flex;
     flex-direction: row;
@@ -151,6 +93,67 @@
         &.default-name {
           font-size: 1rem;
         }
+      }
+    }
+  }
+}
+
+/** Hover effects */
+.PlaneDisplay:not(.no-hover) {
+  transition: transform 0.3s ease;
+
+  .tag-img {
+    transition: filter 0.3s ease;
+  }
+
+  &:hover {
+    transform: translateX(5px);
+    cursor: pointer;
+
+    .tag-img {
+      filter: drop-shadow(0 4px 8px rgba(156, 156, 156, 0.2));
+      transition: filter 0.3s ease;
+    }
+  }
+
+  .tag:not(.registration-tag) {
+    transition: transform 0.3s ease;
+
+    &:active {
+      transition: none;
+      transform: translateY(3px) translateX(5px);
+      filter: none;
+      .tag-img {
+        filter: none;
+        transition: none;
+      }
+    }
+  }
+
+  .tag.registration-tag {
+    transition: transform 0.3s ease;
+
+    .tag-img {
+      transition: filter 0.3s ease;
+    }
+
+    &:hover {
+      cursor: pointer;
+      transform: rotate(15deg);
+
+      .tag-img {
+        filter: drop-shadow(0 4px 8px rgba(156, 156, 156, 0.2));
+        transition: filter 0.3s ease;
+      }
+    }
+
+    &:active {
+      transition: none;
+      transform: rotate(15deg) translateY(3px);
+      filter: none;
+      .tag-img {
+        filter: none;
+        transition: none;
       }
     }
   }

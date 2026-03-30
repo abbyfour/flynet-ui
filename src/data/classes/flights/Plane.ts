@@ -25,6 +25,14 @@ export class Plane {
     return new Plane(rawFlight.planeModel, rawFlight.planeRegistration);
   }
 
+  public get id(): string {
+    if (!this.model) {
+      return "00";
+    }
+
+    return this.model;
+  }
+
   public get manufacturer(): string {
     if (!this.model) {
       return "Unknown";
@@ -55,5 +63,9 @@ export class Plane {
     return (
       this.model.replace(new RegExp(manufacturer, "i"), "").trim() || "Unknown"
     );
+  }
+
+  public deregister(): Plane {
+    return new Plane(this.model, undefined);
   }
 }

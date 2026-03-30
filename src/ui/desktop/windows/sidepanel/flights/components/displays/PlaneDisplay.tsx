@@ -8,15 +8,17 @@ type PlaneDisplayProps = {
   plane: Plane;
   onClick?: () => void;
   onRegistrationClick?: () => void;
+  noHover?: boolean;
 };
 
 export function PlaneDisplay({
   plane,
   onClick,
   onRegistrationClick,
+  noHover = false,
 }: PlaneDisplayProps) {
   return (
-    <div className="PlaneDisplay">
+    <div className={`PlaneDisplay ${noHover ? "no-hover" : ""}`}>
       <div className="tag" onClick={onClick}>
         <img src={airplaneTag} alt="" className="tag-img" />
 

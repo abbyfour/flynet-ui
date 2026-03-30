@@ -1,0 +1,84 @@
+.Profile {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .profile-info {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: 1rem;
+    margin-top: -10px;
+
+    .names {
+      display: flex;
+      flex-direction: column;
+
+      .nickname {
+        font-family: var(--fun);
+      }
+
+      .username {
+        color: #424242;
+        font-size: 1.3rem;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .avatar {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 0.5rem solid white;
+    margin-top: -65px;
+    flex-shrink: 0;
+  }
+
+  .expanded-profile {
+    display: flex;
+    flex-direction: column;
+
+    padding: 0.5em;
+    padding-top: 0.7rem;
+    gap: 0.7rem;
+
+    .bio {
+      padding: 1rem;
+      padding-top: 0;
+      padding-bottom: 0;
+      line-height: 1.2;
+    }
+  }
+
+  .footer {
+    margin-top: auto;
+    padding-bottom: 0.3rem;
+
+    .barcode {
+      font-family: var(--barcode);
+      font-size: 3rem;
+      color: #333;
+      text-align: center;
+    }
+  }
+}
+
+.Profile {
+  .expanded-profile {
+    h5 {
+      font-size: 90%;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: #333;
+      text-decoration: underline;
+    }
+  }
+}

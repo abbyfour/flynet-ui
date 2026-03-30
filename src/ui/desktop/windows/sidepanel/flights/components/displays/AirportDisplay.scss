@@ -12,17 +12,19 @@
     transform 0.3s ease,
     box-shadow 0.3s ease;
 
-  &:hover {
-    transform: translateX(5px);
-    box-shadow: 0 4px 8px rgba(156, 156, 156, 0.2);
+  &:not(.no-hover) {
+    &:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 8px rgba(156, 156, 156, 0.2);
 
-    cursor: pointer;
-  }
+      cursor: pointer;
+    }
 
-  &:active {
-    transition: none;
-    transform: translateY(3px) translateX(5px);
-    box-shadow: none;
+    &:active {
+      transition: none;
+      transform: translateY(3px) translateX(5px);
+      box-shadow: none;
+    }
   }
 
   .right {

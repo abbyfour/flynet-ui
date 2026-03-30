@@ -40,7 +40,10 @@ export function SidepanelWindow() {
   };
 
   return activeWindow ? (
-    <SidepanelContainer align="left" className="SidepanelWindow">
+    <SidepanelContainer
+      align="left"
+      className={`SidepanelWindow ${activeWindow === SidepanelWindows.Profile  ? "no-padding" : ""}`}
+    >
       <div className="window-header">
         <div className="window-controls">
           <ActionIcon variant="transparent" color="dark" onClick={handleClose}>

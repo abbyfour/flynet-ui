@@ -5,6 +5,11 @@
   display: flex;
   align-items: center;
   gap: 0.5em;
+  width: 100%;
+
+  .details {
+    width: 100%;
+  }
 
   .icon {
     display: flex;

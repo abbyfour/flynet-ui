@@ -58,11 +58,10 @@ export function StatusBar() {
 
       <p className="time">
         {now
-          .toLocaleString("en-GB", {
+          .toLocaleString("en-US", {
             weekday: "short",
+            month: "short",
             day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
             hour: "2-digit",
             minute: "2-digit",
             hour12: false,
