@@ -9,7 +9,7 @@ interface InputLabelProps {
 
 export function InputLabel({ label, changed, required }: InputLabelProps) {
   return (
-    <div className="InputLabel">
+    <div className="InputLabel tiny-header">
       {required && <span className="required">*</span>}
       {label}{" "}
       {changed && <IconCircleFilled size={6} color="rgb(72, 128, 207)" />}

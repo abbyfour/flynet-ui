@@ -1,8 +1,51 @@
-$bg-color: #272727;
-$viewport-padding: 0;
-
 :root {
+  /**
+    * Fonts
+    */
   --monospace: "Cascadia Code", monospace;
   --fun: "Cherry Bomb One", cursive;
   --barcode: "Libre Barcode 128 Text", system-ui;
+
+  /**
+    * Colors
+    */
+  --black: #1e1e1e;
+  --white: #fffffc;
+  --grey-light: #f5f5f5;
+  --grey: #808080;
+  --grey-dark: #404040;
+
+  // Accent colors for light and dark themes
+  --accent: rgb(211, 47, 0);
+  --accent-dark: rgb(167, 36, 0);
+  --accent-darker: rgb(103, 22, 0);
+  --accent-light: #fbd1d1;
+  --accent-contrast: var(--white);
+
+  /**
+    * Font weights
+    */
+  --weight-regular: 400;
+  --weight-medium: 450;
+  --weight-semibold: 550;
+  --weight-bold: 700;
+
+  /**
+  * Spacing
+  */
+
+  --gap-xxs: 0.15rem;
+  --gap-xs: 0.3rem;
+  --gap-sm: 0.5rem;
+  --gap-md: 0.7rem;
+  --gap-lg: 1rem;
+  --gap-xl: 1.2rem;
+}
+
+[data-theme="dark"] {
+  --accent: rgb(255, 200, 0);
+  --accent-dark: rgb(208, 153, 0);
+  --accent-darker: rgb(161, 83, 0);
+  --accent-light: #ffe7b7;
+  --accent-contrast: var(--black);
 }

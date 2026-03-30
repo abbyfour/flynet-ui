@@ -1,50 +1,38 @@
 .StatusBar {
+  @include inline-content;
+
   z-index: 1;
   width: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 10px;
+
+  padding: 0 var(--gap-sm);
   height: 30px;
-  color: 11ee1e;
-  background: white;
+  background: var(--white);
+  justify-content: space-between;
 
   .user-message,
   .time {
     font-size: 0.833rem;
-    font-weight: 500;
+    font-weight: var(--weight-medium);
     font-family: var(--monospace);
   }
 
-  .logo {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 5px;
+  .text {
+    @include inline-content;
+    font-weight: var(--weight-bold);
 
-    .text {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 5px;
-      font-weight: bold;
-
-      img {
-        height: 22px;
-      }
+    img {
+      height: 22px;
     }
   }
 
   .user-management {
+    @include inline-content;
+
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
   }
 }

@@ -20,13 +20,13 @@ export function AirlineView({ airline }: { airline: Airline | undefined }) {
           {airline.name}
           {airline.iataCode && (
             <>
-              <span className="airline-code">{airline.iataCode}</span>
+              <span className="subtitle">{airline.iataCode}</span>
             </>
           )}
         </h4>
 
         <div className="planes">
-          <h5>Planes:</h5>
+          <h5 className="tiny-header">Planes:</h5>
 
           <ul className="planes-list">
             {uniquifyBy(
@@ -44,7 +44,7 @@ export function AirlineView({ airline }: { airline: Airline | undefined }) {
         </div>
 
         <div>
-          <h5>Flights:</h5>
+          <h5 className="tiny-header">Flights:</h5>
 
           <p className="flight-count">
             {flights.length} flights for this airline

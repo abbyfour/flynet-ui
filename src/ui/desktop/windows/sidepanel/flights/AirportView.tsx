@@ -29,26 +29,26 @@ export function AirportView({ airport }: { airport: Airport | undefined }) {
       </h4>
 
       <div className="location">
-        <h5>Location:</h5>
+        <h5 className="tiny-header">Location:</h5>
         <span>
           {airport.city}, {airport.isoRegion}, {airport.isoCountry}
         </span>
       </div>
 
       <div className="type">
-        <h5>Type:</h5>
+        <h5 className="tiny-header">Type:</h5>
         <span>{displayAirportType(airport.type)}</span>
       </div>
 
       <div className="coordinates">
-        <h5>Coordinates:</h5>
+        <h5 className="tiny-header">Coordinates:</h5>
         <span>
           {airport.coords[0].toFixed(4)}, {airport.coords[1].toFixed(4)}
         </span>
       </div>
 
       <div className="destinations">
-        <h5>Your destinations:</h5>
+        <h5 className="tiny-header">Your destinations:</h5>
         <div className="destinations-list">
           {uniquifyBy(
             flights
@@ -81,7 +81,7 @@ export function AirportView({ airport }: { airport: Airport | undefined }) {
       </div>
 
       <div>
-        <h5>Flights:</h5>
+        <h5 className="tiny-header">Flights:</h5>
 
         <p className="flight-count">
           {flights.length} flights to or from this airport

@@ -42,7 +42,7 @@ export function SidepanelWindow() {
   return activeWindow ? (
     <SidepanelContainer
       align="left"
-      className={`SidepanelWindow ${activeWindow === SidepanelWindows.Profile  ? "no-padding" : ""}`}
+      className={`SidepanelWindow ${activeWindow === SidepanelWindows.Profile ? "no-padding" : ""}`}
     >
       <div className="window-header">
         <div className="window-controls">
@@ -73,7 +73,7 @@ export function SidepanelWindow() {
         </span>
       </div>
 
-      <div className="content sidepanel-scroll-area">
+      <div className="panel-content sidepanel-scroll-area">
         {getSidepanelWindow(activeWindow) || <></>}
       </div>
     </SidepanelContainer>

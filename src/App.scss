@@ -1,4 +1,5 @@
 @use "./styles/variables" as *;
+@use "./styles/globals" as *;
 
 @import url("https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&family=Cherry+Bomb+One&family=Libre+Barcode+128+Text&family=Teachers:ital,wght@0,400..800;1,400..800&display=swap");
 
@@ -7,8 +8,8 @@ body,
 #root {
   height: 100%;
   margin: 0;
-  padding: $viewport-padding;
-  background: $bg-color;
+  padding: 0;
+  background: #272727;
   font-family: "Teachers", sans-serif !important;
 }
 

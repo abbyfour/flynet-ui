@@ -1,14 +1,12 @@
 .FlightListSeparator {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0.5rem 0;
+  @include inline-content;
+  margin: var(--gap-sm) 0;
 
   &::before,
   &::after {
     content: "";
     height: 1.5px;
-    background-color: black;
+    background-color: var(--black);
     opacity: 0.4;
   }
 
@@ -21,10 +19,10 @@
   }
 
   .label {
-    color: black;
+    color: var(--black);
     opacity: 0.6;
     white-space: nowrap;
-    font-weight: 600;
+    font-weight: var(--weight-semibold);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     font-size: 0.75rem;

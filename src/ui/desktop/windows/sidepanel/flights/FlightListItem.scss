@@ -1,10 +1,10 @@
 .FlightListItem {
-  padding: 0.6em;
+  padding: var(--gap-sm);
   cursor: pointer;
   border-radius: 3px;
   display: flex;
   align-items: center;
-  gap: 0.5em;
+  gap: var(--gap-sm);
   width: 100%;
 
   .details {
@@ -12,72 +12,38 @@
   }
 
   .icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include inline-content;
 
     .AirlineTail {
       width: 40px;
-      height: 40px;
-    }
-  }
-
-  &.highlighted,
-  &:hover {
-    .middle {
-      // give the text a highlighter effect by adding a bright background color with some transparency
-      background-size: 100% 100%;
     }
   }
 
   .header,
   .footer {
-    color: gray;
-    font-weight: 500;
+    color: var(--grey);
+    font-weight: var(--weight-medium);
   }
 
   .header,
   .middle {
-    margin-bottom: 5px;
+    margin-bottom: var(--gap-xs);
   }
 
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-
-  &:hover {
-    transform: translateX(5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-
-  &:active {
-    transition: none;
-    transform: translateY(3px) translateX(5px);
-    box-shadow: none;
-  }
+  @include hover-slide;
 
   .header {
-    display: flex;
+    @include inline-content;
     justify-content: space-between;
-    gap: 0.5em;
-    align-items: center;
 
-    .left {
-      display: flex;
-      gap: 0.5em;
-      align-items: center;
-
-      .route {
-        display: flex;
-        align-items: center;
-        gap: 0.25em;
-      }
+    .left,
+    .right {
+      @include inline-content;
     }
 
-    .right {
-      display: flex;
-      gap: 0.2em;
-      align-items: center;
+    .route {
+      @include inline-content;
+      gap: var(--gap-xxs);
     }
   }
 }

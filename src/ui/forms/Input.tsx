@@ -1,6 +1,5 @@
 import { PasswordInput, Textarea, TextInput } from "@mantine/core";
 import { TimeInput } from "@mantine/dates";
-import { IconCircleFilled } from "@tabler/icons-react";
 import { useCallback, useState } from "react";
 import { type Time } from "../../util/types";
 import "./Input.scss";
@@ -99,12 +98,12 @@ export function Input<T extends InputType>({
     case "date":
       return (
         <div className="date-input">
-          <label htmlFor={id} className="input-label">
-            {label}
-            {hasValueChanged() && (
-              <IconCircleFilled size={6} color="rgb(72, 128, 207)" />
-            )}
-          </label>
+          <InputLabel
+            label={label}
+            changed={hasValueChanged()}
+            required={required}
+          />
+
           <input
             type="date"
             {...sharedInputProps}

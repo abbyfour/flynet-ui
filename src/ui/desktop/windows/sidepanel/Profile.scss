@@ -1,20 +1,18 @@
 .Profile {
   min-height: 70vh;
-  display: flex;
-  flex-direction: column;
+  @include vertical-content;
 
   .main-content {
-    display: flex;
-    flex-direction: column;
+    @include vertical-content;
+    gap: 0;
     flex: 1;
   }
 
   .profile-info {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
-    margin-left: 1rem;
-    margin-top: -10px;
+    margin-left: var(--gap-lg);
+    margin-top: calc(var(--gap-md) * -1);
 
     .names {
       display: flex;
@@ -25,9 +23,9 @@
       }
 
       .username {
-        color: #424242;
+        color: var(--grey);
         font-size: 1.3rem;
-        font-weight: 500;
+        font-weight: var(--weight-semibold);
       }
     }
   }
@@ -37,7 +35,7 @@
     height: 150px;
     object-fit: cover;
     border-radius: 50%;
-    border: 0.5rem solid white;
+    border: var(--gap-sm) solid var(--white);
     margin-top: -65px;
     flex-shrink: 0;
   }
@@ -46,12 +44,12 @@
     display: flex;
     flex-direction: column;
 
-    padding: 0.5em;
-    padding-top: 0.7rem;
-    gap: 0.7rem;
+    padding: var(--gap-sm);
+    padding-top: var(--gap-md);
+    gap: var(--gap-md);
 
     .bio {
-      padding: 1rem;
+      padding: var(--gap-lg);
       padding-top: 0;
       padding-bottom: 0;
       line-height: 1.2;
@@ -60,25 +58,13 @@
 
   .footer {
     margin-top: auto;
-    padding-bottom: 0.3rem;
+    padding-bottom: var(--gap-xs);
 
     .barcode {
+      color: var(--grey-dark);
       font-family: var(--barcode);
       font-size: 3rem;
-      color: #333;
       text-align: center;
-    }
-  }
-}
-
-.Profile {
-  .expanded-profile {
-    h5 {
-      font-size: 90%;
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-      color: #333;
-      text-decoration: underline;
     }
   }
 }

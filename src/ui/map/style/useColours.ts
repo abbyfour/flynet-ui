@@ -1,5 +1,6 @@
-import { AppTheme } from "../../../data/classes/ui";
-import { useAppSelector } from "../../../data/store";
+import { AppTheme } from "@data/classes/ui";
+import { useAppSelector } from "@data/store";
+import { selectThemeFallbackToSystem } from "@data/uiSlice";
 import {
   colourRoles,
   colours,
@@ -14,7 +15,7 @@ type UseColourRecord = Record<`${ColourRole}Colour`, RGB>;
 
 /** Uses the theme in storage to return the right colours for rendering */
 export function useColours(): UseColourRecord {
-  const theme = useAppSelector((state) => state.ui.theme);
+  const theme = useAppSelector(selectThemeFallbackToSystem);
 
   const returns = (
     Object.entries(colourRoles) as [ColourRole, ColourKey | ThemedColourKey][]

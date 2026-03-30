@@ -1,47 +1,39 @@
 .AirportView {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--gap-md);
 
   .title {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
-    border-left: rgb(0, 0, 0) 3px solid;
+    gap: var(--gap-xs);
+    border-left: var(--black) 3px solid;
     padding-left: 0.5em;
     font-size: 1.44rem;
     font-weight: 500;
 
-    .airline-code {
-      color: #222;
+    .airport-code {
+      color: var(--grey-dark);
       font-weight: normal;
       font-size: 1rem;
     }
   }
 
-  h5 {
-    font-size: 70%;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    color: #333;
-    text-decoration: underline;
-  }
-
   .destinations {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--gap-sm);
 
     .destinations-list {
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      gap: var(--gap-xs);
 
       .destination {
         display: inline-flex;
         align-items: center;
-        gap: 0.3em;
-        margin-right: 0.5rem;
+        gap: var(--gap-xs);
+        margin-right: var(--gap-sm);
       }
     }
   }
@@ -49,7 +41,7 @@
   .flights {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--gap-sm);
   }
 
   .flight-count {

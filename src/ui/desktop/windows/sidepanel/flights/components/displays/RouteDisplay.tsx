@@ -17,7 +17,7 @@ export function RouteDisplay({ route, onClick }: RouteDisplayProps) {
       </div>
 
       <div className="line"></div>
-      <div className="plane">{icons.flights.plane(24)}</div>
+      <div className="plane">{icons.flights.plane({ size: 24 })}</div>
 
       <div className="terminus">
         <div className="dot"></div>

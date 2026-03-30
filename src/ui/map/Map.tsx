@@ -1,7 +1,8 @@
 import { useState } from "react";
 import BaseMap from "react-map-gl/maplibre";
-import { store, useAppDispatch, useAppSelector } from "../../data/store";
-import { recordMapPosition } from "../../data/uiSlice";
+
+import { store, useAppDispatch, useAppSelector } from "@data/store";
+import { recordMapPosition, selectThemeFallbackToSystem } from "@data/uiSlice";
 import { DataLayers } from "./DataLayers";
 
 const maptilerKey = import.meta.env.VITE_MAPTILER_KEY;
@@ -9,7 +10,7 @@ const maptilerKey = import.meta.env.VITE_MAPTILER_KEY;
 export function Map() {
   const dispatch = useAppDispatch();
 
-  const theme = useAppSelector((state) => state.ui.theme);
+  const theme = useAppSelector(selectThemeFallbackToSystem);
 
   // Capture initial view state once without subscribing to mapPosition updates
   const [initialView] = useState(() => {

@@ -1,26 +1,13 @@
 .LoginWindow {
-  padding: 0.5em;
+  padding: var(--gap-sm);
   background: white;
 
   min-width: 300px;
-  width: 25vw;
-
-  .logout {
-    border: none;
-    background: none;
-    color: red;
-
-    &:hover {
-      cursor: pointer;
-      color: darkred;
-    }
-  }
+  width: 15vw;
 }
 
 .LoginForm {
   form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5em;
+    @include vertical-content;
   }
 }

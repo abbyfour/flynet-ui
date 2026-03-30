@@ -1,15 +1,15 @@
 .AirportCodePill {
-  display: inline-flex;
-  align-items: center;
-  background-color: #ffebc3;
-  margin-right: 0.5em;
+  @include inline-content;
 
-  border-left: 4px solid #f5b800;
+  background-color: var(--accent-light);
+  color: var(--black);
+
+  margin-right: var(--gap-xs);
+  border-left: 4px solid var(--accent);
   border-radius: 4px;
 
   font-family: var(--monospace);
-  font-weight: 700;
-  color: #1a1a1a;
+  font-weight: var(--weight-bold);
   letter-spacing: 0.03em;
 
   &.md {
@@ -30,8 +30,8 @@
     bottom: calc(100% + 0.4rem);
     padding: 0.35rem 0.5rem;
     border-radius: 0.35rem;
-    background: #111;
-    color: #fff;
+    background: var(--black);
+    color: var(--white);
     font-size: 0.75rem;
     white-space: nowrap;
     opacity: 0;

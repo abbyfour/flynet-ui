@@ -1,45 +1,28 @@
 .AirportDetails {
   display: flex;
   flex-direction: row;
-  gap: 0.3em;
+  gap: var(--gap-sm);
   align-items: center;
+  width: fit-content;
 
-  padding: 0.5em;
+  padding: var(--gap-sm);
   border-radius: 5px;
-  transition: translateX 0.2s ease-in-out;
 
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-
-  &:not(.no-hover) {
-    &:hover {
-      transform: translateX(5px);
-      box-shadow: 0 4px 8px rgba(156, 156, 156, 0.2);
-
-      cursor: pointer;
-    }
-
-    &:active {
-      transition: none;
-      transform: translateY(3px) translateX(5px);
-      box-shadow: none;
-    }
-  }
+  @include hover-slide;
 
   .right {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: var(--gap-xs);
   }
 
   .subline {
     font-size: 0.875rem;
-    color: gray;
+    color: var(--grey);
   }
 }
 
 .AirportDetails.minimal {
-  padding: 0.25em;
-  gap: 0.15em;
+  padding: var(--gap-xxs);
+  gap: var(--gap-xxs);
 }

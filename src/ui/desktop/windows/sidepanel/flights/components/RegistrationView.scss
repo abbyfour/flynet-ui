@@ -1,46 +1,23 @@
 .RegistrationView {
   .title {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    border-left: rgb(0, 0, 0) 3px solid;
-    padding-left: 0.5em;
-    font-weight: 700;
-
-    .plane-model {
-      color: #222;
-      font-weight: normal;
-    }
+    @include panel-title;
   }
 
   .content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-  }
-
-  h5 {
-    font-size: 90%;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    color: #333;
-    text-decoration: underline;
+    @include vertical-content;
   }
 }
 
 .external-links {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
+  @include vertical-content;
+  gap: var(--gap-xs);
 
   a {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    color: #a17900;
+    @include inline-content;
+    color: var(--accent-dark);
 
     &:hover {
-      color: #684c00;
+      color: var(--accent-darker);
     }
   }
 }

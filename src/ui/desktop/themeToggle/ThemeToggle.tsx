@@ -1,15 +1,15 @@
-import { useAppDispatch, useAppSelector } from "../../../data/store";
-
-import darkToggleIcon from "../../../assets/icons/dark-toggle.svg";
-import lightToggleIcon from "../../../assets/icons/light-toggle.svg";
-
 import { Tooltip } from "@mantine/core";
-import { AppTheme } from "../../../data/classes/ui";
-import { setTheme } from "../../../data/uiSlice";
+
+import { AppTheme } from "@data/classes/ui";
+import { useAppDispatch, useAppSelector } from "@data/store";
+import { selectThemeFallbackToSystem, setTheme } from "@data/uiSlice";
+
+import darkToggleIcon from "@assets/icons/dark-toggle.svg";
+import lightToggleIcon from "@assets/icons/light-toggle.svg";
 import "./ThemeToggle.scss";
 
 export function ThemeToggle() {
-  const theme = useAppSelector((state) => state.ui.theme);
+  const theme = useAppSelector(selectThemeFallbackToSystem);
   const dispatch = useAppDispatch();
 
   const toggleTheme = () => {
@@ -21,13 +21,13 @@ export function ThemeToggle() {
   return (
     <div className="ThemeToggle">
       <Tooltip
-        label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+        label={`Switch to ${theme === AppTheme.Dark ? "light" : "dark"} mode`}
         openDelay={500}
         position="right"
       >
         <button type="button" onClick={toggleTheme}>
           <img
-            src={theme === "dark" ? lightToggleIcon : darkToggleIcon}
+            src={theme === AppTheme.Dark ? lightToggleIcon : darkToggleIcon}
             alt="Toggle theme"
           />
         </button>

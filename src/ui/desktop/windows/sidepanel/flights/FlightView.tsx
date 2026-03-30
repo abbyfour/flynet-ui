@@ -56,14 +56,12 @@ export function FlightView({ flight }: FlightViewProps) {
 
   return (
     <div className="FlightView">
-      <div className="content">
+      <div className="flight">
         <h4 className="title">
-          {flight.flightNumber && (
-            <>
-              <span className="flight-number">{flight.flightNumber}</span>
-            </>
-          )}
-          {flight.origin.city} to {flight.destination.city}
+          {flight.flightNumber && <>{flight.flightNumber}</>}
+          <span className="subtitle">
+            {flight.origin.city} to {flight.destination.city}
+          </span>
         </h4>
 
         {flight.date && (
@@ -87,7 +85,6 @@ export function FlightView({ flight }: FlightViewProps) {
         )}
 
         <div className="route-details">
-          <h5>Route:</h5>
           <RouteDisplay
             route={flight.route}
             onClick={() =>
@@ -130,7 +127,7 @@ export function FlightView({ flight }: FlightViewProps) {
 
         {flight.airline && (
           <div className="airline-details">
-            <h5>Airline:</h5>
+            <h5 className="tiny-header">Airline:</h5>
 
             <AirlineDisplay
               airline={flight.airline}
@@ -150,7 +147,7 @@ export function FlightView({ flight }: FlightViewProps) {
 
         {flight.plane && (
           <div className="plane-details">
-            <h5>Plane:</h5>
+            <h5 className="tiny-header">Plane:</h5>
             <PlaneDisplay
               plane={flight.plane}
               onClick={() =>
@@ -176,8 +173,8 @@ export function FlightView({ flight }: FlightViewProps) {
         )}
 
         {flight.note && (
-          <div className="notes">
-            <h5>Notes:</h5>
+          <div className="notes support-newlines">
+            <h5 className="tiny-header">Notes:</h5>
             {flight.note}
           </div>
         )}

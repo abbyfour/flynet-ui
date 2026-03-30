@@ -17,12 +17,12 @@ export function PlaneView({ plane }: { plane: Plane | undefined }) {
     <div className="PlaneView">
       <div className="content">
         <h4 className="title">
-          <span className="manufacturer">{plane.manufacturer}</span>
-          <span className="model">{plane.manufacturerModel}</span>
+          <span>{plane.manufacturer}</span>
+          <span className="subtitle">{plane.manufacturerModel}</span>
         </h4>
 
         <div className="airlines">
-          <h5>Airlines:</h5>
+          <h5 className="tiny-header">Airlines:</h5>
 
           <ul className="airlines-list">
             {uniquifyBy(
@@ -40,7 +40,7 @@ export function PlaneView({ plane }: { plane: Plane | undefined }) {
         </div>
 
         <div>
-          <h5>Flights:</h5>
+          <h5 className="tiny-header">Flights:</h5>
 
           <p className="flight-count">{flights.length} flights on this plane</p>
         </div>

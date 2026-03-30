@@ -1,29 +1,9 @@
 .PlaneView {
   .title {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    border-left: rgb(0, 0, 0) 3px solid;
-    padding-left: 0.5em;
-    font-weight: 700;
-
-    .manufacturer {
-      color: #222;
-      font-weight: normal;
-    }
+    @include panel-title;
   }
 
   .content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-  }
-
-  h5 {
-    font-size: 90%;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    color: #333;
-    text-decoration: underline;
+    @include vertical-content;
   }
 }

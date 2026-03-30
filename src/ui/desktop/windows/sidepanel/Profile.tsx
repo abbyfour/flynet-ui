@@ -63,7 +63,7 @@ export function Profile() {
 
           {homeAirport && (
             <div className="home-airport">
-              <h5>Home airport</h5>
+              <h5 className="tiny-header">Home airport</h5>
 
               <AirportDisplay noHover airport={homeAirport} />
             </div>
@@ -71,7 +71,7 @@ export function Profile() {
 
           {favouriteAirline && (
             <div className="favourite-airline">
-              <h5>Favourite airline</h5>
+              <h5 className="tiny-header">Favourite airline</h5>
 
               <AirlineDisplay noHover airline={favouriteAirline} />
             </div>
@@ -79,7 +79,7 @@ export function Profile() {
 
           {favouritePlane && (
             <div className="favourite-plane">
-              <h5>Favourite plane</h5>
+              <h5 className="tiny-header">Favourite plane</h5>
 
               <PlaneDisplay noHover plane={favouritePlane} onClick={() => {}} />
             </div>

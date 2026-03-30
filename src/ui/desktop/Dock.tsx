@@ -1,29 +1,30 @@
 import "./Dock.scss";
 
-import { SidepanelWindows } from "../../data/classes/ui";
-import { useAppDispatch, useAppSelector } from "../../data/store";
+import { SidepanelWindows } from "@data/classes/ui";
+import { useAppDispatch, useAppSelector } from "@data/store";
 import {
   closeActiveSidepanelWindow,
+  selectThemeFallbackToSystem,
   setActiveSidepanelWindow,
-} from "../../data/uiSlice";
+} from "@data/uiSlice";
 
 // icons
-import flightsIconDarkBw from "../../assets/dock/flights-bw-dark.svg";
-import flightsIconBw from "../../assets/dock/flights-bw.svg";
-import flightsIconDark from "../../assets/dock/flights-dark.svg";
-import flightsIcon from "../../assets/dock/flights.svg";
-import friendsIconDarkBw from "../../assets/dock/friends-bw-dark.svg";
-import friendsIconBw from "../../assets/dock/friends-bw.svg";
-import friendsIconDark from "../../assets/dock/friends-dark.svg";
-import friendsIcon from "../../assets/dock/friends.svg";
-import profileIconDarkBw from "../../assets/dock/profile-bw-dark.svg";
-import profileIconBw from "../../assets/dock/profile-bw.svg";
-import profileIconDark from "../../assets/dock/profile-dark.svg";
-import profileIcon from "../../assets/dock/profile.svg";
-import settingsIconDarkBw from "../../assets/dock/settings-bw-dark.svg";
-import settingsIconBw from "../../assets/dock/settings-bw.svg";
-import settingsIconDark from "../../assets/dock/settings-dark.svg";
-import settingsIcon from "../../assets/dock/settings.svg";
+import flightsIconDarkBw from "@assets/dock/flights-bw-dark.svg";
+import flightsIconBw from "@assets/dock/flights-bw.svg";
+import flightsIconDark from "@assets/dock/flights-dark.svg";
+import flightsIcon from "@assets/dock/flights.svg";
+import friendsIconDarkBw from "@assets/dock/friends-bw-dark.svg";
+import friendsIconBw from "@assets/dock/friends-bw.svg";
+import friendsIconDark from "@assets/dock/friends-dark.svg";
+import friendsIcon from "@assets/dock/friends.svg";
+import profileIconDarkBw from "@assets/dock/profile-bw-dark.svg";
+import profileIconBw from "@assets/dock/profile-bw.svg";
+import profileIconDark from "@assets/dock/profile-dark.svg";
+import profileIcon from "@assets/dock/profile.svg";
+import settingsIconDarkBw from "@assets/dock/settings-bw-dark.svg";
+import settingsIconBw from "@assets/dock/settings-bw.svg";
+import settingsIconDark from "@assets/dock/settings-dark.svg";
+import settingsIcon from "@assets/dock/settings.svg";
 
 interface Window {
   name: SidepanelWindows;
@@ -68,7 +69,7 @@ export function Dock() {
   const activeWindow = useAppSelector(
     (state) => state.ui.activeSidepanelWindow,
   );
-  const theme = useAppSelector((state) => state.ui.theme);
+  const theme = useAppSelector(selectThemeFallbackToSystem);
 
   const dispatch = useAppDispatch();
 

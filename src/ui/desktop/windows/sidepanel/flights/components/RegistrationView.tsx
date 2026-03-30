@@ -30,36 +30,38 @@ export function RegistrationView({ plane }: RegistrationViewProps) {
           <span className="plane-model">{plane.model}</span>
         </h4>
 
-        <div className="external-links">
-          <h5>External links:</h5>
+        <div>
+          <h5 className="tiny-header">External links:</h5>
 
-          <a
-            href={jetphotosLink(plane.registration)}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            JetPhotos {icons.actions.externalLink()}
-          </a>
+          <div className="external-links">
+            <a
+              href={jetphotosLink(plane.registration)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              JetPhotos {icons.actions.externalLink()}
+            </a>
 
-          <a
-            href={flightawareLink(plane.registration)}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            FlightAware {icons.actions.externalLink()}
-          </a>
+            <a
+              href={flightawareLink(plane.registration)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              FlightAware {icons.actions.externalLink()}
+            </a>
 
-          <a
-            href={planespottersLink(plane.registration)}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Planespotters {icons.actions.externalLink()}
-          </a>
+            <a
+              href={planespottersLink(plane.registration)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Planespotters {icons.actions.externalLink()}
+            </a>
+          </div>
         </div>
 
         <div>
-          <h5>Flights:</h5>
+          <h5 className="tiny-header">Flights:</h5>
 
           <p className="flight-count">
             {flights.length} flights on this aircraft

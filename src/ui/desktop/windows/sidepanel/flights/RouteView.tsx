@@ -19,12 +19,14 @@ export function RouteView({ route }: { route: Route | undefined }) {
   return (
     <div className="RouteView">
       <h4 className="title">
-        {route.origin.city} {icons.flights.route(16)} {route.destination.city}
+        <span>
+          {route.origin.city} {icons.flights.route(16)} {route.destination.city}
+        </span>
       </h4>
 
       <div className="airport-details">
         <div className="origin">
-          <h5>Airport 1:</h5>
+          <h5 className="tiny-header">Airport 1:</h5>
           <AirportDisplay
             airport={route.origin}
             onClick={() =>
@@ -40,7 +42,7 @@ export function RouteView({ route }: { route: Route | undefined }) {
         </div>
 
         <div className="destination">
-          <h5>Airport 2:</h5>
+          <h5 className="tiny-header">Airport 2:</h5>
           <AirportDisplay
             airport={route.destination}
             onClick={() =>
@@ -57,7 +59,7 @@ export function RouteView({ route }: { route: Route | undefined }) {
       </div>
 
       <div className="flights">
-        <h5>Flights:</h5>
+        <h5 className="tiny-header">Flights:</h5>
 
         <p className="flight-count">{flights.length} flights on this route</p>
 
