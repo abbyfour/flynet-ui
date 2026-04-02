@@ -1,11 +1,27 @@
 .Profile {
-  min-height: 70vh;
   @include vertical-content;
+  min-height: inherit;
+  height: var(--panel-height-md);
 
   .main-content {
     @include vertical-content;
     gap: 0;
     flex: 1;
+  }
+
+  .banner {
+    display: grid;
+    justify-items: end;
+
+    > * {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .edit-button {
+      margin: var(--gap-xs);
+      width: fit-content;
+    }
   }
 
   .profile-info {

@@ -43,7 +43,7 @@ export function RoutesLayer({ routes, selected }: RoutesLayerProps) {
     getSourcePosition: (d: GroupedRoute) => d.route.origin.coords,
     getTargetPosition: (d: GroupedRoute) => d.route.destination.coords,
     // Styles
-    getWidth: 1.5,
+    getWidth: 1.7,
 
     getSourceColor: (d: GroupedRoute) => getRouteColour(d, selected),
     getTargetColor: (d: GroupedRoute) => getRouteColour(d, selected),
@@ -96,7 +96,7 @@ const intensifyColour = (
     cappedMaxFlights <= 2
       ? 255
       : Math.round(
-          (Math.min(route.flights.length, 10) / cappedMaxFlights) * 255,
+          (Math.min(route.flights.length, 10) / cappedMaxFlights + 0.05) * 255,
         );
 
   return [...colour, Math.max(intensity, minimumOpacity ?? 0)];

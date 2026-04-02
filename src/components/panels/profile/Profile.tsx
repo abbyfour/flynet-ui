@@ -1,96 +1,159 @@
+import { icons } from "@assets/icons/icons";
 import banner from "@assets/profile-banner.svg";
+import { Button } from "@components/common/buttons/Button";
 import { AirlineDisplay } from "@components/displays/AirlineDisplay";
 import { AirportDisplay } from "@components/displays/AirportDisplay";
 import { PlaneDisplay } from "@components/displays/PlaneDisplay";
+import { EditProfileForm } from "@components/forms/EditProfileForm";
 import type { Airline } from "@data/classes/flights/Airline";
 import type { Airport } from "@data/classes/flights/Airport";
 import type { Flight } from "@data/classes/flights/Flight";
 import type { Plane } from "@data/classes/flights/Plane";
+import type { ExtendedUserProperties, UserWithToken } from "@data/classes/user";
 import { selectFlightsAsObjects } from "@data/services/flights/selectFlights";
 import { setSidepanelOptions } from "@data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
-import { useEffect } from "react";
-
+import { useEffect, useState } from "react";
 import "./Profile.scss";
 
 export function Profile() {
   const currentUser = useAppSelector((state) => state.user.currentUser);
-  const flights = useAppSelector(selectFlightsAsObjects);
+
+  const [editing, setEditing] = useState(false);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(setSidepanelOptions({ title: "Profile" }));
   }, [dispatch]);
 
+  const openEditProfile = () => {
+    setEditing(true);
+  };
+
+  const clearEditing = () => {
+    setEditing(false);
+  };
+
+  useEffect(() => {
+    if (editing) {
+      dispatch(
+        setSidepanelOptions({
+          title: "Edit profile",
+          onGoBack: () => setEditing(false),
+        }),
+      );
+    } else {
+      dispatch(
+        setSidepanelOptions({
+          title: "Profile",
+        }),
+      );
+    }
+  }, [editing, dispatch]);
+
   if (!currentUser) {
     return <div>Please sign in!</div>;
   }
+
+  return (
+    <div className="Profile">
+      <div className="main-content">
+        {editing ? (
+          <EditProfileForm clearEditing={clearEditing} />
+        ) : (
+          <ProfileContent
+            openEditProfile={openEditProfile}
+            currentUser={currentUser}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ProfileContent({
+  openEditProfile,
+  currentUser,
+}: {
+  openEditProfile: () => void;
+  currentUser: UserWithToken<ExtendedUserProperties>;
+}) {
+  const flights = useAppSelector(selectFlightsAsObjects);
 
   const homeAirport = mostVisitedAirport(flights);
   const favouriteAirline = mostFlownAirline(flights);
   const favouritePlane = mostFlownPlane(flights);
 
   return (
-    <div className="Profile">
-      <div className="main-content">
+    <>
+      <div className="banner">
         <img src={banner} alt="Profile Banner" width="100%" />
 
-        <div className="profile-info">
-          <img
-            src="https://up.quizlet.com/11bmuo-fk839-256s.png"
-            alt=""
-            className="avatar"
-          />
+        <Button
+          className="edit-button"
+          variant="filled"
+          icon={icons.actions.edit(16)}
+          onClick={openEditProfile}
+        >
+          Edit profile
+        </Button>
+      </div>
 
-          <div className="names">
-            <h3 className="nickname">
-              {currentUser.nickname || currentUser.username}
-            </h3>
-            <h5 className="username">@{currentUser.username}</h5>
-          </div>
+      <div className="profile-info">
+        <img
+          src="https://up.quizlet.com/11bmuo-fk839-256s.png"
+          alt=""
+          className="avatar"
+        />
+
+        <div className="names">
+          <h3 className="nickname">
+            {currentUser.nickname || currentUser.username}
+          </h3>
+          <h5 className="username">@{currentUser.username}</h5>
+        </div>
+      </div>
+
+      <div className="expanded-profile">
+        <p className="bio">
+          stand for the flag *alberta flag*,
+          <br />
+          kneel for the cross *westjet logo*
+        </p>
+
+        <div className="separator">
+          <hr />
         </div>
 
-        <div className="expanded-profile">
-          <p className="bio">
-            stand for the flag *alberta flag*,
-            <br />
-            kneel for the cross *westjet logo*
-          </p>
+        {homeAirport && (
+          <div className="home-airport">
+            <h5 className="tiny-header">Home airport</h5>
 
-          <div className="separator">
-            <hr />
+            <AirportDisplay noHover airport={homeAirport} />
           </div>
+        )}
 
-          {homeAirport && (
-            <div className="home-airport">
-              <h5 className="tiny-header">Home airport</h5>
+        {favouriteAirline && (
+          <div className="favourite-airline">
+            <h5 className="tiny-header">Favourite airline</h5>
 
-              <AirportDisplay noHover airport={homeAirport} />
-            </div>
-          )}
+            <AirlineDisplay noHover airline={favouriteAirline} />
+          </div>
+        )}
 
-          {favouriteAirline && (
-            <div className="favourite-airline">
-              <h5 className="tiny-header">Favourite airline</h5>
+        {favouritePlane && (
+          <div className="favourite-plane">
+            <h5 className="tiny-header">Favourite plane</h5>
 
-              <AirlineDisplay noHover airline={favouriteAirline} />
-            </div>
-          )}
-
-          {favouritePlane && (
-            <div className="favourite-plane">
-              <h5 className="tiny-header">Favourite plane</h5>
-
-              <PlaneDisplay noHover plane={favouritePlane} onClick={() => {}} />
-            </div>
-          )}
-        </div>
+            <PlaneDisplay noHover plane={favouritePlane} onClick={() => {}} />
+          </div>
+        )}
       </div>
 
       <div className="footer">
         <div className="barcode">flynet.ca/@{currentUser.username}</div>
       </div>
-    </div>
+    </>
   );
 }
 

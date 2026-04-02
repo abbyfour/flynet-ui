@@ -2,14 +2,12 @@ export type RGB = [number, number, number];
 export type RGBA = [number, number, number, number];
 
 export const colours = {
-  yellow: [255, 200, 0],
-  red: [211, 47, 0],
-  darkRed: [211, 47, 0],
-  pink: [209, 88, 201],
-  green: [133, 184, 51],
+  flynetYellow: [255, 183, 0],
+  flynetRed: [255, 84, 84],
+  flynetTeal: [56, 211, 242],
 
-  white: [255, 255, 255],
-  black: [0, 0, 0],
+  white: [255, 255, 252],
+  black: [30, 30, 30],
 } satisfies Record<string, RGB>;
 
 export type ColourKey = keyof typeof colours;
@@ -22,9 +20,9 @@ export type ThemedColourKey = {
 export const colourRoles = {
   primaryText: { light: "black", dark: "white" },
 
-  flightLine: { light: "red", dark: "yellow" },
-  flightLineHighlight: { light: "darkRed", dark: "white" },
-  flightLineUpcoming: "green",
+  flightLine: { light: "flynetRed", dark: "flynetYellow" },
+  flightLineHighlight: { light: "black", dark: "white" },
+  flightLineUpcoming: "flynetTeal",
   airportDot: { light: "black", dark: "white" },
 } satisfies Record<string, ColourKey | ThemedColourKey>;
 

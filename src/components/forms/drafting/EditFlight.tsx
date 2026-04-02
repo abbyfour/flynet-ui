@@ -10,7 +10,7 @@ import { setSidepanelOptions } from "@data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { findFlightFromID } from "@util/flights";
 import { useEffect, useMemo, useRef } from "react";
-import { FlightDrafter } from "../FlightDrafter";
+import { FlightDrafter } from "./FlightDrafter";
 
 export function EditFlight() {
   const [updateFlight, { isLoading }] = useUpdateFlightMutation();

@@ -1,7 +1,7 @@
 import { icons } from "@assets/icons/icons";
 import { FlightsPanel } from "@components/panels/flights/FlightsPanel";
 import { Social } from "@components/panels/Friends";
-import { Profile } from "@components/panels/Profile";
+import { Profile } from "@components/panels/profile/Profile";
 import { Settings } from "@components/panels/Settings";
 import { SidepanelWindows } from "@data/classes/ui";
 import {

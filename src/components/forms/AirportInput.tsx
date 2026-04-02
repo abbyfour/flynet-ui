@@ -1,8 +1,12 @@
 import { Airport } from "@data/classes/flights/Airport";
 import type { AirportDraft } from "@data/classes/flights/FlightDraft";
-import { useLazyGetAirportByCodeQuery } from "@data/services/flights/flightsAPI";
+import {
+  useLazyGetAirportByCodeQuery,
+  useLazySearchAirportsQuery,
+} from "@data/services/flights/flightsAPI";
 import { Combobox, Loader, Pill, PillsInput, useCombobox } from "@mantine/core";
-import { useState } from "react";
+import { displayAirportType } from "@util/flights";
+import { useMemo, useState } from "react";
 import type { BaseInputProps } from "./Input";
 import { InputLabel } from "./InputLabel";
 
@@ -18,7 +22,33 @@ export function AirportInput({
   ...props
 }: AirportInputProps) {
   const [code, setCode] = useState("");
-  const [searchAirport, { data, isLoading }] = useLazyGetAirportByCodeQuery();
+  const normalizedCode = code.trim();
+  const canSearch = normalizedCode.length >= 3;
+  const shouldUseCodeSearch = /^[a-zA-Z]{3,4}$/.test(normalizedCode);
+
+  const [
+    searchAirportByCode,
+    { data: airportDataByCode, isFetching: isFetchingByCode },
+  ] = useLazyGetAirportByCodeQuery();
+  const [searchAirports, { data: searchedAirports, isFetching: isSearching }] =
+    useLazySearchAirportsQuery();
+
+  const isLoading = isSearching || (shouldUseCodeSearch && isFetchingByCode);
+
+  const searchResults = useMemo(() => {
+    const byDisplayCode = new Map<string, Airport>();
+
+    if (shouldUseCodeSearch && airportDataByCode) {
+      byDisplayCode.set(airportDataByCode.displayCode, airportDataByCode);
+    }
+
+    for (const airport of searchedAirports || []) {
+      byDisplayCode.set(airport.displayCode, airport);
+    }
+
+    return [...byDisplayCode.values()];
+  }, [airportDataByCode, searchedAirports, shouldUseCodeSearch]);
+
   const combobox = useCombobox();
   const [initialValue] = useState(value);
 
@@ -30,10 +60,17 @@ export function AirportInput({
 
   const handleChange = (input: string) => {
     setCode(input);
-    combobox.openDropdown();
 
-    if (input.length >= 3) {
-      searchAirport(input);
+    const normalizedInput = input.trim();
+
+    if (normalizedInput.length >= 3) {
+      combobox.openDropdown();
+
+      if (normalizedInput.length === 3 || normalizedInput.length === 4) {
+        searchAirportByCode(normalizedInput.toUpperCase());
+      }
+
+      searchAirports(normalizedInput);
     } else {
       combobox.closeDropdown();
     }
@@ -54,8 +91,12 @@ export function AirportInput({
     <Combobox
       store={combobox}
       onOptionSubmit={(val) => {
-        if (data && data.displayCode === val) {
-          handleSelect(toProperties(data));
+        const selectedAirport = searchResults.find(
+          (airport) => airport.displayCode === val,
+        );
+
+        if (selectedAirport) {
+          handleSelect(toProperties(selectedAirport));
         }
       }}
     >
@@ -77,14 +118,16 @@ export function AirportInput({
           <Pill.Group>
             {value && (
               <Pill withRemoveButton onRemove={handleClear}>
-                {value.displayCode} — {value.name}
+                <span style={{ fontWeight: "bold" }}>{value.displayCode}</span>{" "}
+                | {value.name}
               </Pill>
             )}
+
             {!value && (
               <PillsInput.Field
                 value={code}
                 onChange={(e) => handleChange(e.currentTarget.value)}
-                onFocus={() => data && combobox.openDropdown()}
+                onFocus={() => canSearch && combobox.openDropdown()}
                 onBlur={() => combobox.closeDropdown()}
               />
             )}
@@ -94,16 +137,26 @@ export function AirportInput({
 
       <Combobox.Dropdown>
         <Combobox.Options>
-          {data ? (
-            <Combobox.Option value={data.displayCode}>
-              <strong>{data.displayCode}</strong> — {data.name}
-              <div style={{ fontSize: "0.8em", color: "gray" }}>
-                {data.city}, {data.isoCountry}
-              </div>
-            </Combobox.Option>
+          {searchResults.length > 0 ? (
+            searchResults.slice(0, 15).map((airport) => (
+              <Combobox.Option
+                key={airport.displayCode}
+                value={airport.displayCode}
+              >
+                <strong>{airport.displayCode}</strong> — {airport.name}
+                <div style={{ fontSize: "0.8em", color: "gray" }}>
+                  {displayAirportType(airport.type)} • {airport.city},{" "}
+                  {airport.isoCountry}
+                </div>
+              </Combobox.Option>
+            ))
           ) : (
             <Combobox.Empty>
-              {code.length >= 3 ? "No airport found" : "Type to search..."}
+              {canSearch
+                ? isLoading
+                  ? "Searching..."
+                  : "No airport found"
+                : "Type at least 3 characters..."}
             </Combobox.Empty>
           )}
         </Combobox.Options>

@@ -4,8 +4,8 @@ import type { FlightDraft } from "@data/classes/flights/FlightDraft";
 import { Fieldset } from "@mantine/core";
 import type { Time } from "@util/types";
 import { useEffect, useState } from "react";
-import { AirportInput } from "./AirportInput";
-import { Input } from "./Input";
+import { AirportInput } from "../AirportInput";
+import { Input } from "../Input";
 
 import "./FlightDrafter.scss";
 

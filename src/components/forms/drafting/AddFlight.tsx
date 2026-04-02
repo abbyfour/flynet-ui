@@ -7,7 +7,7 @@ import { useAddFlightMutation } from "@data/services/flights/flightsAPI";
 import { setSidepanelOptions } from "@data/sidepanelSlice";
 import { useAppDispatch } from "@data/store";
 import { useEffect } from "react";
-import { FlightDrafter } from "../FlightDrafter";
+import { FlightDrafter } from "./FlightDrafter";
 
 export function AddFlight() {
   const [addFlight, { isLoading }] = useAddFlightMutation();

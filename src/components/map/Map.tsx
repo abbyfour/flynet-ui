@@ -1,6 +1,7 @@
 import { useState } from "react";
 import BaseMap from "react-map-gl/maplibre";
 
+import { AppTheme } from "@data/classes/ui";
 import { store, useAppDispatch, useAppSelector } from "@data/store";
 import { recordMapPosition, selectThemeFallbackToSystem } from "@data/uiSlice";
 import { DataLayers } from "./DataLayers";
@@ -22,7 +23,8 @@ export function Map() {
     };
   });
 
-  const mapTilerStyle = theme === "dark" ? "dataviz-v4-dark" : "dataviz-v4";
+  const mapTilerStyle =
+    theme === AppTheme.Dark ? "dataviz-v4-dark" : "dataviz-v4-light";
 
   // Force a full remount of the BaseMap when theme/DPR changes..
   const mapKey = `${theme}-${

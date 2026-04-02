@@ -50,7 +50,7 @@ export function FlightListItem({ flight, highlighted }: FlightListItemProps) {
 
           <div className="right">
             {flight.upcoming && (
-              <IconCircleFilled size={8} color="rgb(133, 184, 51)" />
+              <IconCircleFilled size={8} color="var(--teal)" />
             )}
             {flight.date?.toDateString()}
           </div>

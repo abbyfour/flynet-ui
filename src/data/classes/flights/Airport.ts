@@ -24,7 +24,8 @@ export type AirportType =
   | "medium_airport"
   | "small_airport"
   | "seaplane_base"
-  | "heliport";
+  | "heliport"
+  | "closed";
 
 export class Airport {
   constructor(private raw: APIAirport) {

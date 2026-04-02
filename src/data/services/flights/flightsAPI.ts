@@ -2,6 +2,7 @@ import { Airport, type APIAirport } from "@data/classes/flights/Airport";
 import type { APIFlight } from "@data/classes/flights/Flight";
 import type { APIFlightLog } from "@data/classes/flights/FlightLog";
 import { createApi } from "@reduxjs/toolkit/query/react";
+import { compareAirportsBySize } from "@util/flights";
 import { baseFlynetQuery } from "../client";
 import type { AddFlightRequestBody, EditFlightRequestBody } from "./types";
 
@@ -91,6 +92,18 @@ export const flightsApi = createApi({
       },
     }),
 
+    searchAirports: build.query<Airport[], string>({
+      query: (query) => `airport/?query=${query}`,
+      transformResponse: (response: { items: APIAirport[] }) => {
+        if (response) {
+          return response.items
+            .map((airport) => new Airport(airport))
+            .sort((a, b) => compareAirportsBySize(a.type, b.type));
+        }
+        return [];
+      },
+    }),
+
     addFlight: build.mutation<void, AddFlightRequestBody>({
       query: (newFlight) => ({
         url: "flight_logs/",
@@ -126,6 +139,7 @@ export const {
   useGetFlightsQuery,
   useLazyGetFlightsQuery,
   useLazyGetAirportByCodeQuery,
+  useLazySearchAirportsQuery,
   useAddFlightMutation,
   useDeleteFlightMutation,
   useUpdateFlightMutation,

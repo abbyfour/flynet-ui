@@ -22,6 +22,9 @@
   --accent-light: #fbd1d1;
   --accent-contrast: var(--white);
 
+  --teal: #38d3f2;
+  --dark-teal: #0080ff;
+
   /**
     * Font weights
     */
@@ -40,6 +43,10 @@
   --gap-md: 0.7rem;
   --gap-lg: 1rem;
   --gap-xl: 1.2rem;
+
+  --panel-height-sm: 50vh;
+  --panel-height-md: 70vh;
+  --panel-height-lg: 85vh;
 }
 
 [data-theme="dark"] {
