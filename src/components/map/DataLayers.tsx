@@ -49,9 +49,6 @@ export function DataLayers() {
   const routes = useAppSelector(selectRoutesFromFlights);
   const airports = useAppSelector(selectAirportsFromFlights);
   const selected = useAppSelector((state) => state.flights.selected);
-  const highlightedRouteKey = useAppSelector(
-    (state) => state.flights.highlightedRouteKey,
-  );
   const currentUser = useAppSelector((state) => state.user.currentUser);
 
   const flightsReady = !flightsLoading && !flightsErrored && currentUser;
@@ -99,7 +96,6 @@ export function DataLayers() {
         RoutesLayer({
           routes: flightsReady ? routes : [],
           selected,
-          highlightedRouteKey,
         }),
       ]}
       pickingRadius={15}

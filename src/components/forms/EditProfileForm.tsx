@@ -1,5 +1,7 @@
 import { SubmitButton } from "@components/common/buttons/SubmitButton";
-import { useAppSelector } from "@data/store";
+import { useUpdateUserMutation } from "@data/services/usersAPI";
+import { useAppDispatch, useAppSelector } from "@data/store";
+import { saveUser } from "@data/userSlice";
 import { IconAt } from "@tabler/icons-react";
 import { useState } from "react";
 import "./EditProfileForm.scss";
@@ -12,9 +14,19 @@ type EditProfileFormProps = {
 export function EditProfileForm({ clearEditing }: EditProfileFormProps) {
   const currentUser = useAppSelector((state) => state.user.currentUser);
   const [editingUser, setEditingUser] = useState(currentUser!);
+  const [updateUser] = useUpdateUserMutation();
+  const dispatch = useAppDispatch();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const updatedUser = await updateUser({
+      id: editingUser.id,
+      nickname: editingUser.nickname,
+      email: editingUser.email,
+    }).unwrap();
+
+    dispatch(saveUser({ ...updatedUser, token: currentUser!.token }));
 
     clearEditing();
   };

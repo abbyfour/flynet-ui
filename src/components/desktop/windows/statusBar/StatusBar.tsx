@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { Thinking } from "./Thinking";
 
 import logo from "@assets/icons/flynet-icon.svg";
+import { getUserAvatarUrl } from "@data/classes/user";
 import "./StatusBar.scss";
 
 export function StatusBar() {
@@ -45,7 +46,12 @@ export function StatusBar() {
       {currentUser && (
         <div className="user-management">
           <p className="user-message">
-            Welcome back, {currentUser.nickname || currentUser.username}!
+            <img
+              className="user-image"
+              src={getUserAvatarUrl(currentUser)}
+              alt="User Avatar"
+            />{" "}
+            {currentUser.nickname || currentUser.username}
           </p>
 
           <Tooltip label="Logout" withArrow color="red">

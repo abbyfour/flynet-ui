@@ -19,6 +19,13 @@
     font-family: var(--monospace);
   }
 
+  .user-image {
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    vertical-align: middle;
+  }
+
   .text {
     @include inline-content;
     font-weight: var(--weight-bold);

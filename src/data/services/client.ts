@@ -14,3 +14,7 @@ export const baseFlynetQuery = () =>
       return headers;
     },
   });
+
+export function flynetServerImageUrl(path: string) {
+  return `https://flynet.bumblesquash.com/${path}`;
+}

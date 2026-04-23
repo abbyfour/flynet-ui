@@ -1,20 +1,31 @@
 import { icons } from "@assets/icons/icons";
 import banner from "@assets/profile-banner.svg";
 import { Button } from "@components/common/buttons/Button";
+import { Toasts } from "@components/common/notices/Toast";
+import { dispatchNotice } from "@components/common/notices/dispatchNotice";
 import { AirlineDisplay } from "@components/displays/AirlineDisplay";
 import { AirportDisplay } from "@components/displays/AirportDisplay";
 import { PlaneDisplay } from "@components/displays/PlaneDisplay";
 import { EditProfileForm } from "@components/forms/EditProfileForm";
+import { openCropAvatarModal } from "@components/forms/profile/openCropAvatarModal";
 import type { Airline } from "@data/classes/flights/Airline";
 import type { Airport } from "@data/classes/flights/Airport";
 import type { Flight } from "@data/classes/flights/Flight";
 import type { Plane } from "@data/classes/flights/Plane";
-import type { ExtendedUserProperties, UserWithToken } from "@data/classes/user";
+import {
+  getUserAvatarUrl,
+  type ExtendedUserProperties,
+  type UserWithToken,
+} from "@data/classes/user";
 import { selectFlightsAsObjects } from "@data/services/flights/selectFlights";
+import { useUpdateUserAvatarMutation } from "@data/services/usersAPI";
 import { setSidepanelOptions } from "@data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { useEffect, useState } from "react";
 import "./Profile.scss";
+
+const ALLOWED_AVATAR_MIME_TYPES = new Set(["image/png", "image/jpeg"]);
+const ALLOWED_AVATAR_EXTENSIONS = [".png", ".jpg", ".jpeg"];
 
 export function Profile() {
   const currentUser = useAppSelector((state) => state.user.currentUser);
@@ -78,6 +89,45 @@ function ProfileContent({
   openEditProfile: () => void;
   currentUser: UserWithToken<ExtendedUserProperties>;
 }) {
+  const [currentAvatar, setCurrentAvatar] = useState<string | undefined>(
+    undefined,
+  );
+
+  const [updateUserAvatar] = useUpdateUserAvatarMutation();
+
+  const handlePFPUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+
+    if (!file) return;
+
+    const normalizedName = file.name.toLowerCase();
+    const hasAllowedMimeType = ALLOWED_AVATAR_MIME_TYPES.has(file.type);
+    const hasAllowedExtension = ALLOWED_AVATAR_EXTENSIONS.some((extension) =>
+      normalizedName.endsWith(extension),
+    );
+
+    if (!hasAllowedMimeType && !hasAllowedExtension) {
+      dispatchNotice(
+        Toasts.warning({
+          title: "Unsupported image type",
+          message: "Please upload a PNG, JPG, or JPEG image.",
+        }),
+      );
+      return;
+    }
+
+    const croppedAvatar = await openCropAvatarModal({ file });
+
+    if (croppedAvatar) {
+      await updateUserAvatar({
+        userProfileID: currentUser.userProfile.id,
+        avatarDataUrl: croppedAvatar,
+      }).unwrap();
+      setCurrentAvatar(croppedAvatar);
+    }
+  };
+
   const flights = useAppSelector(selectFlightsAsObjects);
 
   const homeAirport = mostVisitedAirport(flights);
@@ -100,11 +150,20 @@ function ProfileContent({
       </div>
 
       <div className="profile-info">
-        <img
-          src="https://up.quizlet.com/11bmuo-fk839-256s.png"
-          alt=""
-          className="avatar"
-        />
+        <label className="avatar-input">
+          <img
+            src={currentAvatar || getUserAvatarUrl(currentUser)}
+            alt=""
+            className="avatar"
+          />
+          <span className="avatar-hover-label">Edit</span>
+          <input
+            type="file"
+            accept="image/png,image/jpeg,.jpg,.jpeg"
+            hidden
+            onChange={handlePFPUpload}
+          />
+        </label>
 
         <div className="names">
           <h3 className="nickname">
@@ -116,9 +175,12 @@ function ProfileContent({
 
       <div className="expanded-profile">
         <p className="bio">
-          stand for the flag *alberta flag*,
-          <br />
-          kneel for the cross *westjet logo*
+          {currentUser.userProfile.bio || (
+            <span className="default-bio">
+              This user hasn't written a bio yet... they prefer to remain
+              mysterious...
+            </span>
+          )}
         </p>
 
         <div className="separator">
