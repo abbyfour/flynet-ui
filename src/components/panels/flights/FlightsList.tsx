@@ -10,6 +10,7 @@ import { useGetFlightsQuery } from "@data/services/flights/flightsAPI";
 import { selectFilteredFlights } from "@data/services/flights/selectFlights";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { injectMap } from "@util/arrayUtil";
+import { useMemo } from "react";
 import { FlightListItem } from "./FlightListItem";
 import { FlightListSeparator } from "./FlightListSeperator";
 import FlightListSkeleton from "./FlightListSkeleton";
@@ -40,6 +41,25 @@ export function FlightsList({ isVisible = true }: FlightsListProps) {
     useGetFlightsQuery();
 
   const flightsReady = !flightsLoading && !flightsErrored;
+
+  const separatorMeta = useMemo(() => {
+    let upcomingCount = 0;
+    const yearCounts = new Map<number, number>();
+
+    for (const flight of flights) {
+      if (flight.upcoming) {
+        upcomingCount++;
+        continue;
+      }
+
+      const year = flight.date?.getFullYear();
+      if (!year) continue;
+
+      yearCounts.set(year, (yearCounts.get(year) ?? 0) + 1);
+    }
+
+    return { upcomingCount, yearCounts };
+  }, [flights]);
 
   const isHighlighted = (flight: Flight) =>
     highlightedRouteKey === flight.route.key ||
@@ -78,28 +98,28 @@ export function FlightsList({ isVisible = true }: FlightsListProps) {
             />
           ),
           (cur, prev) => {
-            if (shouldShowSeparator(cur, prev)) {
+            const separator = getSeparator(cur, prev, separatorMeta);
+            if (separator) {
               return (
                 <FlightListSeparator
                   key={`separator-${cur.id}`}
-                  label={getSeparatorLabel(cur, prev, flights)}
+                  label={separator.label}
                   toggleValue={
-                    getSeparatorLabel(cur, prev, flights)
-                      .toString()
-                      .startsWith("Upcoming")
+                    separator.type === "upcoming"
                       ? filters?.upcoming
-                      : filters?.year === cur.date?.getFullYear()
+                      : filters?.year === separator.year
                   }
-                  onToggle={(label, value) => {
-                    if (label.toString().startsWith("Upcoming")) {
+                  onToggle={(_label, value) => {
+                    if (separator.type === "upcoming") {
                       dispatch(
                         updateFilters({ upcoming: value ? true : undefined }),
                       );
                     } else {
-                      const year = parseInt(label.toString());
-                      if (!isNaN(year)) {
+                      if (separator.year) {
                         dispatch(
-                          updateFilters({ year: value ? year : undefined }),
+                          updateFilters({
+                            year: value ? separator.year : undefined,
+                          }),
                         );
                       }
                     }
@@ -133,25 +153,38 @@ function shouldShowYearSeparator(
   );
 }
 
-function shouldShowSeparator(cur: Flight, prev: Flight | undefined): boolean {
-  return (
-    // Show separator before the first upcoming flight
-    shouldShowUpcomingSeparator(cur, prev) ||
-    // Show separator before the first flight of a different year (or no year)
-    shouldShowYearSeparator(cur, prev)
-  );
-}
+type SeparatorMeta = {
+  upcomingCount: number;
+  yearCounts: Map<number, number>;
+};
 
-function getSeparatorLabel(
+type SeparatorData =
+  | { type: "upcoming"; label: string }
+  | { type: "year"; label: string; year?: number };
+
+function getSeparator(
   cur: Flight,
   prev: Flight | undefined,
-  flights: Flight[],
-): string {
+  meta: SeparatorMeta,
+): SeparatorData | undefined {
   if (shouldShowUpcomingSeparator(cur, prev)) {
-    return `Upcoming (${flights.filter((f) => f.upcoming).length})`;
-  } else if (shouldShowYearSeparator(cur, prev)) {
-    return `${cur.date?.getFullYear() || "No date"} (${flights.filter((f) => !f.upcoming && f.date?.getFullYear() === cur.date?.getFullYear()).length})`;
+    return {
+      type: "upcoming",
+      label: `Upcoming (${meta.upcomingCount})`,
+    };
   }
 
-  return "";
+  if (shouldShowYearSeparator(cur, prev)) {
+    const year = cur.date?.getFullYear();
+    const labelYear = year ?? "No date";
+    const count = year ? (meta.yearCounts.get(year) ?? 0) : 0;
+
+    return {
+      type: "year",
+      year,
+      label: `${labelYear} (${count})`,
+    };
+  }
+
+  return undefined;
 }

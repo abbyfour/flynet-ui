@@ -1,3 +1,5 @@
+@use "@/styles/variables" as *;
+
 .ThemeToggle {
   position: absolute;
   bottom: 10px;
@@ -7,8 +9,14 @@
   button {
     background: none;
     border: none;
-    padding: none;
+    padding: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
     cursor: pointer;
+    touch-action: manipulation;
 
     img {
       width: 30px;
@@ -23,5 +31,14 @@
         transform: rotate(-12deg);
       }
     }
+  }
+}
+
+@media (max-width: $breakpoint-tablet) {
+  .ThemeToggle {
+    left: auto;
+    right: var(--gap-sm);
+    top: calc(40px + var(--gap-xs));
+    bottom: auto;
   }
 }

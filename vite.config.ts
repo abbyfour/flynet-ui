@@ -10,6 +10,13 @@ export default defineConfig({
     port: 8080,
     host: true, // Expose to local network
     open: true,
+    proxy: {
+      "/api": {
+        target: "https://flynet.bumblesquash.com",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
   },
   resolve: {
     alias: {

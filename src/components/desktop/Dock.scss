@@ -1,14 +1,36 @@
+@use "@/styles/variables" as *;
+
 .Dock {
   // centered on the bottom macos style
   position: absolute;
-  bottom: 10px;
-  z-index: 1;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: var(--dock-bottom-offset);
+  z-index: 20;
+  left: 0;
+  right: 0;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  border-radius: 16px;
+  padding: var(--gap-xs) var(--gap-sm);
+  background: var(--white);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
 
   .dock-icon-button {
     border: none;
     background: none;
+    padding: 0;
+    margin: 0;
+    appearance: none;
+    border-radius: 12px;
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 
     &:hover {
       cursor: pointer;
@@ -18,6 +40,55 @@
       &:hover {
         animation: jiggle 0.3s ease-in-out;
       }
+    }
+  }
+
+  .dock-icon-image {
+    display: block;
+    width: 54px;
+    max-width: 12vw;
+    height: auto;
+  }
+}
+
+@media (max-width: $breakpoint-tablet) {
+  .Dock {
+    width: auto;
+    max-width: calc(100% - (var(--gap-sm) * 2));
+    justify-content: center;
+    gap: var(--gap-xl);
+    padding: var(--dock-shell-padding-y) var(--gap-xl);
+
+    .dock-icon-button {
+      width: var(--dock-button-size);
+      height: var(--dock-button-size);
+    }
+
+    .dock-icon-image {
+      width: 56px;
+      height: 56px;
+      max-width: none;
+      object-fit: contain;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-mobile) {
+  .Dock {
+    bottom: var(--dock-bottom-offset);
+    gap: 0.84rem;
+    padding: var(--dock-shell-padding-y) 0.84rem;
+    border-radius: 20px;
+
+    .dock-icon-button {
+      width: var(--dock-button-size);
+      height: var(--dock-button-size);
+    }
+
+    .dock-icon-image {
+      width: 52px;
+      height: 52px;
+      max-width: none;
     }
   }
 }

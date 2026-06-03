@@ -1,3 +1,5 @@
+@use "@/styles/variables" as *;
+
 .SidepanelWindow {
   .window-header {
     background-color: var(--accent);
@@ -7,8 +9,9 @@
     position: relative;
     color: var(--accent-contrast);
 
-    padding-top: var(--gap-sm);
-    padding-bottom: var(--gap-sm);
+    padding-top: var(--sidepanel-header-padding-y-desktop);
+    padding-bottom: var(--sidepanel-header-padding-y-desktop);
+    min-height: var(--sidepanel-header-height-desktop);
 
     .window-controls {
       position: absolute;
@@ -16,26 +19,52 @@
 
       display: flex;
       align-items: center;
+      gap: var(--sidepanel-control-gap-desktop);
+      padding: 0 0.12rem;
+      margin-left: 0.04rem;
+      border-radius: 999px;
+      background: transparent;
 
       // color the icons to contrast with the header background
       & > * {
         color: var(--accent-contrast);
+        width: var(--sidepanel-control-size-desktop);
+        height: var(--sidepanel-control-size-desktop);
+      }
+
+      .window-control-button {
+        border-radius: 999px;
+        background: transparent;
+        color: var(--accent-contrast);
+
+        &:hover {
+          background: transparent;
+          opacity: 0.85;
+        }
       }
     }
 
     .window-title {
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       font-weight: var(--weight-bold);
-      letter-spacing: 0.08em;
+      letter-spacing: 0.045em;
       text-transform: uppercase;
-      font-size: 0.8rem;
+      font-size: var(--sidepanel-title-size-desktop);
+      padding: 0 var(--sidepanel-title-padding-desktop);
     }
   }
 
   .panel-content {
-    overflow: scroll;
-    max-height: 85vh;
-    width: 23vw;
+    overflow: auto;
+    max-height: calc(
+      100dvh - var(--statusbar-height) - var(--sidepanel-edge-gap) - var(
+          --sidepanel-theme-toggle-clearance
+        ) - var(--sidepanel-header-height-desktop)
+    );
+    width: clamp(27.3rem, 26vw, 30rem);
+    min-width: 27.3rem;
     background: var(--white);
     color: var(--black);
     padding: var(--gap-md);
@@ -44,6 +73,61 @@
   &.no-padding {
     .panel-content {
       padding: 0;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-tablet) {
+  .SidepanelWindow {
+    .window-header {
+      min-height: var(--sidepanel-header-height-mobile);
+      padding-top: var(--sidepanel-header-padding-y-mobile);
+      padding-bottom: var(--sidepanel-header-padding-y-mobile);
+
+      .window-controls {
+        left: 0.1rem;
+        gap: var(--sidepanel-control-gap-mobile);
+        padding: 0.1rem 0.18rem;
+        margin-left: 0;
+        background: transparent;
+
+        & > * {
+          width: var(--sidepanel-control-size-mobile);
+          height: var(--sidepanel-control-size-mobile);
+        }
+
+        .window-control-button {
+          background: var(--accent-dark);
+
+          &:hover {
+            background: var(--accent-darker);
+            opacity: 1;
+          }
+        }
+      }
+
+      .window-title {
+        font-size: var(--sidepanel-title-size-mobile);
+        letter-spacing: 0.035em;
+        padding: 0 var(--sidepanel-title-padding-mobile);
+      }
+    }
+
+    .panel-content {
+      width: 100%;
+      max-height: min(62dvh, 30rem);
+      padding: var(--gap-sm);
+    }
+  }
+}
+
+@media (max-width: $breakpoint-mobile) {
+  .SidepanelWindow {
+    .window-header {
+      .window-title {
+        font-size: var(--sidepanel-title-size-mobile-sm);
+        padding: 0 var(--sidepanel-title-padding-mobile-sm);
+      }
     }
   }
 }

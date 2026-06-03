@@ -45,14 +45,15 @@ export function StatusBar() {
 
       {currentUser && (
         <div className="user-management">
-          <p className="user-message">
-            <img
-              className="user-image"
-              src={getUserAvatarUrl(currentUser)}
-              alt="User Avatar"
-            />{" "}
+          <span className="user-name">
             {currentUser.nickname || currentUser.username}
-          </p>
+          </span>
+
+          <img
+            className="user-image"
+            src={getUserAvatarUrl(currentUser)}
+            alt="User Avatar"
+          />
 
           <Tooltip label="Logout" withArrow color="red">
             <ActionIcon variant="transparent" color="red" onClick={logout}>
