@@ -26,6 +26,10 @@
     vertical-align: middle;
   }
 
+  .logo {
+    @include inline-content;
+  }
+
   .text {
     @include inline-content;
     font-weight: var(--weight-bold);
