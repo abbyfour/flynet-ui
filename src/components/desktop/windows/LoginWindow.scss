@@ -2,12 +2,17 @@
   padding: var(--gap-sm);
   background: white;
 
-  min-width: 300px;
-  width: 15vw;
+  width: min(24rem, calc(100vw - 2rem));
 }
 
 .LoginForm {
   form {
     @include vertical-content;
+  }
+}
+
+@media (max-width: 640px) {
+  .LoginWindow {
+    padding: var(--gap-md);
   }
 }

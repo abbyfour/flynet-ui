@@ -11,19 +11,21 @@ import "./styles.shim.ts";
 function App() {
   return (
     <AppContext>
-      {/* Desktop UI */}
-      <StatusBar />
-      <Dock />
+      <div className="app">
+        {/* Desktop UI */}
+        <StatusBar />
+        <Dock />
 
-      {/* Windows */}
-      <LoginWindow />
-      <SidepanelWindow />
+        {/* Windows */}
+        <LoginWindow />
+        <SidepanelWindow />
 
-      {/* UI controls — temporary */}
-      <ThemeToggle />
+        {/* UI controls — temporary */}
+        <ThemeToggle />
 
-      {/* Renders both base map and data layers */}
-      <Map />
+        {/* Renders both base map and data layers */}
+        <Map />
+      </div>
     </AppContext>
   );
 }

@@ -11,6 +11,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { closeActiveSidepanelWindow } from "@data/uiSlice";
 import { ActionIcon } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { SidepanelContainer } from "../SidepanelContainer";
 import "./SidepanelWindow.scss";
 
@@ -21,6 +22,9 @@ export function SidepanelWindow() {
   const sidepanelOptions = useAppSelector(selectSidepanelOptions);
 
   const dispatch = useAppDispatch();
+  const isMobile = useMediaQuery("(max-width: 900px)");
+  const iconSize = isMobile ? 20 : 18;
+  const homeIconSize = isMobile ? 18 : 16;
 
   const handleClose = () => {
     dispatch(clearSidepanelOptions());
@@ -46,25 +50,32 @@ export function SidepanelWindow() {
     >
       <div className="window-header">
         <div className="window-controls">
-          <ActionIcon variant="transparent" color="dark" onClick={handleClose}>
-            {icons.actions.window.close(18)}
+          <ActionIcon
+            className="window-control-button"
+            variant="transparent"
+            color="dark"
+            onClick={handleClose}
+          >
+            {icons.actions.window.close(iconSize)}
           </ActionIcon>
           {sidepanelOptions.onGoBack && (
             <ActionIcon
+              className="window-control-button"
               variant="transparent"
               color="dark"
               onClick={handleGoback}
             >
-              {icons.actions.window.back(18)}
+              {icons.actions.window.back(iconSize)}
             </ActionIcon>
           )}
           {sidepanelOptions.onGoHome && (
             <ActionIcon
+              className="window-control-button"
               variant="transparent"
               color="dark"
               onClick={handleGoHome}
             >
-              {icons.actions.window.home(16)}
+              {icons.actions.window.home(homeIconSize)}
             </ActionIcon>
           )}
         </div>

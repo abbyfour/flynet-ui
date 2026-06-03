@@ -1,3 +1,6 @@
+$breakpoint-tablet: 900px;
+$breakpoint-mobile: 640px;
+
 :root {
   /**
     * Fonts
@@ -47,6 +50,56 @@
   --panel-height-sm: 50vh;
   --panel-height-md: 70vh;
   --panel-height-lg: 85vh;
+
+  /**
+   * App shell layout
+   */
+  --statusbar-height: 30px;
+  --statusbar-padding-x: 0.3rem;
+  --statusbar-avatar-size: 22px;
+
+  --dock-bottom-offset: 18px;
+  --dock-shell-padding-y: 0.48rem;
+  --dock-button-size: 64px;
+  --dock-panel-gap: 8px;
+  --dock-estimated-height: calc(
+    var(--dock-button-size) + (var(--dock-shell-padding-y) * 2)
+  );
+
+  --sidepanel-edge-gap: 1rem;
+  --sidepanel-theme-toggle-clearance: 62px;
+
+  --sidepanel-header-height-desktop: 34px;
+  --sidepanel-header-padding-y-desktop: 0.08rem;
+  --sidepanel-control-size-desktop: 24px;
+  --sidepanel-control-gap-desktop: 0.08rem;
+  --sidepanel-title-size-desktop: 0.82rem;
+  --sidepanel-title-padding-desktop: 2.1rem;
+
+  --sidepanel-header-height-mobile: 44px;
+  --sidepanel-header-padding-y-mobile: 0.2rem;
+  --sidepanel-control-size-mobile: 34px;
+  --sidepanel-control-gap-mobile: 0.2rem;
+  --sidepanel-title-size-mobile: 0.96rem;
+  --sidepanel-title-size-mobile-sm: 0.94rem;
+  --sidepanel-title-padding-mobile: 3.4rem;
+  --sidepanel-title-padding-mobile-sm: 3.15rem;
+}
+
+@media (max-width: $breakpoint-tablet) {
+  :root {
+    --statusbar-height: 40px;
+  }
+}
+
+@media (max-width: $breakpoint-mobile) {
+  :root {
+    --statusbar-avatar-size: 20px;
+    --dock-bottom-offset: 14px;
+    --dock-shell-padding-y: 0.42rem;
+    --dock-button-size: 60px;
+    --dock-panel-gap: 6px;
+  }
 }
 
 [data-theme="dark"] {

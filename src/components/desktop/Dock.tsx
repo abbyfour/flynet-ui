@@ -93,7 +93,6 @@ export function Dock() {
             src={getIcon(window, activeWindow, theme)}
             alt={`${window.name} icon`}
             className="dock-icon-image"
-            width="65px"
           />
         </button>
       ))}

@@ -15,11 +15,14 @@ import {
 import { useGetTailsManifestQuery } from "@data/services/tails";
 import { setSidepanelOptions } from "@data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
-import { useCallback, useEffect } from "react";
+import { useMediaQuery } from "@mantine/hooks";
+import { useCallback, useEffect, useRef } from "react";
 import { FlightsList } from "./FlightsList";
 
 export function FlightsPanel() {
+  const panelRef = useRef<HTMLDivElement>(null);
   const currentUser = useAppSelector((state) => state.user.currentUser);
+  const isMobile = useMediaQuery("(max-width: 900px)");
   const selected = useAppSelector((state) => state.flights.selected);
   const selectedFlights = useAppSelector(selectSelectedFlights);
   const drafting = useAppSelector((state) => state.flights.inProgressDraft);
@@ -112,6 +115,18 @@ export function FlightsPanel() {
     flights.length,
   );
 
+  useEffect(() => {
+    if (!isMobile || isListVisible) return;
+
+    // Prevent detail views from inheriting list scroll offset on mobile.
+    const scrollArea = panelRef.current?.closest<HTMLElement>(
+      ".sidepanel-scroll-area",
+    );
+    if (scrollArea) {
+      scrollArea.scrollTop = 0;
+    }
+  }, [isMobile, isListVisible, selected, drafting?.type]);
+
   if (!currentUser) {
     return (
       <div>
@@ -195,7 +210,7 @@ export function FlightsPanel() {
   };
 
   return (
-    <div className="FlightsPanel">
+    <div className="FlightsPanel" ref={panelRef}>
       {showAppropriateView()}
 
       {/* Must remain rendered so the memory foam list can work */}
