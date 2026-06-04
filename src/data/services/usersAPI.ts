@@ -1,10 +1,31 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
 import type {
   ExtendedUserProperties,
   UserProperties,
+  UserSettings,
   UserWithToken,
-} from "../classes/user";
+} from "@data/classes/user";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseFlynetQuery } from "./client";
+
+function dataUrlToBlob(dataUrl: string) {
+  const [metadata, base64Data] = dataUrl.split(",");
+
+  if (!metadata || !base64Data) {
+    throw new Error("Invalid avatar data URL");
+  }
+
+  const mimeType = metadata.match(/data:(.*?);base64/)?.[1];
+  const binary = atob(base64Data);
+  const bytes = new Uint8Array(binary.length);
+
+  for (let index = 0; index < binary.length; index++) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+
+  return new Blob([bytes], {
+    type: mimeType ?? "application/octet-stream",
+  });
+}
 
 export const usersApi = createApi({
   reducerPath: "usersApi",
@@ -15,6 +36,13 @@ export const usersApi = createApi({
         url: "user/register",
         method: "POST",
         body: userProperties,
+      }),
+    }),
+
+    me: build.query<ExtendedUserProperties, void>({
+      query: () => ({
+        url: "user/me",
+        method: "GET",
       }),
     }),
 
@@ -31,7 +59,58 @@ export const usersApi = createApi({
         },
       }),
     }),
+
+    updateUser: build.mutation<
+      ExtendedUserProperties,
+      Partial<ExtendedUserProperties>
+    >({
+      query: ({ ...updateData }) => {
+        delete updateData["id"];
+
+        return {
+          url: `user/me`,
+          method: "PUT",
+          body: updateData,
+        };
+      },
+    }),
+
+    updateUserAvatar: build.mutation<
+      { avatarUrl: string },
+      { avatarDataUrl: string }
+    >({
+      query: ({ avatarDataUrl }) => {
+        const formData = new FormData();
+        const avatarBlob = dataUrlToBlob(avatarDataUrl);
+
+        formData.append("image", avatarBlob, "avatar.jpg");
+
+        return {
+          url: `user/profile_photo`,
+          method: "PUT",
+          body: formData,
+        };
+      },
+    }),
+
+    updateUserSettings: build.mutation<
+      UserSettings,
+      Pick<UserSettings, "id" | "uiMode">
+    >({
+      query: ({ id, ...updateData }) => ({
+        url: `user_settings/${id}`,
+        method: "PUT",
+        body: updateData,
+      }),
+    }),
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation } = usersApi;
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useLazyMeQuery,
+  useUpdateUserMutation,
+  useUpdateUserAvatarMutation,
+  useUpdateUserSettingsMutation,
+} = usersApi;

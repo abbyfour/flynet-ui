@@ -1,0 +1,13 @@
+.tiny-header {
+  font-size: 90%;
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--gap-xs);
+  color: var(--grey-dark);
+  border-bottom: 1px solid var(--grey);
+
+  width: fit-content;
+}
+
+.support-newlines {
+  white-space: pre-wrap;
+}

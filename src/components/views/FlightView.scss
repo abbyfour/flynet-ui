@@ -1,0 +1,26 @@
+.FlightView {
+  .flight {
+    @include vertical-content;
+  }
+
+  .title {
+    @include panel-title;
+  }
+
+  .date,
+  .departure-time,
+  .arrival-time,
+  .time {
+    @include inline-content;
+  }
+
+  .time {
+    margin-top: var(--gap-xs);
+  }
+
+  .action-buttons {
+    margin-top: var(--gap-xl);
+    display: flex;
+    gap: var(--gap-sm);
+  }
+}

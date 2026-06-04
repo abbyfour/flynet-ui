@@ -1,10 +1,10 @@
+import { flightFilter } from "@data/classes/filters";
+import type { Airport } from "@data/classes/flights/Airport";
+import { Flight } from "@data/classes/flights/Flight";
+import { Route } from "@data/classes/flights/Route";
+import type { AppRootState } from "@data/store";
 import { createSelector } from "@reduxjs/toolkit";
-import { compareTimes } from "../../../util/types";
-import { flightFilter } from "../../classes/filters";
-import type { Airport } from "../../classes/flights/Airport";
-import { Flight } from "../../classes/flights/Flight";
-import { Route } from "../../classes/flights/Route";
-import type { AppRootState } from "../../store";
+import { compareTimes } from "@util/types";
 import { flightsApi } from "./flightsAPI";
 
 export type GroupedFlightDetails = Flight;

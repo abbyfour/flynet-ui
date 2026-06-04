@@ -1,0 +1,29 @@
+.AirportDetails {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap-sm);
+  align-items: center;
+  width: fit-content;
+
+  padding: var(--gap-sm);
+  border-radius: 5px;
+
+  @include hover-slide;
+
+  .right {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+  }
+
+  .subline {
+    font-size: 0.875rem;
+    color: var(--grey);
+  }
+}
+
+.AirportDetails.minimal {
+  padding: var(--gap-xxs);
+  gap: var(--gap-xxs);
+  width: 70%;
+}

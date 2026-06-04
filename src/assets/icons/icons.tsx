@@ -1,3 +1,4 @@
+import PlaneIcon from "@assets/icons/plane.svg?react";
 import {
   IconArrowRight,
   IconArrowsLeftRight,
@@ -13,8 +14,6 @@ import {
   IconTrash,
   IconX,
 } from "@tabler/icons-react";
-
-import CustomPlaneIcon from "./plane.svg";
 
 export const icons = {
   actions: {
@@ -38,8 +37,6 @@ export const icons = {
     flightRoute: (size = 16) => <IconArrowRight size={size} />,
     route: (size = 16) => <IconArrowsLeftRight size={size} />,
 
-    plane: (size = 16) => (
-      <img src={CustomPlaneIcon} style={{ width: size, height: size }} />
-    ),
+    plane: ({ size = 16 }) => <PlaneIcon width={size} height={size} />,
   },
 } as const;

@@ -1,0 +1,9 @@
+.InputLabel {
+  @include inline-content;
+  border-bottom: none !important;
+
+  .required {
+    color: rgb(255, 54, 54);
+    font-size: 12px;
+  }
+}

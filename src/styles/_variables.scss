@@ -1,6 +1,110 @@
-$bg-color: #272727;
-$viewport-padding: 0;
+$breakpoint-tablet: 900px;
+$breakpoint-mobile: 640px;
 
 :root {
+  /**
+    * Fonts
+    */
   --monospace: "Cascadia Code", monospace;
+  --fun: "Cherry Bomb One", cursive;
+  --barcode: "Libre Barcode 128 Text", system-ui;
+
+  /**
+    * Colors
+    */
+  --black: #1e1e1e;
+  --white: #fffffc;
+  --grey-light: #f5f5f5;
+  --grey: #808080;
+  --grey-dark: #404040;
+
+  // Accent colors for light and dark themes
+  --accent: rgb(211, 47, 0);
+  --accent-dark: rgb(167, 36, 0);
+  --accent-darker: rgb(103, 22, 0);
+  --accent-light: #fbd1d1;
+  --accent-contrast: var(--white);
+
+  --teal: #38d3f2;
+  --dark-teal: #0080ff;
+
+  /**
+    * Font weights
+    */
+  --weight-regular: 400;
+  --weight-medium: 450;
+  --weight-semibold: 550;
+  --weight-bold: 700;
+
+  /**
+  * Spacing
+  */
+
+  --gap-xxs: 0.15rem;
+  --gap-xs: 0.3rem;
+  --gap-sm: 0.5rem;
+  --gap-md: 0.7rem;
+  --gap-lg: 1rem;
+  --gap-xl: 1.2rem;
+
+  --panel-height-sm: 50vh;
+  --panel-height-md: 70vh;
+  --panel-height-lg: 85vh;
+
+  /**
+   * App shell layout
+   */
+  --statusbar-height: 30px;
+  --statusbar-padding-x: 0.3rem;
+  --statusbar-avatar-size: 22px;
+
+  --dock-bottom-offset: 18px;
+  --dock-shell-padding-y: 0.48rem;
+  --dock-button-size: 64px;
+  --dock-panel-gap: 8px;
+  --dock-estimated-height: calc(
+    var(--dock-button-size) + (var(--dock-shell-padding-y) * 2)
+  );
+
+  --sidepanel-edge-gap: 1rem;
+
+  --sidepanel-header-height-desktop: 34px;
+  --sidepanel-header-padding-y-desktop: 0.08rem;
+  --sidepanel-control-size-desktop: 24px;
+  --sidepanel-control-gap-desktop: 0.08rem;
+  --sidepanel-title-size-desktop: 0.82rem;
+  --sidepanel-title-padding-desktop: 2.1rem;
+
+  --sidepanel-header-height-mobile: 44px;
+  --sidepanel-header-padding-y-mobile: 0.2rem;
+  --sidepanel-control-size-mobile: 34px;
+  --sidepanel-control-gap-mobile: 0.2rem;
+  --sidepanel-title-size-mobile: 0.96rem;
+  --sidepanel-title-size-mobile-sm: 0.94rem;
+  --sidepanel-title-padding-mobile: 3.4rem;
+  --sidepanel-title-padding-mobile-sm: 3.15rem;
+}
+
+@media (max-width: $breakpoint-tablet) {
+  :root {
+    --statusbar-height: 40px;
+  }
+}
+
+@media (max-width: $breakpoint-mobile) {
+  :root {
+    --statusbar-avatar-size: 20px;
+    --dock-bottom-offset: 14px;
+    --dock-shell-padding-y: 0.42rem;
+    --dock-button-size: 60px;
+    --dock-panel-gap: 6px;
+  }
+}
+
+[data-theme="dark"] {
+  --accent: rgb(255, 200, 0);
+  --accent-dark: rgb(208, 153, 0);
+  --accent-darker: rgb(161, 83, 0);
+  --accent-light: #ffe7b7;
+  --accent-contrast: var(--black);
 }

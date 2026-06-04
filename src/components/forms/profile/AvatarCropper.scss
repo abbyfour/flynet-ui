@@ -1,0 +1,30 @@
+.AvatarCropper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+
+  .cropper-frame {
+    position: relative;
+    height: 320px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--black);
+  }
+
+  .zoom-control {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+    font-weight: var(--weight-semibold);
+
+    input {
+      width: 100%;
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--gap-sm);
+  }
+}

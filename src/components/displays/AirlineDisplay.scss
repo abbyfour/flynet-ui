@@ -1,0 +1,35 @@
+.AirlineDisplay {
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  align-items: center;
+  padding: 0.5em;
+  gap: 0.5em;
+  border-radius: 5px;
+
+  @include hover-slide;
+
+  .airline-name {
+    font-weight: 600;
+    font-size: 120%;
+  }
+
+  .airline-code {
+    color: var(--grey);
+    font-weight: 600;
+  }
+
+  .airline-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-left: 2px solid var(--grey-dark);
+    padding-left: 0.5em;
+    padding: 0.7em;
+  }
+
+  .AirlineTail {
+    width: 60px;
+    height: 60px;
+  }
+}

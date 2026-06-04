@@ -1,4 +1,4 @@
-import { regionNamesInEnglish } from "../../../util/iso";
+import { regionNamesInEnglish } from "@util/iso";
 
 export interface APIAirport {
   airportName: string;
@@ -24,7 +24,8 @@ export type AirportType =
   | "medium_airport"
   | "small_airport"
   | "seaplane_base"
-  | "heliport";
+  | "heliport"
+  | "closed";
 
 export class Airport {
   constructor(private raw: APIAirport) {

@@ -1,6 +1,6 @@
-import { compareObjects } from "../../../util/arrayUtil";
-import type { Time } from "../../../util/types";
-import type { APIDateString } from "../../services/flights/types";
+import type { APIDateString } from "@data/services/flights/types";
+import { compareObjects } from "@util/arrayUtil";
+import type { Time } from "@util/types";
 import type { UserProperties } from "../user";
 import { Airline } from "./Airline";
 import { Airport, type APIAirport } from "./Airport";

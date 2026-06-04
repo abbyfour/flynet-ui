@@ -1,0 +1,49 @@
+.FlightListItem {
+  padding: var(--gap-sm);
+  cursor: pointer;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  width: 100%;
+
+  .details {
+    width: 100%;
+  }
+
+  .icon {
+    @include inline-content;
+
+    .AirlineTail {
+      width: 40px;
+    }
+  }
+
+  .header,
+  .footer {
+    color: var(--grey);
+    font-weight: var(--weight-medium);
+  }
+
+  .header,
+  .middle {
+    margin-bottom: var(--gap-xs);
+  }
+
+  @include hover-slide;
+
+  .header {
+    @include inline-content;
+    justify-content: space-between;
+
+    .left,
+    .right {
+      @include inline-content;
+    }
+
+    .route {
+      @include inline-content;
+      gap: var(--gap-xxs);
+    }
+  }
+}

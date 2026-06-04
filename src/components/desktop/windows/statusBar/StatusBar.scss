@@ -1,0 +1,121 @@
+@use "@/styles/variables" as *;
+
+.StatusBar {
+  @include inline-content;
+
+  z-index: 1;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  padding: 0 var(--statusbar-padding-x);
+  height: var(--statusbar-height);
+  background: var(--white);
+  justify-content: space-between;
+  overflow: hidden;
+
+  .user-name,
+  .time {
+    font-size: 0.833rem;
+    font-weight: var(--weight-medium);
+    font-family: var(--monospace);
+  }
+
+  .user-image {
+    width: var(--statusbar-avatar-size);
+    height: var(--statusbar-avatar-size);
+    border-radius: 999px;
+    vertical-align: middle;
+  }
+
+  .logo {
+    @include inline-content;
+    min-width: 0;
+  }
+
+  .text {
+    @include inline-content;
+    font-weight: var(--weight-bold);
+    white-space: nowrap;
+
+    img {
+      height: 22px;
+    }
+  }
+
+  .user-management {
+    @include inline-content;
+
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 50%;
+
+    .user-name {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-tablet) {
+  .StatusBar {
+    padding: 0 var(--gap-xs);
+    gap: var(--gap-xxs);
+
+    .text {
+      font-size: 0.9rem;
+
+      img {
+        height: 18px;
+      }
+    }
+
+    .Thinking {
+      max-width: 34vw;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .user-management {
+      position: static;
+      transform: none;
+      margin-left: auto;
+      max-width: none;
+      flex-shrink: 0;
+
+      .user-name {
+        max-width: 24vw;
+      }
+    }
+
+    .time {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-mobile) {
+  .StatusBar {
+    .Thinking {
+      display: none;
+    }
+
+    .user-management {
+      gap: 0.25rem;
+
+      .user-name {
+        max-width: 40vw;
+        font-size: 0.78rem;
+      }
+
+      .user-image {
+        width: var(--statusbar-avatar-size);
+        height: var(--statusbar-avatar-size);
+      }
+    }
+  }
+}

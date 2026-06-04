@@ -1,0 +1,30 @@
+.FlightListSeparator {
+  @include inline-content;
+  margin: var(--gap-sm) 0;
+
+  &::before,
+  &::after {
+    content: "";
+    height: 1.5px;
+    background-color: var(--black);
+    opacity: 0.4;
+  }
+
+  &::before {
+    flex: 1;
+  }
+
+  &::after {
+    flex: 4;
+  }
+
+  .label {
+    color: var(--black);
+    opacity: 0.6;
+    white-space: nowrap;
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+  }
+}

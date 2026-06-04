@@ -1,5 +1,5 @@
-import type { AirportType } from "../data/classes/flights/Airport";
-import type { Flight } from "../data/classes/flights/Flight";
+import type { AirportType } from "@data/classes/flights/Airport";
+import type { Flight } from "@data/classes/flights/Flight";
 
 export function displayAirportType(type: AirportType) {
   switch (type) {
@@ -13,6 +13,8 @@ export function displayAirportType(type: AirportType) {
       return "Seaplane Base";
     case "heliport":
       return "Heliport";
+    case "closed":
+      return "Closed";
     default:
       return type;
   }
@@ -35,4 +37,16 @@ export function jetphotosLink(reg: string) {
 
 export function flightawareLink(reg: string) {
   return `https://www.flightaware.com/live/flight/${reg}`;
+}
+
+export function compareAirportsBySize(a: AirportType, b: AirportType) {
+  const sizeOrder = [
+    "large_airport",
+    "medium_airport",
+    "small_airport",
+    "seaplane_base",
+    "heliport",
+    "closed",
+  ];
+  return sizeOrder.indexOf(a) - sizeOrder.indexOf(b);
 }

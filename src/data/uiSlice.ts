@@ -1,7 +1,12 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { AppTheme, type SidepanelWindows } from "@data/classes/ui";
+import {
+  createSelector,
+  createSlice,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import type { Coordinates } from "../util/mapUtil";
-import { AppTheme, type SidepanelWindows } from "./classes/ui";
+import type { AppRootState } from "./store";
 
 export interface Thinking {
   message: string;
@@ -9,14 +14,13 @@ export interface Thinking {
 
 export interface UIState {
   activeSidepanelWindow?: SidepanelWindows;
-  theme: AppTheme;
+  theme?: AppTheme;
   mapPosition?: Coordinates;
   thinking?: Thinking;
 }
 
 const initialState: UIState = {
   activeSidepanelWindow: undefined,
-  theme: AppTheme.Light,
   mapPosition: undefined,
 };
 
@@ -41,7 +45,7 @@ const uiSlice = createSlice({
       state.activeSidepanelWindow = undefined;
     },
 
-    setTheme(state: UIState, action: PayloadAction<AppTheme>) {
+    setTheme(state: UIState, action: PayloadAction<AppTheme | undefined>) {
       state.theme = action.payload;
     },
 
@@ -74,3 +78,19 @@ export const {
 } = uiSlice.actions;
 
 export const uiReducer = uiSlice.reducer;
+
+const selectThemeFallbackToSystem = createSelector(
+  (state: AppRootState) => state.ui.theme,
+  (theme) => {
+    if (theme) {
+      return theme;
+    }
+
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+    return prefersDark ? AppTheme.Dark : AppTheme.Light;
+  },
+);
+
+export { selectThemeFallbackToSystem };

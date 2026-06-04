@@ -1,4 +1,4 @@
-import type { Time } from "../../../util/types";
+import type { Time } from "@util/types";
 
 /** ISO format date string */
 export type APIDateString = string;

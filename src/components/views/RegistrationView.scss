@@ -1,0 +1,28 @@
+.RegistrationView {
+  .title {
+    @include panel-title;
+  }
+
+  .content {
+    @include vertical-content;
+  }
+
+  .external-links {
+    @include vertical-content;
+    gap: var(--gap-xs);
+
+    a {
+      @include inline-content;
+      color: var(--accent-dark);
+
+      &:hover {
+        color: var(--accent-darker);
+      }
+    }
+  }
+
+  .flights {
+    @include vertical-content;
+    gap: var(--gap-sm);
+  }
+}

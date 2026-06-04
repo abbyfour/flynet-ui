@@ -1,0 +1,17 @@
+.RouteView {
+  @include vertical-content;
+
+  .title {
+    @include panel-title;
+  }
+
+  .airport-details {
+    @include vertical-content;
+    gap: var(--gap-sm);
+  }
+
+  .flights {
+    @include vertical-content;
+    gap: var(--gap-sm);
+  }
+}

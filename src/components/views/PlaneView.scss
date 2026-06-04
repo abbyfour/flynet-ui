@@ -1,0 +1,14 @@
+.PlaneView {
+  .title {
+    @include panel-title;
+  }
+
+  .content {
+    @include vertical-content;
+  }
+
+  .flights {
+    @include vertical-content;
+    gap: var(--gap-sm);
+  }
+}

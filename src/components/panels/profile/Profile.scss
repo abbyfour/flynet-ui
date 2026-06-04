@@ -1,0 +1,132 @@
+.Profile {
+  @include vertical-content;
+  min-height: 100%;
+  height: auto;
+
+  .main-content {
+    @include vertical-content;
+    gap: 0;
+    flex: 1;
+  }
+
+  .banner {
+    display: grid;
+    justify-items: end;
+
+    > * {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .edit-button {
+      margin: var(--gap-xs);
+      width: fit-content;
+    }
+  }
+
+  .profile-info {
+    display: flex;
+    align-items: center;
+    margin-left: var(--gap-lg);
+    margin-top: calc(var(--gap-md) * -1);
+
+    .avatar-input {
+      position: relative;
+      display: inline-flex;
+      cursor: pointer;
+      flex-shrink: 0;
+
+      &:hover {
+        .avatar {
+          filter: brightness(0.65);
+        }
+
+        .avatar-hover-label {
+          opacity: 1;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+
+    .avatar-hover-label {
+      position: absolute;
+      top: calc(50% - 32px);
+      left: 50%;
+      transform: translate(-50%, -42%);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      background: var(--black);
+      color: var(--white);
+      font-size: 1.2rem;
+      font-weight: var(--weight-semibold);
+      letter-spacing: 0.04em;
+      opacity: 0;
+      transition:
+        opacity 140ms ease,
+        transform 140ms ease;
+      pointer-events: none;
+    }
+
+    .names {
+      display: flex;
+      flex-direction: column;
+
+      .nickname {
+        font-family: var(--fun);
+      }
+
+      .username {
+        color: var(--grey);
+        font-size: 1.3rem;
+        font-weight: var(--weight-semibold);
+      }
+    }
+  }
+
+  .avatar {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: var(--gap-sm) solid var(--white);
+    margin-top: -65px;
+    flex-shrink: 0;
+    transition: filter 140ms ease;
+  }
+
+  .expanded-profile {
+    display: flex;
+    flex-direction: column;
+
+    padding: var(--gap-sm);
+    padding-top: var(--gap-md);
+    gap: var(--gap-md);
+
+    .bio {
+      white-space: pre-wrap;
+      padding: var(--gap-lg);
+      padding-top: 0;
+      padding-bottom: 0;
+      line-height: 1.2;
+
+      .default-bio {
+        color: var(--grey);
+        font-style: italic;
+      }
+    }
+  }
+
+  .footer {
+    margin-top: 0;
+    padding-bottom: var(--gap-sm);
+
+    .barcode {
+      display: block;
+      color: var(--grey-dark);
+      font-family: var(--barcode);
+      font-size: 3rem;
+      line-height: 1.1;
+      text-align: center;
+    }
+  }
+}

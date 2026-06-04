@@ -4,4 +4,8 @@ export class Airline {
   get iataCode() {
     return "AA";
   }
+
+  get id() {
+    return this.name;
+  }
 }

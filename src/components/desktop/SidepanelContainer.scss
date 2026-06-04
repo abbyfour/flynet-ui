@@ -1,0 +1,43 @@
+@use "@/styles/variables" as *;
+
+.SidepanelContainer {
+  position: absolute;
+  top: calc(var(--statusbar-height) + var(--sidepanel-edge-gap));
+  background-color: #f0f0f0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 1;
+  width: auto;
+  max-width: calc(100vw - (var(--sidepanel-edge-gap) * 2));
+  max-height: calc(
+    100dvh - var(--statusbar-height) - (var(--sidepanel-edge-gap) * 2)
+  );
+
+  &.left {
+    left: var(--sidepanel-edge-gap);
+  }
+
+  &.right {
+    right: var(--sidepanel-edge-gap);
+  }
+}
+
+@media (max-width: $breakpoint-tablet) {
+  .SidepanelContainer {
+    // Keep panel just above the floating dock with a small consistent gap.
+    --mobile-dock-clearance: calc(
+      var(--dock-bottom-offset) + var(--dock-estimated-height) +
+        var(--dock-panel-gap)
+    );
+
+    top: auto;
+    left: var(--gap-sm) !important;
+    right: var(--gap-sm) !important;
+    bottom: var(--mobile-dock-clearance);
+    width: auto;
+    max-width: none;
+    max-height: min(calc(100dvh - var(--mobile-dock-clearance) - 48px), 34rem);
+    border-radius: 14px;
+  }
+}
