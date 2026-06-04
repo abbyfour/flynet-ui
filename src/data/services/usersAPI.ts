@@ -76,16 +76,16 @@ export const usersApi = createApi({
 
     updateUserAvatar: build.mutation<
       { avatarUrl: string },
-      { userProfileID: number; avatarDataUrl: string }
+      { avatarDataUrl: string }
     >({
-      query: ({ userProfileID, avatarDataUrl }) => {
+      query: ({ avatarDataUrl }) => {
         const formData = new FormData();
         const avatarBlob = dataUrlToBlob(avatarDataUrl);
 
         formData.append("image", avatarBlob, "avatar.jpg");
 
         return {
-          url: `user_profiles/profile_photo/${userProfileID}`,
+          url: `user/profile_photo`,
           method: "PUT",
           body: formData,
         };

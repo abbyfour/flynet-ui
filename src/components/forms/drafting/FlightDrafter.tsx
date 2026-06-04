@@ -160,7 +160,6 @@ export function FlightDrafter({
       <br />
 
       <Input
-        required
         type="longtext"
         id="notes"
         label="Notes"

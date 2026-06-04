@@ -24,6 +24,7 @@ export function EditProfileForm({ clearEditing }: EditProfileFormProps) {
       id: editingUser.id,
       nickname: editingUser.nickname,
       email: editingUser.email,
+      bio: editingUser.bio,
     }).unwrap();
 
     dispatch(saveUser({ ...updatedUser, token: currentUser!.token }));
@@ -59,6 +60,15 @@ export function EditProfileForm({ clearEditing }: EditProfileFormProps) {
             id="email"
             value={editingUser.email}
             onChange={(v) => setEditingUser({ ...editingUser, email: v })}
+            fingerprinted
+          />
+
+          <Input
+            type="longtext"
+            label="Bio"
+            id="bio"
+            value={editingUser.bio}
+            onChange={(v) => setEditingUser({ ...editingUser, bio: v })}
             fingerprinted
           />
         </div>

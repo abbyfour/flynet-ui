@@ -1,7 +1,7 @@
 .Profile {
   @include vertical-content;
-  min-height: inherit;
-  height: var(--panel-height-md);
+  min-height: 100%;
+  height: auto;
 
   .main-content {
     @include vertical-content;
@@ -117,13 +117,15 @@
   }
 
   .footer {
-    margin-top: auto;
-    padding-bottom: var(--gap-xs);
+    margin-top: 0;
+    padding-bottom: var(--gap-sm);
 
     .barcode {
+      display: block;
       color: var(--grey-dark);
       font-family: var(--barcode);
       font-size: 3rem;
+      line-height: 1.1;
       text-align: center;
     }
   }

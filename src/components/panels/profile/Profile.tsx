@@ -121,7 +121,6 @@ function ProfileContent({
 
     if (croppedAvatar) {
       await updateUserAvatar({
-        userProfileID: currentUser.userProfile.id,
         avatarDataUrl: croppedAvatar,
       }).unwrap();
       setCurrentAvatar(croppedAvatar);
@@ -175,7 +174,7 @@ function ProfileContent({
 
       <div className="expanded-profile">
         <p className="bio">
-          {currentUser.userProfile.bio || (
+          {currentUser.bio || (
             <span className="default-bio">
               This user hasn't written a bio yet... they prefer to remain
               mysterious...
