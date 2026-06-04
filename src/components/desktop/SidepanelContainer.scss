@@ -11,9 +11,7 @@
   width: auto;
   max-width: calc(100vw - (var(--sidepanel-edge-gap) * 2));
   max-height: calc(
-    100dvh - var(--statusbar-height) - var(--sidepanel-edge-gap) - var(
-        --sidepanel-theme-toggle-clearance
-      )
+    100dvh - var(--statusbar-height) - (var(--sidepanel-edge-gap) * 2)
   );
 
   &.left {

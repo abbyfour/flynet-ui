@@ -1,4 +1,5 @@
 import { flynetServerImageUrl } from "@data/services/client";
+import type { AppTheme } from "./ui";
 
 export interface UserProperties {
   id: number;
@@ -13,12 +14,19 @@ export interface ExtendedUserProperties extends UserProperties {
   imagePath?: string;
   imageUuid?: string;
 
+  userSettings: UserSettings;
+
   roleId: number;
   role: {
     id: number;
     slug: string;
     name: string;
   };
+}
+
+export interface UserSettings {
+  id: number;
+  uiMode: AppTheme | "system";
 }
 
 export enum UserRole {

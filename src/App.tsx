@@ -3,7 +3,6 @@ import { Dock } from "@components/desktop/Dock.tsx";
 import { LoginWindow } from "@components/desktop/windows/LoginWindow.tsx";
 import { SidepanelWindow } from "@components/desktop/windows/SidepanelWindow.tsx";
 import { StatusBar } from "@components/desktop/windows/statusBar/StatusBar.tsx";
-import { ThemeToggle } from "@components/forms/ThemeToggle.tsx";
 import { Map } from "@components/map/Map.tsx";
 
 import "./styles.shim.ts";
@@ -19,9 +18,6 @@ function App() {
         {/* Windows */}
         <LoginWindow />
         <SidepanelWindow />
-
-        {/* UI controls — temporary */}
-        <ThemeToggle />
 
         {/* Renders both base map and data layers */}
         <Map />

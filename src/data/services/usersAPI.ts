@@ -1,6 +1,7 @@
 import type {
   ExtendedUserProperties,
   UserProperties,
+  UserSettings,
   UserWithToken,
 } from "@data/classes/user";
 import { createApi } from "@reduxjs/toolkit/query/react";
@@ -91,6 +92,17 @@ export const usersApi = createApi({
         };
       },
     }),
+
+    updateUserSettings: build.mutation<
+      UserSettings,
+      Pick<UserSettings, "id" | "uiMode">
+    >({
+      query: ({ id, ...updateData }) => ({
+        url: `user_settings/${id}`,
+        method: "PUT",
+        body: updateData,
+      }),
+    }),
   }),
 });
 
@@ -100,4 +112,5 @@ export const {
   useLazyMeQuery,
   useUpdateUserMutation,
   useUpdateUserAvatarMutation,
+  useUpdateUserSettingsMutation,
 } = usersApi;

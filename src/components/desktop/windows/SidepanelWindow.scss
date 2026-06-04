@@ -59,9 +59,8 @@
   .panel-content {
     overflow: auto;
     max-height: calc(
-      100dvh - var(--statusbar-height) - var(--sidepanel-edge-gap) - var(
-          --sidepanel-theme-toggle-clearance
-        ) - var(--sidepanel-header-height-desktop)
+      100dvh - var(--statusbar-height) -
+        (var(--sidepanel-edge-gap) * 2) - var(--sidepanel-header-height-desktop)
     );
     width: clamp(27.3rem, 26vw, 30rem);
     min-width: 27.3rem;

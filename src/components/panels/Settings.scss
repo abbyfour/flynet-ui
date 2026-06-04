@@ -1,0 +1,33 @@
+@use "@/styles/mixins" as *;
+
+.Settings {
+  @include vertical-content;
+
+  form {
+    @include vertical-content;
+  }
+
+  .settings-fields {
+    @include vertical-content;
+  }
+
+  .ui-mode-fieldset {
+    border: 1px solid var(--grey-light);
+    border-radius: 6px;
+    padding: var(--gap-sm);
+    margin: 0;
+
+    legend {
+      font-weight: var(--weight-semibold);
+      padding: 0 var(--gap-xs);
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: var(--gap-sm);
+      margin-top: var(--gap-xs);
+      cursor: pointer;
+    }
+  }
+}

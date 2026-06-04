@@ -32,6 +32,7 @@ interface Window {
   iconBw: string;
   iconDark: string;
   iconDarkBw: string;
+  disabled?: boolean;
 }
 
 const windows = {
@@ -48,6 +49,7 @@ const windows = {
     iconBw: friendsIconBw,
     iconDark: friendsIconDark,
     iconDarkBw: friendsIconDarkBw,
+    disabled: true,
   },
   profile: {
     name: SidepanelWindows.Profile,
@@ -74,6 +76,10 @@ export function Dock() {
   const dispatch = useAppDispatch();
 
   const changeWindow = (window: Window) => {
+    if (window.disabled) {
+      return;
+    }
+
     return activeWindow === window.name
       ? dispatch(closeActiveSidepanelWindow())
       : dispatch(setActiveSidepanelWindow(window.name));
@@ -85,8 +91,11 @@ export function Dock() {
         <button
           key={window.name}
           className={
-            "dock-icon-button" + (activeWindow === window.name ? " active" : "")
+            "dock-icon-button" +
+            (activeWindow === window.name ? " active" : "") +
+            ("disabled" in window && window.disabled ? " disabled" : "")
           }
+          disabled={"disabled" in window && window.disabled}
           onClick={() => changeWindow(window)}
         >
           <img

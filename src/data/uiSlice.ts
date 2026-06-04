@@ -45,7 +45,7 @@ const uiSlice = createSlice({
       state.activeSidepanelWindow = undefined;
     },
 
-    setTheme(state: UIState, action: PayloadAction<AppTheme>) {
+    setTheme(state: UIState, action: PayloadAction<AppTheme | undefined>) {
       state.theme = action.payload;
     },
 

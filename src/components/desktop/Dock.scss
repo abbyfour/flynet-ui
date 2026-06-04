@@ -36,10 +36,21 @@
       cursor: pointer;
     }
 
+    &:disabled,
+    &.disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
     &:not(.active) {
       &:hover {
         animation: jiggle 0.3s ease-in-out;
       }
+    }
+
+    &:disabled:hover,
+    &.disabled:hover {
+      animation: none;
     }
   }
 
@@ -48,6 +59,11 @@
     width: 54px;
     max-width: 12vw;
     height: auto;
+  }
+
+  .dock-icon-button:disabled .dock-icon-image,
+  .dock-icon-button.disabled .dock-icon-image {
+    filter: grayscale(1);
   }
 }
 
