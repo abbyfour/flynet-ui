@@ -2,14 +2,23 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 export interface SidepanelState {
   title: string;
-  onGoBack?: () => void;
-  onGoHome?: () => void;
+  showGoBack: boolean;
+  showGoHome: boolean;
+  backRequestId: number;
+  homeRequestId: number;
 }
+
+export type SidepanelHeaderOptions = Pick<
+  SidepanelState,
+  "title" | "showGoBack" | "showGoHome"
+>;
 
 const initialState: SidepanelState = {
   title: "",
-  onGoBack: undefined,
-  onGoHome: undefined,
+  showGoBack: false,
+  showGoHome: false,
+  backRequestId: 0,
+  homeRequestId: 0,
 };
 
 const sidepanelSlice = createSlice({
@@ -22,8 +31,16 @@ const sidepanelSlice = createSlice({
 
     clearSidepanelOptions(state) {
       state.title = "";
-      state.onGoBack = undefined;
-      state.onGoHome = undefined;
+      state.showGoBack = false;
+      state.showGoHome = false;
+    },
+
+    requestSidepanelBack(state) {
+      state.backRequestId += 1;
+    },
+
+    requestSidepanelHome(state) {
+      state.homeRequestId += 1;
     },
   },
 });
@@ -31,6 +48,10 @@ const sidepanelSlice = createSlice({
 export const selectSidepanelOptions = (state: { sidepanel: SidepanelState }) =>
   state.sidepanel;
 
-export const { setSidepanelOptions, clearSidepanelOptions } =
-  sidepanelSlice.actions;
+export const {
+  setSidepanelOptions,
+  clearSidepanelOptions,
+  requestSidepanelBack,
+  requestSidepanelHome,
+} = sidepanelSlice.actions;
 export const sidepanelReducer = sidepanelSlice.reducer;

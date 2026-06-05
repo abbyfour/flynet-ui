@@ -20,7 +20,13 @@ export function Settings() {
   );
 
   useEffect(() => {
-    dispatch(setSidepanelOptions({ title: "Settings" }));
+    dispatch(
+      setSidepanelOptions({
+        title: "Settings",
+        showGoBack: false,
+        showGoHome: false,
+      }),
+    );
   }, [dispatch]);
 
   if (!currentUser) {

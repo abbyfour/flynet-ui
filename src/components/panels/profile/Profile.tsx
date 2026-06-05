@@ -1,6 +1,10 @@
 import { icons } from "@assets/icons/icons";
 import banner from "@assets/profile-banner.svg";
 import { Button } from "@components/common/buttons/Button";
+import {
+  useSidepanelHeader,
+  useSidepanelRequests,
+} from "@components/common/hooks/sidepanel";
 import { Toasts } from "@components/common/notices/Toast";
 import { dispatchNotice } from "@components/common/notices/dispatchNotice";
 import { AirlineDisplay } from "@components/displays/AirlineDisplay";
@@ -19,9 +23,8 @@ import {
 } from "@data/classes/user";
 import { selectFlightsAsObjects } from "@data/services/flights/selectFlights";
 import { useUpdateUserAvatarMutation } from "@data/services/usersAPI";
-import { setSidepanelOptions } from "@data/sidepanelSlice";
-import { useAppDispatch, useAppSelector } from "@data/store";
-import { useEffect, useState } from "react";
+import { useAppSelector } from "@data/store";
+import { useState } from "react";
 import "./Profile.scss";
 
 const ALLOWED_AVATAR_MIME_TYPES = new Set(["image/png", "image/jpeg"]);
@@ -31,11 +34,6 @@ export function Profile() {
   const currentUser = useAppSelector((state) => state.user.currentUser);
 
   const [editing, setEditing] = useState(false);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(setSidepanelOptions({ title: "Profile" }));
-  }, [dispatch]);
 
   const openEditProfile = () => {
     setEditing(true);
@@ -45,22 +43,15 @@ export function Profile() {
     setEditing(false);
   };
 
-  useEffect(() => {
-    if (editing) {
-      dispatch(
-        setSidepanelOptions({
-          title: "Edit profile",
-          onGoBack: () => setEditing(false),
-        }),
-      );
-    } else {
-      dispatch(
-        setSidepanelOptions({
-          title: "Profile",
-        }),
-      );
-    }
-  }, [editing, dispatch]);
+  useSidepanelHeader({
+    title: editing ? "Edit profile" : "Profile",
+    showGoBack: editing,
+    showGoHome: false,
+  });
+
+  useSidepanelRequests({
+    onBackRequest: editing ? () => setEditing(false) : undefined,
+  });
 
   if (!currentUser) {
     return <div>Please sign in!</div>;

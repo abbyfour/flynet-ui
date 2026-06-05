@@ -13,11 +13,14 @@ import {
   selectSelectedFlights,
 } from "@data/services/flights/selectFlights";
 import { useGetTailsManifestQuery } from "@data/services/tails";
-import { setSidepanelOptions } from "@data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { useMediaQuery } from "@mantine/hooks";
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { FlightsList } from "./FlightsList";
+import {
+  useSidepanelHeader,
+  useSidepanelRequests,
+} from "@components/common/hooks/sidepanel";
 
 export function FlightsPanel() {
   const panelRef = useRef<HTMLDivElement>(null);
@@ -36,76 +39,71 @@ export function FlightsPanel() {
   const flightsReady = !flightsLoading && !flightsErrored;
 
   const dispatch = useAppDispatch();
+  const isViewingDetail = Boolean(drafting?.type || selected);
+  const canGoHome = Boolean(!drafting?.type && selected);
 
-  const onGoHome = useCallback(() => {
-    dispatch(clearSelection());
-  }, [dispatch]);
+  useSidepanelRequests({
+    onBackRequest: isViewingDetail
+      ? () => {
+          if (drafting?.type) {
+            return;
+          }
 
-  useEffect(() => {
-    if (drafting?.type) return;
+          if (selected) {
+            dispatch(goBackInSelection());
+          }
+        }
+      : undefined,
+    onHomeRequest: isViewingDetail
+      ? () => {
+          if (drafting?.type) {
+            return;
+          }
+
+          if (selected) {
+            dispatch(clearSelection());
+          }
+        }
+      : undefined,
+  });
+
+  const headerTitle = (() => {
+    if (drafting?.type) {
+      return drafting.type === "new" ? "Add flight" : "Edit flight";
+    }
 
     if (selectedFlights && selected && selected.type === "flight") {
-      dispatch(
-        setSidepanelOptions({
-          title: `Flight ${selectedFlights[0].flightNumber ?? ""}`,
-          onGoBack: () => dispatch(goBackInSelection()),
-          onGoHome,
-        }),
-      );
-    } else if (selectedFlights && selected && selected.type === "route") {
-      dispatch(
-        setSidepanelOptions({
-          title: `Route ${selectedFlights[0].origin.displayCode} ↔ ${selectedFlights[0].destination.displayCode}`,
-          onGoBack: () => dispatch(goBackInSelection()),
-          onGoHome,
-        }),
-      );
-    } else if (selectedFlights && selected && selected.type === "airport") {
-      dispatch(
-        setSidepanelOptions({
-          title: `Airport ${selectedFlights[0].origin.id === selected.airportId ? selectedFlights[0].origin.displayCode : selectedFlights[0].destination.displayCode}`,
-          onGoBack: () => dispatch(goBackInSelection()),
-          onGoHome,
-        }),
-      );
-    } else if (selectedFlights && selected && selected.type === "airline") {
-      dispatch(
-        setSidepanelOptions({
-          title: `Airline ${selectedFlights[0].airline?.name ?? "N/A"}`,
-          onGoBack: () => dispatch(goBackInSelection()),
-          onGoHome,
-        }),
-      );
-    } else if (selectedFlights && selected && selected.type === "plane") {
-      dispatch(
-        setSidepanelOptions({
-          title: `Plane ${selectedFlights[0].plane?.manufacturerModel ?? "N/A"}`,
-          onGoBack: () => dispatch(goBackInSelection()),
-          onGoHome,
-        }),
-      );
-    } else if (
-      selectedFlights &&
-      selected &&
-      selected.type === "registration"
-    ) {
-      dispatch(
-        setSidepanelOptions({
-          title: `Registration ${selectedFlights[0].plane?.registration ?? "N/A"}`,
-          onGoBack: () => dispatch(goBackInSelection()),
-          onGoHome,
-        }),
-      );
-    } else {
-      dispatch(
-        setSidepanelOptions({
-          title: `Flights${flights && flights.length ? ` (${flights.length})` : ""}`,
-          onGoBack: undefined,
-          onGoHome: undefined,
-        }),
-      );
+      return `Flight ${selectedFlights[0].flightNumber ?? ""}`;
     }
-  }, [dispatch, drafting?.type, selected, selectedFlights, flights, onGoHome]);
+
+    if (selectedFlights && selected && selected.type === "route") {
+      return `Route ${selectedFlights[0].origin.displayCode} ↔ ${selectedFlights[0].destination.displayCode}`;
+    }
+
+    if (selectedFlights && selected && selected.type === "airport") {
+      return `Airport ${selectedFlights[0].origin.id === selected.airportId ? selectedFlights[0].origin.displayCode : selectedFlights[0].destination.displayCode}`;
+    }
+
+    if (selectedFlights && selected && selected.type === "airline") {
+      return `Airline ${selectedFlights[0].airline?.name ?? "N/A"}`;
+    }
+
+    if (selectedFlights && selected && selected.type === "plane") {
+      return `Plane ${selectedFlights[0].plane?.manufacturerModel ?? "N/A"}`;
+    }
+
+    if (selectedFlights && selected && selected.type === "registration") {
+      return `Registration ${selectedFlights[0].plane?.registration ?? "N/A"}`;
+    }
+
+    return `Flights${flights && flights.length ? ` (${flights.length})` : ""}`;
+  })();
+
+  useSidepanelHeader({
+    title: headerTitle,
+    showGoBack: isViewingDetail,
+    showGoHome: canGoHome,
+  });
 
   const isListVisible = Boolean(
     flightsReady &&

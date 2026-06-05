@@ -7,6 +7,8 @@ import { SidepanelWindows } from "@data/classes/ui";
 import {
   clearSidepanelOptions,
   selectSidepanelOptions,
+  requestSidepanelBack,
+  requestSidepanelHome,
 } from "@data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { closeActiveSidepanelWindow } from "@data/uiSlice";
@@ -32,15 +34,11 @@ export function SidepanelWindow() {
   };
 
   const handleGoback = () => {
-    if (sidepanelOptions.onGoBack) {
-      sidepanelOptions.onGoBack();
-    }
+    dispatch(requestSidepanelBack());
   };
 
   const handleGoHome = () => {
-    if (sidepanelOptions.onGoHome) {
-      sidepanelOptions.onGoHome();
-    }
+    dispatch(requestSidepanelHome());
   };
 
   return activeWindow ? (
@@ -58,7 +56,7 @@ export function SidepanelWindow() {
           >
             {icons.actions.window.close(iconSize)}
           </ActionIcon>
-          {sidepanelOptions.onGoBack && (
+          {sidepanelOptions.showGoBack && (
             <ActionIcon
               className="window-control-button"
               variant="transparent"
@@ -68,7 +66,7 @@ export function SidepanelWindow() {
               {icons.actions.window.back(iconSize)}
             </ActionIcon>
           )}
-          {sidepanelOptions.onGoHome && (
+          {sidepanelOptions.showGoHome && (
             <ActionIcon
               className="window-control-button"
               variant="transparent"
