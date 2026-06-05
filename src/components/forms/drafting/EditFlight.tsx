@@ -1,4 +1,5 @@
 import { m } from "@assets/text/messages";
+import { useSidepanelRequests } from "@components/common/hooks/sidepanel";
 import { confirm } from "@components/common/notices/Confirm";
 import { dispatchNotice } from "@components/common/notices/dispatchNotice";
 import { Toasts } from "@components/common/notices/Toast";
@@ -10,9 +11,6 @@ import { useAppDispatch, useAppSelector } from "@data/store";
 import { findFlightFromID } from "@util/flights";
 import { useEffect, useMemo, useRef } from "react";
 import { FlightDrafter } from "./FlightDrafter";
-import {
-  useSidepanelRequests,
-} from "@components/common/hooks/sidepanel";
 
 export function EditFlight() {
   const [updateFlight, { isLoading }] = useUpdateFlightMutation();

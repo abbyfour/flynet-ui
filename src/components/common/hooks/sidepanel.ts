@@ -1,10 +1,10 @@
-import { useEffect, useRef } from "react";
-import { useAppDispatch, useAppSelector } from "@data/store";
 import {
   clearSidepanelOptions,
   setSidepanelOptions,
   type SidepanelHeaderOptions,
 } from "@data/sidepanelSlice";
+import { useAppDispatch, useAppSelector } from "@data/store";
+import { useEffect, useRef } from "react";
 
 /**
  * Syncs the sidepanel header with the current component state.

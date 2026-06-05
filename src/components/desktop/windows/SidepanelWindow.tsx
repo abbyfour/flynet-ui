@@ -1,14 +1,14 @@
 import { icons } from "@assets/icons/icons";
 import { FlightsPanel } from "@components/panels/flights/FlightsPanel";
-import { Social } from "@components/panels/Friends";
 import { Profile } from "@components/panels/profile/Profile";
 import { Settings } from "@components/panels/Settings";
+import { Social } from "@components/panels/Social";
 import { SidepanelWindows } from "@data/classes/ui";
 import {
   clearSidepanelOptions,
-  selectSidepanelOptions,
   requestSidepanelBack,
   requestSidepanelHome,
+  selectSidepanelOptions,
 } from "@data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { closeActiveSidepanelWindow } from "@data/uiSlice";
@@ -93,7 +93,7 @@ function getSidepanelWindow(window: SidepanelWindows | undefined) {
   switch (window) {
     case SidepanelWindows.Flights:
       return <FlightsPanel />;
-    case SidepanelWindows.Friends:
+    case SidepanelWindows.Social:
       return <Social />;
     case SidepanelWindows.Profile:
       return <Profile />;

@@ -1,3 +1,7 @@
+import {
+  useSidepanelHeader,
+  useSidepanelRequests,
+} from "@components/common/hooks/sidepanel";
 import { AddFlight } from "@components/forms/drafting/AddFlight";
 import { EditFlight } from "@components/forms/drafting/EditFlight";
 import { AirlineView } from "@components/views/AirlineView";
@@ -17,10 +21,6 @@ import { useAppDispatch, useAppSelector } from "@data/store";
 import { useMediaQuery } from "@mantine/hooks";
 import { useEffect, useRef } from "react";
 import { FlightsList } from "./FlightsList";
-import {
-  useSidepanelHeader,
-  useSidepanelRequests,
-} from "@components/common/hooks/sidepanel";
 
 export function FlightsPanel() {
   const panelRef = useRef<HTMLDivElement>(null);
@@ -68,32 +68,40 @@ export function FlightsPanel() {
   });
 
   const headerTitle = (() => {
+    const primaryFlight = selectedFlights?.[0];
+
     if (drafting?.type) {
       return drafting.type === "new" ? "Add flight" : "Edit flight";
     }
 
-    if (selectedFlights && selected && selected.type === "flight") {
-      return `Flight ${selectedFlights[0].flightNumber ?? ""}`;
+    if (selected && selected.type === "flight") {
+      return `Flight ${primaryFlight?.flightNumber ?? selected.flightId}`;
     }
 
-    if (selectedFlights && selected && selected.type === "route") {
-      return `Route ${selectedFlights[0].origin.displayCode} ↔ ${selectedFlights[0].destination.displayCode}`;
+    if (selected && selected.type === "route") {
+      return primaryFlight
+        ? `Route ${primaryFlight.origin.displayCode} ↔ ${primaryFlight.destination.displayCode}`
+        : `Route ${selected.routeKey}`;
     }
 
-    if (selectedFlights && selected && selected.type === "airport") {
-      return `Airport ${selectedFlights[0].origin.id === selected.airportId ? selectedFlights[0].origin.displayCode : selectedFlights[0].destination.displayCode}`;
+    if (selected && selected.type === "airport") {
+      if (primaryFlight) {
+        return `Airport ${primaryFlight.origin.id === selected.airportId ? primaryFlight.origin.displayCode : primaryFlight.destination.displayCode}`;
+      }
+
+      return `Airport ${selected.airportId}`;
     }
 
-    if (selectedFlights && selected && selected.type === "airline") {
-      return `Airline ${selectedFlights[0].airline?.name ?? "N/A"}`;
+    if (selected && selected.type === "airline") {
+      return `Airline ${primaryFlight?.airline?.name ?? selected.airlineId}`;
     }
 
-    if (selectedFlights && selected && selected.type === "plane") {
-      return `Plane ${selectedFlights[0].plane?.manufacturerModel ?? "N/A"}`;
+    if (selected && selected.type === "plane") {
+      return `Plane ${primaryFlight?.plane?.manufacturerModel ?? selected.planeId}`;
     }
 
-    if (selectedFlights && selected && selected.type === "registration") {
-      return `Registration ${selectedFlights[0].plane?.registration ?? "N/A"}`;
+    if (selected && selected.type === "registration") {
+      return `Registration ${primaryFlight?.plane?.registration ?? selected.registration}`;
     }
 
     return `Flights${flights && flights.length ? ` (${flights.length})` : ""}`;
@@ -106,11 +114,7 @@ export function FlightsPanel() {
   });
 
   const isListVisible = Boolean(
-    flightsReady &&
-    (!selectedFlights || selectedFlights.length === 0) &&
-    !drafting &&
-    flights &&
-    flights.length,
+    flightsReady && !selected && !drafting && flights && flights.length,
   );
 
   useEffect(() => {
@@ -140,6 +144,18 @@ export function FlightsPanel() {
 
     if (drafting?.type === "edit") {
       return <EditFlight />;
+    }
+
+    if (
+      selected &&
+      flightsReady &&
+      (!selectedFlights || selectedFlights.length === 0)
+    ) {
+      return (
+        <div className="FlightsPanel-empty-state">
+          <p>No matching flights found for this selection.</p>
+        </div>
+      );
     }
 
     if (selected && selected.type === "route") {

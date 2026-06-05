@@ -33,10 +33,14 @@
     .avatar-input {
       position: relative;
       display: inline-flex;
-      cursor: pointer;
+      cursor: default;
       flex-shrink: 0;
 
-      &:hover {
+      &.editable {
+        cursor: pointer;
+      }
+
+      &.editable:hover {
         .avatar {
           filter: brightness(0.65);
         }

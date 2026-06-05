@@ -1,7 +1,5 @@
 import { m } from "@assets/text/messages";
-import {
-  useSidepanelRequests,
-} from "@components/common/hooks/sidepanel";
+import { useSidepanelRequests } from "@components/common/hooks/sidepanel";
 import { dispatchNotice } from "@components/common/notices/dispatchNotice";
 import { Toasts } from "@components/common/notices/Toast";
 import { draftToNewRequest } from "@data/classes/flights/FlightDraft";

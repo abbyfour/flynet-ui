@@ -13,10 +13,10 @@ import flightsIconDarkBw from "@assets/dock/flights-bw-dark.svg";
 import flightsIconBw from "@assets/dock/flights-bw.svg";
 import flightsIconDark from "@assets/dock/flights-dark.svg";
 import flightsIcon from "@assets/dock/flights.svg";
-import friendsIconDarkBw from "@assets/dock/friends-bw-dark.svg";
-import friendsIconBw from "@assets/dock/friends-bw.svg";
-import friendsIconDark from "@assets/dock/friends-dark.svg";
-import friendsIcon from "@assets/dock/friends.svg";
+import socialIconDarkBw from "@assets/dock/friends-bw-dark.svg";
+import socialIconBw from "@assets/dock/friends-bw.svg";
+import socialIconDark from "@assets/dock/friends-dark.svg";
+import socialIcon from "@assets/dock/friends.svg";
 import profileIconDarkBw from "@assets/dock/profile-bw-dark.svg";
 import profileIconBw from "@assets/dock/profile-bw.svg";
 import profileIconDark from "@assets/dock/profile-dark.svg";
@@ -43,12 +43,12 @@ const windows = {
     iconDark: flightsIconDark,
     iconDarkBw: flightsIconDarkBw,
   },
-  friends: {
-    name: SidepanelWindows.Friends,
-    icon: friendsIcon,
-    iconBw: friendsIconBw,
-    iconDark: friendsIconDark,
-    iconDarkBw: friendsIconDarkBw,
+  social: {
+    name: SidepanelWindows.Social,
+    icon: socialIcon,
+    iconBw: socialIconBw,
+    iconDark: socialIconDark,
+    iconDarkBw: socialIconDarkBw,
     disabled: true,
   },
   profile: {
