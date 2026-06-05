@@ -1,6 +1,10 @@
 import { icons } from "@assets/icons/icons";
 import banner from "@assets/profile-banner.svg";
 import { Button } from "@components/common/buttons/Button";
+import {
+  useSidepanelHeader,
+  useSidepanelRequests,
+} from "@components/common/hooks/sidepanel";
 import { Toasts } from "@components/common/notices/Toast";
 import { dispatchNotice } from "@components/common/notices/dispatchNotice";
 import { AirlineDisplay } from "@components/displays/AirlineDisplay";
@@ -15,12 +19,15 @@ import type { Plane } from "@data/classes/flights/Plane";
 import {
   getUserAvatarUrl,
   type ExtendedUserProperties,
-  type UserWithToken,
 } from "@data/classes/user";
 import { selectFlightsAsObjects } from "@data/services/flights/selectFlights";
-import { useUpdateUserAvatarMutation } from "@data/services/usersAPI";
-import { setSidepanelOptions } from "@data/sidepanelSlice";
+import {
+  useGetUserByUsernameQuery,
+  useUpdateUserAvatarMutation,
+} from "@data/services/usersAPI";
 import { useAppDispatch, useAppSelector } from "@data/store";
+import { setProfileEditing } from "@data/uiSlice";
+import { joinClasses } from "@util/componentUtil";
 import { useEffect, useState } from "react";
 import "./Profile.scss";
 
@@ -29,52 +36,89 @@ const ALLOWED_AVATAR_EXTENSIONS = [".png", ".jpg", ".jpeg"];
 
 export function Profile() {
   const currentUser = useAppSelector((state) => state.user.currentUser);
-
-  const [editing, setEditing] = useState(false);
+  const profileUsername = useAppSelector((state) => state.ui.profileUsername);
+  const editing = useAppSelector((state) => state.ui.profileEditing);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(setSidepanelOptions({ title: "Profile" }));
-  }, [dispatch]);
+  const targetUsername = profileUsername ?? currentUser?.username;
+  const isViewingOwnProfile =
+    Boolean(currentUser?.username) && currentUser?.username === targetUsername;
+  const canEditProfile = Boolean(isViewingOwnProfile);
+  const isEditingOwnProfile = editing && canEditProfile;
+
+  const { data: fetchedProfile, isFetching: profileLoading } =
+    useGetUserByUsernameQuery(targetUsername ?? "", {
+      skip: !targetUsername || isViewingOwnProfile,
+    });
+
+  const viewedUser = isViewingOwnProfile ? currentUser : fetchedProfile;
 
   const openEditProfile = () => {
-    setEditing(true);
+    if (!isViewingOwnProfile) {
+      return;
+    }
+
+    dispatch(setProfileEditing(true));
   };
 
   const clearEditing = () => {
-    setEditing(false);
+    dispatch(setProfileEditing(false));
   };
 
   useEffect(() => {
-    if (editing) {
-      dispatch(
-        setSidepanelOptions({
-          title: "Edit profile",
-          onGoBack: () => setEditing(false),
-        }),
-      );
-    } else {
-      dispatch(
-        setSidepanelOptions({
-          title: "Profile",
-        }),
-      );
+    if (editing && !canEditProfile) {
+      dispatch(setProfileEditing(false));
     }
-  }, [editing, dispatch]);
+  }, [canEditProfile, dispatch, editing]);
 
-  if (!currentUser) {
+  useSidepanelHeader({
+    title: isEditingOwnProfile ? "Edit profile" : "Profile",
+    showGoBack: isEditingOwnProfile,
+    showGoHome: false,
+  });
+
+  useSidepanelRequests({
+    onBackRequest: isEditingOwnProfile
+      ? () => {
+          dispatch(setProfileEditing(false));
+        }
+      : undefined,
+  });
+
+  if (!targetUsername) {
     return <div>Please sign in!</div>;
+  }
+
+  if (profileLoading) {
+    return (
+      <div className="Profile">
+        <div className="main-content">
+          <p>Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!viewedUser) {
+    return (
+      <div className="Profile">
+        <div className="main-content">
+          <p>Could not find @{targetUsername}.</p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="Profile">
       <div className="main-content">
-        {editing ? (
+        {isEditingOwnProfile ? (
           <EditProfileForm clearEditing={clearEditing} />
         ) : (
           <ProfileContent
             openEditProfile={openEditProfile}
-            currentUser={currentUser}
+            viewedUser={viewedUser}
+            canEdit={canEditProfile}
           />
         )}
       </div>
@@ -84,10 +128,12 @@ export function Profile() {
 
 function ProfileContent({
   openEditProfile,
-  currentUser,
+  viewedUser,
+  canEdit,
 }: {
   openEditProfile: () => void;
-  currentUser: UserWithToken<ExtendedUserProperties>;
+  viewedUser: ExtendedUserProperties;
+  canEdit: boolean;
 }) {
   const [currentAvatar, setCurrentAvatar] = useState<string | undefined>(
     undefined,
@@ -119,6 +165,10 @@ function ProfileContent({
 
     const croppedAvatar = await openCropAvatarModal({ file });
 
+    if (!canEdit) {
+      return;
+    }
+
     if (croppedAvatar) {
       await updateUserAvatar({
         avatarDataUrl: croppedAvatar,
@@ -129,52 +179,56 @@ function ProfileContent({
 
   const flights = useAppSelector(selectFlightsAsObjects);
 
-  const homeAirport = mostVisitedAirport(flights);
-  const favouriteAirline = mostFlownAirline(flights);
-  const favouritePlane = mostFlownPlane(flights);
+  const homeAirport = canEdit ? mostVisitedAirport(flights) : undefined;
+  const favouriteAirline = canEdit ? mostFlownAirline(flights) : null;
+  const favouritePlane = canEdit ? mostFlownPlane(flights) : null;
 
   return (
     <>
       <div className="banner">
         <img src={banner} alt="Profile Banner" width="100%" />
 
-        <Button
-          className="edit-button"
-          variant="filled"
-          icon={icons.actions.edit(16)}
-          onClick={openEditProfile}
-        >
-          Edit profile
-        </Button>
+        {canEdit && (
+          <Button
+            className="edit-button"
+            variant="filled"
+            icon={icons.actions.edit(16)}
+            onClick={openEditProfile}
+          >
+            Edit profile
+          </Button>
+        )}
       </div>
 
       <div className="profile-info">
-        <label className="avatar-input">
+        <label className={joinClasses("avatar-input", canEdit && "editable")}>
           <img
-            src={currentAvatar || getUserAvatarUrl(currentUser)}
+            src={currentAvatar || getUserAvatarUrl(viewedUser)}
             alt=""
             className="avatar"
           />
-          <span className="avatar-hover-label">Edit</span>
-          <input
-            type="file"
-            accept="image/png,image/jpeg,.jpg,.jpeg"
-            hidden
-            onChange={handlePFPUpload}
-          />
+          {canEdit && <span className="avatar-hover-label">Edit</span>}
+          {canEdit && (
+            <input
+              type="file"
+              accept="image/png,image/jpeg,.jpg,.jpeg"
+              hidden
+              onChange={handlePFPUpload}
+            />
+          )}
         </label>
 
         <div className="names">
           <h3 className="nickname">
-            {currentUser.nickname || currentUser.username}
+            {viewedUser.nickname || viewedUser.username}
           </h3>
-          <h5 className="username">@{currentUser.username}</h5>
+          <h5 className="username">@{viewedUser.username}</h5>
         </div>
       </div>
 
       <div className="expanded-profile">
         <p className="bio">
-          {currentUser.bio || (
+          {viewedUser.bio || (
             <span className="default-bio">
               This user hasn't written a bio yet... they prefer to remain
               mysterious...
@@ -212,7 +266,7 @@ function ProfileContent({
       </div>
 
       <div className="footer">
-        <div className="barcode">flynet.ca/@{currentUser.username}</div>
+        <div className="barcode">flynet.ca/@{viewedUser.username}</div>
       </div>
     </>
   );

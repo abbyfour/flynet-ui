@@ -6,7 +6,13 @@ export function Social() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(setSidepanelOptions({ title: "Social" }));
+    dispatch(
+      setSidepanelOptions({
+        title: "Social",
+        showGoBack: false,
+        showGoHome: false,
+      }),
+    );
   }, [dispatch]);
 
   return (

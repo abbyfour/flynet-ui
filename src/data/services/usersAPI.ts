@@ -46,6 +46,13 @@ export const usersApi = createApi({
       }),
     }),
 
+    getUserByUsername: build.query<ExtendedUserProperties, string>({
+      query: (username) => ({
+        url: `user/username/${encodeURIComponent(username)}`,
+        method: "GET",
+      }),
+    }),
+
     login: build.mutation<
       UserWithToken<ExtendedUserProperties>,
       { username: string; password: string }
@@ -110,6 +117,7 @@ export const {
   useRegisterMutation,
   useLoginMutation,
   useLazyMeQuery,
+  useGetUserByUsernameQuery,
   useUpdateUserMutation,
   useUpdateUserAvatarMutation,
   useUpdateUserSettingsMutation,

@@ -5,7 +5,7 @@ export enum AppTheme {
 
 export enum SidepanelWindows {
   Flights = "flights",
-  Friends = "friends",
+  Social = "social",
   Profile = "profile",
   Settings = "settings",
 }

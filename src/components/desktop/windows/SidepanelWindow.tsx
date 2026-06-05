@@ -1,11 +1,13 @@
 import { icons } from "@assets/icons/icons";
 import { FlightsPanel } from "@components/panels/flights/FlightsPanel";
-import { Social } from "@components/panels/Friends";
 import { Profile } from "@components/panels/profile/Profile";
 import { Settings } from "@components/panels/Settings";
+import { Social } from "@components/panels/Social";
 import { SidepanelWindows } from "@data/classes/ui";
 import {
   clearSidepanelOptions,
+  requestSidepanelBack,
+  requestSidepanelHome,
   selectSidepanelOptions,
 } from "@data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
@@ -32,15 +34,11 @@ export function SidepanelWindow() {
   };
 
   const handleGoback = () => {
-    if (sidepanelOptions.onGoBack) {
-      sidepanelOptions.onGoBack();
-    }
+    dispatch(requestSidepanelBack());
   };
 
   const handleGoHome = () => {
-    if (sidepanelOptions.onGoHome) {
-      sidepanelOptions.onGoHome();
-    }
+    dispatch(requestSidepanelHome());
   };
 
   return activeWindow ? (
@@ -58,7 +56,7 @@ export function SidepanelWindow() {
           >
             {icons.actions.window.close(iconSize)}
           </ActionIcon>
-          {sidepanelOptions.onGoBack && (
+          {sidepanelOptions.showGoBack && (
             <ActionIcon
               className="window-control-button"
               variant="transparent"
@@ -68,7 +66,7 @@ export function SidepanelWindow() {
               {icons.actions.window.back(iconSize)}
             </ActionIcon>
           )}
-          {sidepanelOptions.onGoHome && (
+          {sidepanelOptions.showGoHome && (
             <ActionIcon
               className="window-control-button"
               variant="transparent"
@@ -95,7 +93,7 @@ function getSidepanelWindow(window: SidepanelWindows | undefined) {
   switch (window) {
     case SidepanelWindows.Flights:
       return <FlightsPanel />;
-    case SidepanelWindows.Friends:
+    case SidepanelWindows.Social:
       return <Social />;
     case SidepanelWindows.Profile:
       return <Profile />;

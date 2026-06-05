@@ -1,4 +1,5 @@
 import { m } from "@assets/text/messages";
+import { useSidepanelRequests } from "@components/common/hooks/sidepanel";
 import { confirm } from "@components/common/notices/Confirm";
 import { dispatchNotice } from "@components/common/notices/dispatchNotice";
 import { Toasts } from "@components/common/notices/Toast";
@@ -6,7 +7,6 @@ import { draftToNewRequest } from "@data/classes/flights/FlightDraft";
 import { clearDraftingFlight } from "@data/flightsSlice";
 import { useUpdateFlightMutation } from "@data/services/flights/flightsAPI";
 import { selectFlightsAsObjects } from "@data/services/flights/selectFlights";
-import { setSidepanelOptions } from "@data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { findFlightFromID } from "@util/flights";
 import { useEffect, useMemo, useRef } from "react";
@@ -42,33 +42,28 @@ export function EditFlight() {
         : undefined;
   }, [drafting, flights]);
 
-  useEffect(() => {
-    const goBackFromEdit = async () => {
-      const flight = editingFlightRef.current;
-      if (!flight || flight.isUnchangedFromDraft(latestDraftRef.current)) {
-        dispatch(clearDraftingFlight());
-        return;
-      }
+  useSidepanelRequests({
+    onBackRequest: () => {
+      void (async () => {
+        const flight = editingFlightRef.current;
+        if (!flight || flight.isUnchangedFromDraft(latestDraftRef.current)) {
+          dispatch(clearDraftingFlight());
+          return;
+        }
 
-      const confirmation = await confirm({
-        title: m.confirm.losingChanges.title,
-        children: <p>{m.confirm.losingChanges.text}</p>,
-        color: "red",
-        labels: { confirm: "Yes.", cancel: "Wait, no!" },
-      });
+        const confirmation = await confirm({
+          title: m.confirm.losingChanges.title,
+          children: <p>{m.confirm.losingChanges.text}</p>,
+          color: "red",
+          labels: { confirm: "Yes.", cancel: "Wait, no!" },
+        });
 
-      if (confirmation) {
-        dispatch(clearDraftingFlight());
-      }
-    };
-
-    dispatch(
-      setSidepanelOptions({
-        title: "Edit flight",
-        onGoBack: () => goBackFromEdit(),
-      }),
-    );
-  }, [dispatch, drafting]);
+        if (confirmation) {
+          dispatch(clearDraftingFlight());
+        }
+      })();
+    },
+  });
 
   const handleSubmit = async (
     draft: Parameters<typeof draftToNewRequest>[0],
