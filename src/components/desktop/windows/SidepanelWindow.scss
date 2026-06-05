@@ -64,6 +64,8 @@
     );
     width: clamp(27.3rem, 26vw, 30rem);
     min-width: 27.3rem;
+    max-width: 100%;
+    box-sizing: border-box;
     background: var(--white);
     color: var(--black);
     padding: var(--gap-md);
@@ -114,8 +116,11 @@
 
     .panel-content {
       width: 100%;
+      min-width: 0;
+      max-width: 100%;
       max-height: min(62dvh, 30rem);
       padding: var(--gap-sm);
+      overflow-x: hidden;
     }
   }
 }

@@ -9,6 +9,7 @@
   overflow: hidden;
   z-index: 1;
   width: auto;
+  min-width: 0;
   max-width: calc(100vw - (var(--sidepanel-edge-gap) * 2));
   max-height: calc(
     100dvh - var(--statusbar-height) - (var(--sidepanel-edge-gap) * 2)
@@ -36,6 +37,7 @@
     right: var(--gap-sm) !important;
     bottom: var(--mobile-dock-clearance);
     width: auto;
+    min-width: 0;
     max-width: none;
     max-height: min(calc(100dvh - var(--mobile-dock-clearance) - 48px), 34rem);
     border-radius: 14px;
