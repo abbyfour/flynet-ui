@@ -1,0 +1,67 @@
+@use "@/styles/variables" as *;
+
+.ProfileFlightsNotice {
+  position: absolute;
+  top: calc(var(--statusbar-height) - 1px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+
+  padding: 0.24rem 0.7rem;
+  border-radius: 0 0 0.52rem 0.52rem;
+  border: 1px solid rgba(30, 30, 30, 0.2);
+  border-top: none;
+
+  background: var(--white);
+  color: var(--black);
+  font-family: var(--monospace);
+  font-size: 0.76rem;
+  font-weight: var(--weight-medium);
+  line-height: 1.2;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+
+  &::before {
+    content: "";
+    width: 0.33rem;
+    height: 0.33rem;
+    border-radius: 999px;
+    background: #d32f00;
+    flex-shrink: 0;
+  }
+
+  .username {
+    font-weight: var(--weight-bold);
+  }
+
+  .clear-viewing-user {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+    margin-left: var(--gap-sm);
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.08);
+    }
+  }
+}
+
+@media (max-width: $breakpoint-mobile) {
+  .ProfileFlightsNotice {
+    top: calc(var(--statusbar-height) - 1px);
+    max-width: calc(100vw - 1rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

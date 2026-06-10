@@ -10,33 +10,68 @@ import { FlightView } from "@components/views/FlightView";
 import { PlaneView } from "@components/views/PlaneView";
 import { RegistrationView } from "@components/views/RegistrationView";
 import { RouteView } from "@components/views/RouteView";
+import { flightFilter } from "@data/classes/filters";
+import { Flight } from "@data/classes/flights/Flight";
 import { clearSelection, goBackInSelection } from "@data/flightsSlice";
-import { useGetFlightsQuery } from "@data/services/flights/flightsAPI";
 import {
-  selectFlightsAsObjects,
-  selectSelectedFlights,
+  useGetFlightsQuery,
+  useGetUserFlightsQuery,
+} from "@data/services/flights/flightsAPI";
+import {
+  selectFilteredFlights,
+  sortFlights,
 } from "@data/services/flights/selectFlights";
+import type { Selected } from "@data/services/SelectionHistory";
 import { useGetTailsManifestQuery } from "@data/services/tails";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { useMediaQuery } from "@mantine/hooks";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { FlightsList } from "./FlightsList";
 
 export function FlightsPanel() {
   const panelRef = useRef<HTMLDivElement>(null);
   const currentUser = useAppSelector((state) => state.user.currentUser);
+  const profileUsername = useAppSelector((state) => state.ui.profileUsername);
   const isMobile = useMediaQuery("(max-width: 900px)");
   const selected = useAppSelector((state) => state.flights.selected);
-  const selectedFlights = useAppSelector(selectSelectedFlights);
   const drafting = useAppSelector((state) => state.flights.inProgressDraft);
-  const flights = useAppSelector(selectFlightsAsObjects);
+  const filters = useAppSelector((state) => state.flights.filters);
+  const ownFlights = useAppSelector(selectFilteredFlights);
 
-  const { isLoading: flightsLoading, isError: flightsErrored } =
-    useGetFlightsQuery();
+  const isViewingOtherProfile =
+    Boolean(profileUsername) && currentUser?.username !== profileUsername;
+
+  const { isLoading: ownFlightsLoading, isError: ownFlightsErrored } =
+    useGetFlightsQuery(undefined, { skip: !currentUser });
+  const {
+    data: profileFlights,
+    isLoading: profileFlightsLoading,
+    isError: profileFlightsErrored,
+  } = useGetUserFlightsQuery(profileUsername ?? "", {
+    skip: !isViewingOtherProfile || !profileUsername,
+  });
 
   useGetTailsManifestQuery(); // fire and forget — just warms the cache
 
-  const flightsReady = !flightsLoading && !flightsErrored;
+  const profileFlightsAsObjects = useMemo(() => {
+    const flights = (profileFlights?.items ?? []).map(
+      (flight) => new Flight(flight),
+    );
+
+    return (filters ? flights.filter(flightFilter(filters)) : flights).sort(
+      sortFlights,
+    );
+  }, [filters, profileFlights?.items]);
+
+  const flights = isViewingOtherProfile ? profileFlightsAsObjects : ownFlights;
+  const selectedFlights = useMemo(
+    () => filterFlightsBySelection(flights, selected),
+    [flights, selected],
+  );
+
+  const flightsReady = isViewingOtherProfile
+    ? !profileFlightsLoading && !profileFlightsErrored
+    : !ownFlightsLoading && !ownFlightsErrored;
 
   const dispatch = useAppDispatch();
   const isViewingDetail = Boolean(drafting?.type || selected);
@@ -217,7 +252,12 @@ export function FlightsPanel() {
     }
 
     if (selectedFlights && selectedFlights.length === 1 && !drafting) {
-      return <FlightView flight={selectedFlights[0]} />;
+      return (
+        <FlightView
+          flight={selectedFlights[0]}
+          canEdit={!isViewingOtherProfile}
+        />
+      );
     }
 
     return <></>;
@@ -228,7 +268,53 @@ export function FlightsPanel() {
       {showAppropriateView()}
 
       {/* Must remain rendered so the memory foam list can work */}
-      <FlightsList isVisible={isListVisible} />
+      <FlightsList
+        flights={flights}
+        isLoading={!flightsReady}
+        isVisible={isListVisible}
+        canAddFlight={!isViewingOtherProfile}
+      />
     </div>
   );
+}
+
+function filterFlightsBySelection(
+  flights: Flight[],
+  selected: Selected | undefined,
+) {
+  if (!selected) return [];
+
+  if (selected.type === "flight") {
+    return flights.filter((flight) => flight.id === selected.flightId);
+  }
+
+  if (selected.type === "route") {
+    return flights.filter((flight) => flight.route.key === selected.routeKey);
+  }
+
+  if (selected.type === "airport") {
+    return flights.filter(
+      (flight) =>
+        flight.origin.id === selected.airportId ||
+        flight.destination.id === selected.airportId,
+    );
+  }
+
+  if (selected.type === "airline") {
+    return flights.filter(
+      (flight) => flight.airline?.name === selected.airlineId,
+    );
+  }
+
+  if (selected.type === "plane") {
+    return flights.filter((flight) => flight.plane?.model === selected.planeId);
+  }
+
+  if (selected.type === "registration") {
+    return flights.filter(
+      (flight) => flight.plane?.registration === selected.registration,
+    );
+  }
+
+  return [];
 }

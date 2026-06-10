@@ -3,6 +3,7 @@ import { useUrlNavigationSync } from "@components/common/hooks/urlNavigation";
 import { Dock } from "@components/desktop/Dock.tsx";
 import { LoginWindow } from "@components/desktop/windows/LoginWindow.tsx";
 import { SidepanelWindow } from "@components/desktop/windows/SidepanelWindow.tsx";
+import { ProfileFlightsNotice } from "@components/desktop/windows/statusBar/ProfileFlightsNotice.tsx";
 import { StatusBar } from "@components/desktop/windows/statusBar/StatusBar.tsx";
 import { Map } from "@components/map/Map.tsx";
 
@@ -16,6 +17,7 @@ function App() {
       <div className="app">
         {/* Desktop UI */}
         <StatusBar />
+        <ProfileFlightsNotice />
         <Dock />
 
         {/* Windows */}

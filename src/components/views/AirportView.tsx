@@ -1,6 +1,7 @@
 import { AirportDisplay } from "@components/displays/AirportDisplay";
 import { FlightListItem } from "@components/panels/flights/FlightListItem";
 import type { Airport } from "@data/classes/flights/Airport";
+import type { Flight } from "@data/classes/flights/Flight";
 import { setSelected } from "@data/flightsSlice";
 import { selectSelectedFlights } from "@data/services/flights/selectFlights";
 import { useAppDispatch, useAppSelector } from "@data/store";
@@ -8,9 +9,16 @@ import { uniquifyBy } from "@util/arrayUtil";
 import { displayAirportType } from "@util/flights";
 import "./AirportView.scss";
 
-export function AirportView({ airport }: { airport: Airport | undefined }) {
+export function AirportView({
+  airport,
+  flights: flightsProp,
+}: {
+  airport: Airport | undefined;
+  flights?: Flight[];
+}) {
   const dispatch = useAppDispatch();
-  const flights = useAppSelector((state) => selectSelectedFlights(state));
+  const reduxFlights = useAppSelector((state) => selectSelectedFlights(state));
+  const flights = flightsProp ?? reduxFlights;
 
   if (!airport || !flights || flights.length === 0) {
     return <></>;

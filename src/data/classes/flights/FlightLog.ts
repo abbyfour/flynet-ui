@@ -5,3 +5,5 @@ export interface APIFlightLog {
   total: number;
   items: APIFlight[];
 }
+
+export type APIUsernameFlightLog = APIFlight[];

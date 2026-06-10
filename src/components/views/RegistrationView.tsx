@@ -1,5 +1,6 @@
 import { icons } from "@assets/icons/icons";
 import { FlightListItem } from "@components/panels/flights/FlightListItem";
+import type { Flight } from "@data/classes/flights/Flight";
 import type { Plane } from "@data/classes/flights/Plane";
 import { selectSelectedFlights } from "@data/services/flights/selectFlights";
 import { useAppSelector } from "@data/store";
@@ -13,10 +14,12 @@ import "./RegistrationView.scss";
 
 type RegistrationViewProps = {
   plane: Plane;
+  flights?: Flight[];
 };
 
-export function RegistrationView({ plane }: RegistrationViewProps) {
-  const flights = useAppSelector((state) => selectSelectedFlights(state));
+export function RegistrationView({ plane, flights: flightsProp }: RegistrationViewProps) {
+  const reduxFlights = useAppSelector((state) => selectSelectedFlights(state));
+  const flights = flightsProp ?? reduxFlights;
 
   if (!plane?.registration || !flights || flights.length === 0) {
     return <></>;

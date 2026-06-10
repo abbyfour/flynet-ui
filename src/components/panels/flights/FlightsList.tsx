@@ -2,13 +2,13 @@ import { Button } from "@components/common/buttons/Button";
 import { MemoryFoamList } from "@components/common/MemoryFoamList";
 import type { Flight } from "@data/classes/flights/Flight";
 import {
+  clearSelection,
   recordFlightsListScrollPosition,
   setNewFlight,
   updateFilters,
 } from "@data/flightsSlice";
-import { useGetFlightsQuery } from "@data/services/flights/flightsAPI";
-import { selectFilteredFlights } from "@data/services/flights/selectFlights";
 import { useAppDispatch, useAppSelector } from "@data/store";
+import { setProfileUsername } from "@data/uiSlice";
 import { injectMap } from "@util/arrayUtil";
 import { useMemo } from "react";
 import { FlightListItem } from "./FlightListItem";
@@ -18,13 +18,20 @@ import FlightListSkeleton from "./FlightListSkeleton";
 import "./FlightsList.scss";
 
 interface FlightsListProps {
+  flights: Flight[];
+  isLoading?: boolean;
   isVisible?: boolean;
+  canAddFlight?: boolean;
 }
 
-export function FlightsList({ isVisible = true }: FlightsListProps) {
+export function FlightsList({
+  flights,
+  isLoading = false,
+  isVisible = true,
+  canAddFlight = true,
+}: FlightsListProps) {
   const dispatch = useAppDispatch();
 
-  const flights = useAppSelector(selectFilteredFlights);
   const highlightedRouteKey = useAppSelector(
     (state) => state.flights.highlightedRouteKey,
   );
@@ -37,10 +44,12 @@ export function FlightsList({ isVisible = true }: FlightsListProps) {
     dispatch(setNewFlight());
   };
 
-  const { isLoading: flightsLoading, isError: flightsErrored } =
-    useGetFlightsQuery();
+  const handleGoBackToMyFlights = () => {
+    dispatch(setProfileUsername(undefined));
+    dispatch(clearSelection());
+  };
 
-  const flightsReady = !flightsLoading && !flightsErrored;
+  const flightsReady = !isLoading;
 
   const separatorMeta = useMemo(() => {
     let upcomingCount = 0;
@@ -68,17 +77,22 @@ export function FlightsList({ isVisible = true }: FlightsListProps) {
 
   return (
     <>
-      {isVisible && (
-        <Button
-          onClick={handleAddFlight}
-          disabled={!flightsReady}
-          className="add-button"
-        >
-          Add flight
-        </Button>
-      )}
+      {isVisible &&
+        (canAddFlight ? (
+          <Button
+            onClick={handleAddFlight}
+            disabled={!flightsReady}
+            className="add-button"
+          >
+            Add flight
+          </Button>
+        ) : (
+          <Button onClick={handleGoBackToMyFlights} className="add-button">
+            Go back to my flights
+          </Button>
+        ))}
 
-      {flightsLoading && <FlightListSkeleton />}
+      {isLoading && <FlightListSkeleton />}
 
       <MemoryFoamList
         isVisible={isVisible}
