@@ -1,6 +1,9 @@
 import { Airport, type APIAirport } from "@data/classes/flights/Airport";
 import type { APIFlight } from "@data/classes/flights/Flight";
-import type { APIFlightLog } from "@data/classes/flights/FlightLog";
+import type {
+  APIFlightLog,
+  APIUsernameFlightLog,
+} from "@data/classes/flights/FlightLog";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { compareAirportsBySize } from "@util/flights";
 import { baseFlynetQuery } from "../client";
@@ -80,6 +83,22 @@ export const flightsApi = createApi({
         }
       },
       providesTags: [FlightsApiTags.Flights],
+      keepUnusedDataFor: 300,
+    }),
+
+    getUserFlights: build.query<APIFlightLog, string>({
+      query: (username) => ({
+        url: `user/flight_logs/${encodeURIComponent(username)}`,
+        method: "GET",
+      }),
+      transformResponse: (response: APIUsernameFlightLog) => {
+        return {
+          message: "",
+          total: response.length,
+          items: response,
+        };
+      },
+      keepUnusedDataFor: 300,
     }),
 
     getAirportByCode: build.query<Airport | undefined, string>({
@@ -137,6 +156,7 @@ export const flightsApi = createApi({
 
 export const {
   useGetFlightsQuery,
+  useGetUserFlightsQuery,
   useLazyGetFlightsQuery,
   useLazyGetAirportByCodeQuery,
   useLazySearchAirportsQuery,

@@ -46,14 +46,12 @@ const uiSlice = createSlice({
 
       if (action.payload !== "profile") {
         state.profileEditing = false;
-        state.profileUsername = undefined;
       }
     },
 
     closeActiveSidepanelWindow(state: UIState) {
       state.activeSidepanelWindow = undefined;
       state.profileEditing = false;
-      state.profileUsername = undefined;
     },
 
     setProfileEditing(state: UIState, action: PayloadAction<boolean>) {

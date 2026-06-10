@@ -141,7 +141,7 @@ export const selectSelectedFlights = createSelector(
                 : null,
 );
 
-function sortFlights(a: Flight, b: Flight) {
+export function sortFlights(a: Flight, b: Flight) {
   if (!a.date && !b.date) return 0;
 
   if (!a.date) return 1;
@@ -155,6 +155,4 @@ function sortFlights(a: Flight, b: Flight) {
 
   // If dates are equal, compare departure times
   return (compareTimes(a.departureTime, b.departureTime) || 0) * -1; // Multiply by -1 to sort in descending order
-
-  return 0;
 }

@@ -54,14 +54,67 @@ function parsePathname(pathname: string): RouteState {
   if (head.startsWith("@")) {
     const profileUsername = decodeParam(head.slice(1));
 
-    if (second === "flight") {
-      const flightId = parseIntParam(third);
-      if (flightId !== undefined) {
-        return {
-          window: SidepanelWindows.Flights,
-          selected: { type: "flight", flightId },
-        };
+    const profileSelected = (() => {
+      if (!second || !third) return undefined;
+
+      if (second === "flight") {
+        const flightId = parseIntParam(third);
+        if (flightId !== undefined) {
+          return { type: "flight", flightId } as const;
+        }
       }
+
+      if (second === "airport") {
+        const airportId = parseIntParam(third);
+        if (airportId !== undefined) {
+          return { type: "airport", airportId } as const;
+        }
+      }
+
+      if (second === "route") {
+        const routeKey = decodeParam(third);
+        if (routeKey) {
+          return { type: "route", routeKey } as const;
+        }
+      }
+
+      if (second === "airline") {
+        const airlineId = decodeParam(third);
+        if (airlineId) {
+          return { type: "airline", airlineId } as const;
+        }
+      }
+
+      if (second === "plane") {
+        const planeId = decodeParam(third);
+        if (planeId) {
+          return { type: "plane", planeId } as const;
+        }
+      }
+
+      if (second === "registration") {
+        const registration = decodeParam(third);
+        if (registration) {
+          return { type: "registration", registration } as const;
+        }
+      }
+
+      return undefined;
+    })();
+
+    if (second === "flights") {
+      return {
+        window: SidepanelWindows.Flights,
+        profileUsername,
+      };
+    }
+
+    if (profileSelected) {
+      return {
+        window: SidepanelWindows.Flights,
+        profileUsername,
+        selected: profileSelected,
+      };
     }
 
     if (second === "edit") {
@@ -195,6 +248,31 @@ function encodeParam(value: string): string {
   return encodeURIComponent(value);
 }
 
+function buildUserScopedPath(
+  encodedUsername: string,
+  selected: FlightsState["selected"] | undefined,
+  fallback: string,
+): string {
+  if (selected) {
+    switch (selected.type) {
+      case "flight":
+        return `/@${encodedUsername}/flight/${selected.flightId}`;
+      case "airport":
+        return `/@${encodedUsername}/airport/${selected.airportId}`;
+      case "route":
+        return `/@${encodedUsername}/route/${encodeParam(selected.routeKey)}`;
+      case "airline":
+        return `/@${encodedUsername}/airline/${encodeParam(selected.airlineId)}`;
+      case "plane":
+        return `/@${encodedUsername}/plane/${encodeParam(selected.planeId)}`;
+      case "registration":
+        return `/@${encodedUsername}/registration/${encodeParam(selected.registration)}`;
+    }
+  }
+
+  return fallback;
+}
+
 function buildPathname({
   activeWindow,
   selected,
@@ -223,32 +301,23 @@ function buildPathname({
   }
 
   if (activeWindow === SidepanelWindows.Profile) {
-    if (profileUsername) {
-      const encodedProfileUsername = encodeParam(profileUsername);
-      return profileEditing
-        ? `/@${encodedProfileUsername}/edit`
-        : `/@${encodedProfileUsername}`;
+    const user = profileUsername ?? username;
+    if (user) {
+      const encoded = encodeParam(user);
+      return profileEditing ? `/@${encoded}/edit` : `/@${encoded}`;
     }
-
-    if (username) {
-      return profileEditing ? `/@${username}/edit` : `/@${username}`;
-    }
-
     return profileEditing ? "/profile/edit" : "/profile";
   }
 
   if (activeWindow === SidepanelWindows.Flights) {
-    if (drafting?.type === "new") {
-      return "/flights/new";
+    if (profileUsername) {
+      const encoded = encodeParam(profileUsername);
+      return buildUserScopedPath(encoded, selected, `/@${encoded}/flights`);
     }
 
-    if (drafting?.type === "edit") {
-      return `/flights/edit/${drafting.flightId}`;
-    }
-
-    if (!selected) {
-      return "/flights";
-    }
+    if (drafting?.type === "new") return "/flights/new";
+    if (drafting?.type === "edit") return `/flights/edit/${drafting.flightId}`;
+    if (!selected) return "/flights";
 
     switch (selected.type) {
       case "flight":
@@ -303,8 +372,11 @@ export function useUrlNavigationSync() {
 
       dispatch(setActiveSidepanelWindow(route.window));
 
-      if (route.window === SidepanelWindows.Profile) {
+      if (route.profileUsername) {
         dispatch(setProfileUsername(route.profileUsername));
+      }
+
+      if (route.window === SidepanelWindows.Profile) {
         dispatch(setProfileEditing(Boolean(route.profileEditing)));
       }
 

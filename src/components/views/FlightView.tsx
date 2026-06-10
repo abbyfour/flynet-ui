@@ -21,9 +21,10 @@ import "./FlightView.scss";
 
 type FlightViewProps = {
   flight: Flight;
+  canEdit?: boolean;
 };
 
-export function FlightView({ flight }: FlightViewProps) {
+export function FlightView({ flight, canEdit = true }: FlightViewProps) {
   const dispatch = useAppDispatch();
 
   const [deleteFlight] = useDeleteFlightMutation();
@@ -179,12 +180,14 @@ export function FlightView({ flight }: FlightViewProps) {
         )}
       </div>
 
-      <div className="action-buttons">
-        <Button icon={icons.actions.edit(16)} onClick={handleEditFlight}>
-          Edit
-        </Button>
-        <DeleteButton className="delete-button" onClick={handleDeleteFlight} />
-      </div>
+      {canEdit && (
+        <div className="action-buttons">
+          <Button icon={icons.actions.edit(16)} onClick={handleEditFlight}>
+            Edit
+          </Button>
+          <DeleteButton className="delete-button" onClick={handleDeleteFlight} />
+        </div>
+      )}
     </div>
   );
 }

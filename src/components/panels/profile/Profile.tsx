@@ -14,21 +14,29 @@ import { EditProfileForm } from "@components/forms/EditProfileForm";
 import { openCropAvatarModal } from "@components/forms/profile/openCropAvatarModal";
 import type { Airline } from "@data/classes/flights/Airline";
 import type { Airport } from "@data/classes/flights/Airport";
-import type { Flight } from "@data/classes/flights/Flight";
+import { Flight } from "@data/classes/flights/Flight";
 import type { Plane } from "@data/classes/flights/Plane";
 import {
   getUserAvatarUrl,
   type ExtendedUserProperties,
 } from "@data/classes/user";
-import { selectFlightsAsObjects } from "@data/services/flights/selectFlights";
+import { clearSelection } from "@data/flightsSlice";
+import {
+  useGetFlightsQuery,
+  useGetUserFlightsQuery,
+} from "@data/services/flights/flightsAPI";
+import {
+  selectFlightsAsObjects,
+  sortFlights,
+} from "@data/services/flights/selectFlights";
 import {
   useGetUserByUsernameQuery,
   useUpdateUserAvatarMutation,
 } from "@data/services/usersAPI";
 import { useAppDispatch, useAppSelector } from "@data/store";
-import { setProfileEditing } from "@data/uiSlice";
+import { setProfileEditing, setProfileUsername } from "@data/uiSlice";
 import { joinClasses } from "@util/componentUtil";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./Profile.scss";
 
 const ALLOWED_AVATAR_MIME_TYPES = new Set(["image/png", "image/jpeg"]);
@@ -39,6 +47,9 @@ export function Profile() {
   const profileUsername = useAppSelector((state) => state.ui.profileUsername);
   const editing = useAppSelector((state) => state.ui.profileEditing);
   const dispatch = useAppDispatch();
+
+  const profileHistoryRef = useRef<string[]>([]);
+  const [profileHistoryDepth, setProfileHistoryDepth] = useState(0);
 
   const targetUsername = profileUsername ?? currentUser?.username;
   const isViewingOwnProfile =
@@ -51,13 +62,63 @@ export function Profile() {
       skip: !targetUsername || isViewingOwnProfile,
     });
 
+  const ownFlights = useAppSelector(selectFlightsAsObjects);
+  useGetFlightsQuery(undefined, { skip: !currentUser });
+  const { data: fetchedProfileFlights } = useGetUserFlightsQuery(
+    targetUsername ?? "",
+    { skip: !targetUsername || isViewingOwnProfile },
+  );
+
+  const viewedFlights = useMemo(
+    () =>
+      isViewingOwnProfile
+        ? ownFlights
+        : (fetchedProfileFlights?.items ?? [])
+            .map((flight) => new Flight(flight))
+            .sort(sortFlights),
+    [fetchedProfileFlights?.items, isViewingOwnProfile, ownFlights],
+  );
+
   const viewedUser = isViewingOwnProfile ? currentUser : fetchedProfile;
 
-  const openEditProfile = () => {
-    if (!isViewingOwnProfile) {
+  useEffect(() => {
+    if (!targetUsername) {
       return;
     }
 
+    const stack = profileHistoryRef.current;
+
+    if (stack.length === 0) {
+      if (currentUser?.username && currentUser.username !== targetUsername) {
+        stack.push(currentUser.username);
+      }
+      stack.push(targetUsername);
+      setProfileHistoryDepth(stack.length);
+      return;
+    }
+
+    if (stack[stack.length - 1] === targetUsername) {
+      return;
+    }
+
+    const existingIndex = stack.lastIndexOf(targetUsername);
+    if (existingIndex >= 0) {
+      stack.splice(existingIndex + 1);
+      setProfileHistoryDepth(stack.length);
+      return;
+    }
+
+    stack.push(targetUsername);
+    setProfileHistoryDepth(stack.length);
+  }, [currentUser?.username, targetUsername]);
+
+  // Reset selection when navigating to a different profile.
+  useEffect(() => {
+    dispatch(clearSelection());
+  }, [targetUsername, dispatch]);
+
+  const openEditProfile = () => {
+    if (!isViewingOwnProfile) return;
     dispatch(setProfileEditing(true));
   };
 
@@ -71,18 +132,42 @@ export function Profile() {
     }
   }, [canEditProfile, dispatch, editing]);
 
+  const canGoBackProfiles = !isEditingOwnProfile && profileHistoryDepth > 1;
+
   useSidepanelHeader({
     title: isEditingOwnProfile ? "Edit profile" : "Profile",
-    showGoBack: isEditingOwnProfile,
+    showGoBack: isEditingOwnProfile || canGoBackProfiles,
     showGoHome: false,
   });
 
   useSidepanelRequests({
-    onBackRequest: isEditingOwnProfile
-      ? () => {
-          dispatch(setProfileEditing(false));
-        }
-      : undefined,
+    onBackRequest:
+      isEditingOwnProfile || canGoBackProfiles
+        ? () => {
+            if (isEditingOwnProfile) {
+              dispatch(setProfileEditing(false));
+            } else if (canGoBackProfiles) {
+              profileHistoryRef.current.pop();
+              setProfileHistoryDepth(profileHistoryRef.current.length);
+              const previousUsername =
+                profileHistoryRef.current[profileHistoryRef.current.length - 1];
+
+              if (!previousUsername) {
+                return;
+              }
+
+              dispatch(clearSelection());
+
+              dispatch(
+                setProfileUsername(
+                  previousUsername === currentUser?.username
+                    ? undefined
+                    : previousUsername,
+                ),
+              );
+            }
+          }
+        : undefined,
   });
 
   if (!targetUsername) {
@@ -118,6 +203,7 @@ export function Profile() {
           <ProfileContent
             openEditProfile={openEditProfile}
             viewedUser={viewedUser}
+            viewedFlights={viewedFlights}
             canEdit={canEditProfile}
           />
         )}
@@ -129,10 +215,12 @@ export function Profile() {
 function ProfileContent({
   openEditProfile,
   viewedUser,
+  viewedFlights,
   canEdit,
 }: {
   openEditProfile: () => void;
   viewedUser: ExtendedUserProperties;
+  viewedFlights: Flight[];
   canEdit: boolean;
 }) {
   const [currentAvatar, setCurrentAvatar] = useState<string | undefined>(
@@ -177,11 +265,9 @@ function ProfileContent({
     }
   };
 
-  const flights = useAppSelector(selectFlightsAsObjects);
-
-  const homeAirport = canEdit ? mostVisitedAirport(flights) : undefined;
-  const favouriteAirline = canEdit ? mostFlownAirline(flights) : null;
-  const favouritePlane = canEdit ? mostFlownPlane(flights) : null;
+  const homeAirport = mostVisitedAirport(viewedFlights);
+  const favouriteAirline = mostFlownAirline(viewedFlights);
+  const favouritePlane = mostFlownPlane(viewedFlights);
 
   return (
     <>
@@ -243,7 +329,6 @@ function ProfileContent({
         {homeAirport && (
           <div className="home-airport">
             <h5 className="tiny-header">Home airport</h5>
-
             <AirportDisplay noHover airport={homeAirport} />
           </div>
         )}
@@ -251,7 +336,6 @@ function ProfileContent({
         {favouriteAirline && (
           <div className="favourite-airline">
             <h5 className="tiny-header">Favourite airline</h5>
-
             <AirlineDisplay noHover airline={favouriteAirline} />
           </div>
         )}
@@ -259,7 +343,6 @@ function ProfileContent({
         {favouritePlane && (
           <div className="favourite-plane">
             <h5 className="tiny-header">Favourite plane</h5>
-
             <PlaneDisplay noHover plane={favouritePlane} onClick={() => {}} />
           </div>
         )}

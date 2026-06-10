@@ -1,3 +1,5 @@
+@use "@/styles/variables" as *;
+
 .Profile {
   @include vertical-content;
   min-height: 100%;

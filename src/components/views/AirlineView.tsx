@@ -1,13 +1,21 @@
 import { FlightListItem } from "@components/panels/flights/FlightListItem";
 import type { Airline } from "@data/classes/flights/Airline";
+import type { Flight } from "@data/classes/flights/Flight";
 import { selectSelectedFlights } from "@data/services/flights/selectFlights";
 import { useAppSelector } from "@data/store";
 import { uniquifyBy } from "@util/arrayUtil";
 
 import "./AirlineView.scss";
 
-export function AirlineView({ airline }: { airline: Airline | undefined }) {
-  const flights = useAppSelector((state) => selectSelectedFlights(state));
+export function AirlineView({
+  airline,
+  flights: flightsProp,
+}: {
+  airline: Airline | undefined;
+  flights?: Flight[];
+}) {
+  const reduxFlights = useAppSelector((state) => selectSelectedFlights(state));
+  const flights = flightsProp ?? reduxFlights;
 
   if (!airline || !flights || flights.length === 0) {
     return <></>;

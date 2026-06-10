@@ -1,6 +1,7 @@
 import { icons } from "@assets/icons/icons";
 import { AirportDisplay } from "@components/displays/AirportDisplay";
 import { FlightListItem } from "@components/panels/flights/FlightListItem";
+import type { Flight } from "@data/classes/flights/Flight";
 import type { Route } from "@data/classes/flights/Route";
 import { setSelected } from "@data/flightsSlice";
 import { selectSelectedFlights } from "@data/services/flights/selectFlights";
@@ -8,8 +9,15 @@ import { useAppDispatch, useAppSelector } from "@data/store";
 
 import "./RouteView.scss";
 
-export function RouteView({ route }: { route: Route | undefined }) {
-  const flights = useAppSelector((state) => selectSelectedFlights(state));
+export function RouteView({
+  route,
+  flights: flightsProp,
+}: {
+  route: Route | undefined;
+  flights?: Flight[];
+}) {
+  const reduxFlights = useAppSelector((state) => selectSelectedFlights(state));
+  const flights = flightsProp ?? reduxFlights;
   const dispatch = useAppDispatch();
 
   if (!route || !flights || flights.length === 0) {

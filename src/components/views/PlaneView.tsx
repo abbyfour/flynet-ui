@@ -1,4 +1,5 @@
 import { FlightListItem } from "@components/panels/flights/FlightListItem";
+import type { Flight } from "@data/classes/flights/Flight";
 import type { Plane } from "@data/classes/flights/Plane";
 import { selectSelectedFlights } from "@data/services/flights/selectFlights";
 import { useAppSelector } from "@data/store";
@@ -6,8 +7,15 @@ import { uniquifyBy } from "@util/arrayUtil";
 
 import "./PlaneView.scss";
 
-export function PlaneView({ plane }: { plane: Plane | undefined }) {
-  const flights = useAppSelector((state) => selectSelectedFlights(state));
+export function PlaneView({
+  plane,
+  flights: flightsProp,
+}: {
+  plane: Plane | undefined;
+  flights?: Flight[];
+}) {
+  const reduxFlights = useAppSelector((state) => selectSelectedFlights(state));
+  const flights = flightsProp ?? reduxFlights;
 
   if (!plane || !flights || flights.length === 0) {
     return <></>;
