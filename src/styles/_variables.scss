@@ -17,6 +17,7 @@ $breakpoint-mobile: 640px;
   --grey-light: #f5f5f5;
   --grey: #808080;
   --grey-dark: #404040;
+  --glass: rgba(161, 161, 161, 0.325);
 
   // Accent colors for light and dark themes
   --accent: rgb(211, 47, 0);
@@ -107,4 +108,5 @@ $breakpoint-mobile: 640px;
   --accent-darker: rgb(161, 83, 0);
   --accent-light: #ffe7b7;
   --accent-contrast: var(--black);
+  --glass: rgba(226, 226, 226, 0.325);
 }
