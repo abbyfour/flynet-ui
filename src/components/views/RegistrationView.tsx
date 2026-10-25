@@ -1,9 +1,7 @@
 import { icons } from "@assets/icons/icons";
 import { FlightListItem } from "@components/panels/flights/FlightListItem";
+import type { Aircraft } from "@data/classes/flights/Aircraft";
 import type { Flight } from "@data/classes/flights/Flight";
-import type { Plane } from "@data/classes/flights/Plane";
-import { selectSelectedFlights } from "@data/services/flights/selectFlights";
-import { useAppSelector } from "@data/store";
 import {
   flightawareLink,
   jetphotosLink,
@@ -13,15 +11,15 @@ import {
 import "./RegistrationView.scss";
 
 type RegistrationViewProps = {
-  plane: Plane;
-  flights?: Flight[];
+  aircraft: Aircraft;
+  flights: Flight[];
 };
 
-export function RegistrationView({ plane, flights: flightsProp }: RegistrationViewProps) {
-  const reduxFlights = useAppSelector((state) => selectSelectedFlights(state));
-  const flights = flightsProp ?? reduxFlights;
-
-  if (!plane?.registration || !flights || flights.length === 0) {
+export function RegistrationView({
+  aircraft,
+  flights,
+}: RegistrationViewProps) {
+  if (!aircraft?.registration || flights.length === 0) {
     return <></>;
   }
 
@@ -29,8 +27,8 @@ export function RegistrationView({ plane, flights: flightsProp }: RegistrationVi
     <div className="RegistrationView">
       <div className="content">
         <h4 className="title">
-          {plane.registration}
-          <span className="subtitle">{plane.model}</span>
+          {aircraft.registration}
+          <span className="subtitle">{aircraft.model}</span>
         </h4>
 
         <div>
@@ -38,7 +36,7 @@ export function RegistrationView({ plane, flights: flightsProp }: RegistrationVi
 
           <div className="external-links">
             <a
-              href={jetphotosLink(plane.registration)}
+              href={jetphotosLink(aircraft.registration)}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -46,7 +44,7 @@ export function RegistrationView({ plane, flights: flightsProp }: RegistrationVi
             </a>
 
             <a
-              href={flightawareLink(plane.registration)}
+              href={flightawareLink(aircraft.registration)}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -54,7 +52,7 @@ export function RegistrationView({ plane, flights: flightsProp }: RegistrationVi
             </a>
 
             <a
-              href={planespottersLink(plane.registration)}
+              href={planespottersLink(aircraft.registration)}
               target="_blank"
               rel="noopener noreferrer"
             >

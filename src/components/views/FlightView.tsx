@@ -5,9 +5,9 @@ import { DeleteButton } from "@components/common/buttons/DeleteButton";
 import { confirm } from "@components/common/notices/Confirm";
 import { dispatchNotice } from "@components/common/notices/dispatchNotice";
 import { Toasts } from "@components/common/notices/Toast";
+import { AircraftDisplay } from "@components/displays/AircraftDisplay";
 import { AirlineDisplay } from "@components/displays/AirlineDisplay";
 import { AirportDisplay } from "@components/displays/AirportDisplay";
-import { PlaneDisplay } from "@components/displays/PlaneDisplay";
 import { RouteDisplay } from "@components/displays/RouteDisplay";
 import type { Flight } from "@data/classes/flights/Flight";
 import {
@@ -16,6 +16,7 @@ import {
   setSelected,
 } from "@data/flightsSlice";
 import { useDeleteFlightMutation } from "@data/services/flights/flightsAPI";
+import { SelectionType } from "@data/services/SelectionHistory";
 import { useAppDispatch } from "@data/store";
 import "./FlightView.scss";
 
@@ -91,7 +92,7 @@ export function FlightView({ flight, canEdit = true }: FlightViewProps) {
               dispatch(
                 flight.route &&
                   setSelected({
-                    type: "route",
+                    type: SelectionType.Route,
                     routeKey: flight.route?.key,
                   }),
               )
@@ -104,7 +105,7 @@ export function FlightView({ flight, canEdit = true }: FlightViewProps) {
               flight.origin &&
               dispatch(
                 setSelected({
-                  type: "airport",
+                  type: SelectionType.Airport,
                   airportId: flight.origin.id,
                 }),
               )
@@ -117,7 +118,7 @@ export function FlightView({ flight, canEdit = true }: FlightViewProps) {
               flight.destination &&
               dispatch(
                 setSelected({
-                  type: "airport",
+                  type: SelectionType.Airport,
                   airportId: flight.destination.id,
                 }),
               )
@@ -136,7 +137,7 @@ export function FlightView({ flight, canEdit = true }: FlightViewProps) {
                 flight.airline &&
                 dispatch(
                   setSelected({
-                    type: "airline",
+                    type: SelectionType.Airline,
                     airlineId: flight.airline!.name,
                   }),
                 )
@@ -145,26 +146,26 @@ export function FlightView({ flight, canEdit = true }: FlightViewProps) {
           </div>
         )}
 
-        {flight.plane && (
+        {flight.aircraft && (
           <div className="plane-details">
             <h5 className="tiny-header">Plane:</h5>
-            <PlaneDisplay
-              plane={flight.plane}
+            <AircraftDisplay
+              aircraft={flight.aircraft}
               onClick={() =>
-                flight.plane?.model &&
+                flight.aircraft?.model &&
                 dispatch(
                   setSelected({
-                    type: "plane",
-                    planeId: flight.plane.model,
+                    type: SelectionType.Aircraft,
+                    planeId: flight.aircraft.model,
                   }),
                 )
               }
               onRegistrationClick={() =>
-                flight.plane?.registration &&
+                flight.aircraft?.registration &&
                 dispatch(
                   setSelected({
-                    type: "registration",
-                    registration: flight.plane!.registration!,
+                    type: SelectionType.Registration,
+                    registration: flight.aircraft!.registration!,
                   }),
                 )
               }
@@ -185,7 +186,10 @@ export function FlightView({ flight, canEdit = true }: FlightViewProps) {
           <Button icon={icons.actions.edit(16)} onClick={handleEditFlight}>
             Edit
           </Button>
-          <DeleteButton className="delete-button" onClick={handleDeleteFlight} />
+          <DeleteButton
+            className="delete-button"
+            onClick={handleDeleteFlight}
+          />
         </div>
       )}
     </div>

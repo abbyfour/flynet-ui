@@ -5,6 +5,7 @@ import { Route } from "@data/classes/flights/Route";
 import type { AppRootState } from "@data/store";
 import { createSelector } from "@reduxjs/toolkit";
 import { compareTimes } from "@util/types";
+import { SelectionType } from "../SelectionHistory";
 import { flightsApi } from "./flightsAPI";
 
 export type GroupedFlightDetails = Flight;
@@ -114,31 +115,36 @@ export const selectAirportsFromFlights = createSelector(
  */
 export const selectSelectedFlights = createSelector(
   [selectFlightsAsObjects, (state: AppRootState) => state.flights.selected],
-  (flights, selection) =>
-    selection?.type === "flight"
+  (flights, selection) => {
+    console.log("Selection:", selection);
+
+    console.log("Flights for selected airline:", flights);
+
+    return selection?.type === SelectionType.Flight
       ? flights.filter((flight) => flight.id === selection.flightId)
-      : selection?.type === "route"
+      : selection?.type === SelectionType.Route
         ? flights.filter((flight) => flight.route.key === selection.routeKey)
-        : selection?.type === "airport"
+        : selection?.type === SelectionType.Airport
           ? flights.filter(
               (flight) =>
                 flight.origin.id === selection.airportId ||
                 flight.destination.id === selection.airportId,
             )
-          : selection?.type === "airline"
+          : selection?.type === SelectionType.Airline
             ? flights.filter(
                 (flight) => flight?.airline?.name === selection.airlineId,
               )
-            : selection?.type === "plane"
+            : selection?.type === SelectionType.Aircraft
               ? flights.filter(
-                  (flight) => flight?.plane?.model === selection.planeId,
+                  (flight) => flight?.aircraft?.model === selection.planeId,
                 )
-              : selection?.type === "registration"
+              : selection?.type === SelectionType.Registration
                 ? flights.filter(
                     (flight) =>
-                      flight?.plane?.registration === selection.registration,
+                      flight?.aircraft?.registration === selection.registration,
                   )
-                : null,
+                : null;
+  },
 );
 
 export function sortFlights(a: Flight, b: Flight) {

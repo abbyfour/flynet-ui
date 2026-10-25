@@ -7,15 +7,15 @@ import {
 } from "@components/common/hooks/sidepanel";
 import { Toasts } from "@components/common/notices/Toast";
 import { dispatchNotice } from "@components/common/notices/dispatchNotice";
+import { AircraftDisplay } from "@components/displays/AircraftDisplay";
 import { AirlineDisplay } from "@components/displays/AirlineDisplay";
 import { AirportDisplay } from "@components/displays/AirportDisplay";
-import { PlaneDisplay } from "@components/displays/PlaneDisplay";
 import { EditProfileForm } from "@components/forms/EditProfileForm";
 import { openCropAvatarModal } from "@components/forms/profile/openCropAvatarModal";
+import type { Aircraft } from "@data/classes/flights/Aircraft";
 import type { Airline } from "@data/classes/flights/Airline";
 import type { Airport } from "@data/classes/flights/Airport";
 import { Flight } from "@data/classes/flights/Flight";
-import type { Plane } from "@data/classes/flights/Plane";
 import {
   getUserAvatarUrl,
   type ExtendedUserProperties,
@@ -34,7 +34,7 @@ import {
   useUpdateUserAvatarMutation,
 } from "@data/services/usersAPI";
 import { useAppDispatch, useAppSelector } from "@data/store";
-import { setProfileEditing, setProfileUsername } from "@data/uiSlice";
+import { setIsEditingProfile, setViewedProfileUsername } from "@data/uiSlice";
 import { joinClasses } from "@util/componentUtil";
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./Profile.scss";
@@ -44,14 +44,16 @@ const ALLOWED_AVATAR_EXTENSIONS = [".png", ".jpg", ".jpeg"];
 
 export function Profile() {
   const currentUser = useAppSelector((state) => state.user.currentUser);
-  const profileUsername = useAppSelector((state) => state.ui.profileUsername);
-  const editing = useAppSelector((state) => state.ui.profileEditing);
+  const viewedProfileUsername = useAppSelector(
+    (state) => state.ui.viewedProfileUsername,
+  );
+  const editing = useAppSelector((state) => state.ui.isEditingProfile);
   const dispatch = useAppDispatch();
 
   const profileHistoryRef = useRef<string[]>([]);
   const [profileHistoryDepth, setProfileHistoryDepth] = useState(0);
 
-  const targetUsername = profileUsername ?? currentUser?.username;
+  const targetUsername = viewedProfileUsername ?? currentUser?.username;
   const isViewingOwnProfile =
     Boolean(currentUser?.username) && currentUser?.username === targetUsername;
   const canEditProfile = Boolean(isViewingOwnProfile);
@@ -119,16 +121,16 @@ export function Profile() {
 
   const openEditProfile = () => {
     if (!isViewingOwnProfile) return;
-    dispatch(setProfileEditing(true));
+    dispatch(setIsEditingProfile(true));
   };
 
   const clearEditing = () => {
-    dispatch(setProfileEditing(false));
+    dispatch(setIsEditingProfile(false));
   };
 
   useEffect(() => {
     if (editing && !canEditProfile) {
-      dispatch(setProfileEditing(false));
+      dispatch(setIsEditingProfile(false));
     }
   }, [canEditProfile, dispatch, editing]);
 
@@ -145,7 +147,7 @@ export function Profile() {
       isEditingOwnProfile || canGoBackProfiles
         ? () => {
             if (isEditingOwnProfile) {
-              dispatch(setProfileEditing(false));
+              dispatch(setIsEditingProfile(false));
             } else if (canGoBackProfiles) {
               profileHistoryRef.current.pop();
               setProfileHistoryDepth(profileHistoryRef.current.length);
@@ -159,7 +161,7 @@ export function Profile() {
               dispatch(clearSelection());
 
               dispatch(
-                setProfileUsername(
+                setViewedProfileUsername(
                   previousUsername === currentUser?.username
                     ? undefined
                     : previousUsername,
@@ -343,7 +345,11 @@ function ProfileContent({
         {favouritePlane && (
           <div className="favourite-plane">
             <h5 className="tiny-header">Favourite plane</h5>
-            <PlaneDisplay noHover plane={favouritePlane} onClick={() => {}} />
+            <AircraftDisplay
+              noHover
+              aircraft={favouritePlane}
+              onClick={() => {}}
+            />
           </div>
         )}
       </div>
@@ -394,19 +400,19 @@ function mostFlownAirline(flights: Flight[]): Airline | null {
     .airline;
 }
 
-function mostFlownPlane(flights: Flight[]): Plane | null {
+function mostFlownPlane(flights: Flight[]): Aircraft | null {
   if (flights.length === 0) return null;
 
-  const counts = new Map<string, { plane: Plane; count: number }>();
+  const counts = new Map<string, { plane: Aircraft; count: number }>();
 
   for (const flight of flights) {
-    const entry = flight.plane ? counts.get(flight.plane.id) : undefined;
+    const entry = flight.aircraft ? counts.get(flight.aircraft.id) : undefined;
 
     if (entry) {
       entry.count++;
-    } else if (flight?.plane) {
-      counts.set(flight.plane.id, {
-        plane: flight.plane.deregister(),
+    } else if (flight?.aircraft) {
+      counts.set(flight.aircraft.id, {
+        plane: flight.aircraft.deregister(),
         count: 1,
       });
     }

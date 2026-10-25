@@ -1,15 +1,24 @@
 const QUEUE_MAX_LENGTH = 10;
 
+export enum SelectionType {
+  Flight = "flight",
+  Route = "route",
+  Airport = "airport",
+  Airline = "airline",
+  Aircraft = "plane",
+  Registration = "registration",
+}
+
 export type Selected =
   | {
-      type: "flight";
+      type: SelectionType.Flight;
       flightId: number;
     }
-  | { type: "route"; routeKey: string }
-  | { type: "airport"; airportId: number }
-  | { type: "airline"; airlineId: string }
-  | { type: "plane"; planeId: string }
-  | { type: "registration"; registration: string };
+  | { type: SelectionType.Route; routeKey: string }
+  | { type: SelectionType.Airport; airportId: number }
+  | { type: SelectionType.Airline; airlineId: string }
+  | { type: SelectionType.Aircraft; planeId: number | string }
+  | { type: SelectionType.Registration; registration: string };
 
 export type SelectionHistory = Array<Selected>;
 

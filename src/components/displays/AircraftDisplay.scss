@@ -1,0 +1,131 @@
+.AircraftDisplay {
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  align-items: center;
+  padding: 0.5em;
+  gap: 0.5em;
+  border-radius: 5px;
+
+  @include hover-slide;
+
+  .aircraft-icon-frame {
+    --plane-icon-scale: 1.55;
+
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    overflow: visible;
+
+    &.large-airframe {
+      --plane-icon-scale: 1.12;
+    }
+  }
+
+  .aircraft-icon {
+    width: 60px;
+    height: 60px;
+    transform: scale(var(--plane-icon-scale));
+    transform-origin: center;
+  }
+
+  // Many aircraft SVGs are thin line drawings; this improves readability.
+  .aircraft-icon
+    :where(
+      path,
+      line,
+      polyline,
+      polygon,
+      circle,
+      ellipse,
+      rect
+    )[style*="stroke"] {
+    stroke-width: 0.75px !important;
+  }
+
+  .aircraft-icon
+    :where(path, line, polyline, polygon, circle, ellipse, rect)[stroke] {
+    stroke-width: 0.75px !important;
+  }
+
+  .aircraft-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-left: 2px solid var(--grey-dark);
+    padding: 0.7em;
+  }
+
+  .aircraft-name {
+    font-size: 132%;
+    font-weight: 600;
+    line-height: 1.2;
+    width: fit-content;
+  }
+
+  .aircraft-registration {
+    color: var(--grey);
+    font-weight: 600;
+    font-size: 0.86rem;
+    line-height: 1.1;
+
+    &.is-clickable {
+      background: none;
+      border: 0;
+      padding: 0.18rem 0.35rem;
+      margin: -0.18rem -0.35rem;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+      border-radius: 4px;
+      transition:
+        color 0.15s ease,
+        background-color 0.15s ease,
+        text-decoration-thickness 0.15s ease;
+
+      &:hover {
+        color: var(--black);
+        background-color: rgba(0, 0, 0, 0.06);
+        text-decoration-thickness: 2px;
+      }
+
+      &:focus-visible {
+        outline: 2px solid rgba(0, 0, 0, 0.35);
+        outline-offset: 2px;
+        color: var(--black);
+      }
+    }
+  }
+}
+
+/** Hover effects */
+.AircraftDisplay:not(.no-hover) {
+  .aircraft-icon {
+    transition:
+      filter 0.3s ease,
+      transform 0.2s ease;
+  }
+
+  &:hover {
+    .aircraft-icon {
+      filter: drop-shadow(0 4px 8px rgba(156, 156, 156, 0.2));
+      transition: filter 0.3s ease;
+    }
+  }
+
+  &:active {
+    transition: none;
+    transform: translateY(2px) translateX(3px);
+
+    .aircraft-icon {
+      transform: scale(var(--plane-icon-scale));
+      filter: none;
+      transition: none;
+    }
+  }
+}

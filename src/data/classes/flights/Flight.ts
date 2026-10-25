@@ -2,10 +2,10 @@ import type { APIDateString } from "@data/services/flights/types";
 import { compareObjects } from "@util/arrayUtil";
 import type { Time } from "@util/types";
 import type { UserProperties } from "../user";
+import { Aircraft } from "./Aircraft";
 import { Airline } from "./Airline";
 import { Airport, type APIAirport } from "./Airport";
 import type { FlightDraft } from "./FlightDraft";
-import { Plane } from "./Plane";
 import { Route } from "./Route";
 
 export interface APIFlight {
@@ -42,14 +42,14 @@ export interface APIFlight {
 }
 
 export class Flight {
-  public readonly plane: Plane | undefined;
+  public readonly aircraft: Aircraft | undefined;
   public readonly origin: Airport;
   public readonly destination: Airport;
   public readonly route: Route;
   public readonly airline: Airline | undefined;
 
   constructor(protected raw: APIFlight) {
-    this.plane = Plane.fromRawFlight(raw);
+    this.aircraft = Aircraft.fromRawFlight(raw);
     this.origin = new Airport(raw.originAirport);
     this.destination = new Airport(raw.destinationAirport);
     this.route = new Route(this.origin, this.destination);
@@ -98,8 +98,8 @@ export class Flight {
       date: this.raw.date ? new Date(this.raw.date) : undefined,
       departureTime: this.departureTime,
       arrivalTime: this.arrivalTime,
-      planeModel: this.plane?.model,
-      planeRegistration: this.plane?.registration,
+      planeModel: this.aircraft?.model,
+      planeRegistration: this.aircraft?.registration,
       note: this.note,
       origin: {
         id: this.origin.id,
