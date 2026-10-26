@@ -9,8 +9,10 @@ import {
 } from "@data/flightsSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { setViewedProfileUsername } from "@data/uiSlice";
+import { CloseButton, TextInput } from "@mantine/core";
+import { useDebouncedValue } from "@mantine/hooks";
 import { injectMap } from "@util/arrayUtil";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FlightListItem } from "./FlightListItem";
 import { FlightListSeparator } from "./FlightListSeperator";
 import FlightListSkeleton from "./FlightListSkeleton";
@@ -39,6 +41,18 @@ export function FlightsList({
     (state) => state.flights.highlightedAirportId,
   );
   const filters = useAppSelector((state) => state.flights.filters);
+
+  const [searchText, setSearchText] = useState(filters?.search ?? "");
+  const [debouncedSearch] = useDebouncedValue(searchText.trim(), 300);
+
+  useEffect(() => {
+    dispatch(updateFilters({ search: debouncedSearch || undefined }));
+  }, [debouncedSearch, dispatch]);
+
+  // Keep the input in sync if filters get reset elsewhere (e.g. logout)
+  useEffect(() => {
+    if (!filters?.search) setSearchText((cur) => (cur.trim() ? "" : cur));
+  }, [filters?.search]);
 
   const handleAddFlight = () => {
     dispatch(setNewFlight());
@@ -91,6 +105,29 @@ export function FlightsList({
             Go back to my flights
           </Button>
         ))}
+
+      {isVisible && (
+        <TextInput
+          className="search-input"
+          placeholder="Search airline, airport, aircraft, registration"
+          aria-label="Search flights"
+          value={searchText}
+          onChange={(event) => setSearchText(event.currentTarget.value)}
+          rightSection={
+            searchText ? (
+              <CloseButton
+                size="sm"
+                aria-label="Clear search"
+                onClick={() => setSearchText("")}
+              />
+            ) : null
+          }
+        />
+      )}
+
+      {isVisible && flights.length === 0 && (
+        <p>No flights match your search.</p>
+      )}
 
       {isLoading && <FlightListSkeleton />}
 

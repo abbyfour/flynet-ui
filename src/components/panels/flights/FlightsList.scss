@@ -1,4 +1,13 @@
 .FlightsPanel {
+  .search-input {
+    margin-bottom: 1em;
+
+    input {
+      font-family: var(--sans-serif);
+      font-size: 1rem;
+    }
+  }
+
   .add-button {
     margin-bottom: 1em;
   }

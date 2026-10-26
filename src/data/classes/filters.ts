@@ -3,6 +3,7 @@ import type { Flight } from "./flights/Flight";
 export interface FlightsFilters {
   upcoming?: true | false | undefined;
   year?: number | undefined;
+  search?: string | undefined;
 }
 
 export function flightFilter(
@@ -29,8 +30,36 @@ export function flightFilter(
       }
     }
 
+    if (pass && filters.search) {
+      pass = matchesSearch(flight, filters.search);
+    }
+
     return pass;
   };
+}
+
+function matchesSearch(flight: Flight, search: string): boolean {
+  const terms = search.toLowerCase().split(/\s+/).filter(Boolean);
+  if (terms.length === 0) return true;
+
+  const haystack = [
+    flight.airline?.name,
+    flight.aircraft?.model,
+    flight.aircraft?.registration,
+    ...[flight.origin, flight.destination].flatMap((airport) => [
+      airport.name,
+      airport.city,
+      airport.iataCode,
+      airport.icaoCode,
+      airport.localCode,
+      airport.isoCountry,
+    ]),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  return terms.every((term) => haystack.includes(term));
 }
 
 export function modifyFilters(

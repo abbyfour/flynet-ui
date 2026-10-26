@@ -152,7 +152,7 @@ export function FlightsPanel() {
   });
 
   const isListVisible = Boolean(
-    flightsReady && !selected && !drafting && flights && flights.length,
+    flightsReady && !selected && !drafting && flights && (flights.length || filters),
   );
 
   useEffect(() => {
