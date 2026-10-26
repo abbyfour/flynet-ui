@@ -8,7 +8,7 @@ import {
   updateFilters,
 } from "@data/flightsSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
-import { setProfileUsername } from "@data/uiSlice";
+import { setViewedProfileUsername } from "@data/uiSlice";
 import { injectMap } from "@util/arrayUtil";
 import { useMemo } from "react";
 import { FlightListItem } from "./FlightListItem";
@@ -45,7 +45,7 @@ export function FlightsList({
   };
 
   const handleGoBackToMyFlights = () => {
-    dispatch(setProfileUsername(undefined));
+    dispatch(setViewedProfileUsername(undefined));
     dispatch(clearSelection());
   };
 

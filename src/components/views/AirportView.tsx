@@ -3,24 +3,22 @@ import { FlightListItem } from "@components/panels/flights/FlightListItem";
 import type { Airport } from "@data/classes/flights/Airport";
 import type { Flight } from "@data/classes/flights/Flight";
 import { setSelected } from "@data/flightsSlice";
-import { selectSelectedFlights } from "@data/services/flights/selectFlights";
-import { useAppDispatch, useAppSelector } from "@data/store";
+import { SelectionType } from "@data/services/SelectionHistory";
+import { useAppDispatch } from "@data/store";
 import { uniquifyBy } from "@util/arrayUtil";
 import { displayAirportType } from "@util/flights";
 import "./AirportView.scss";
 
 export function AirportView({
   airport,
-  flights: flightsProp,
+  flights,
 }: {
   airport: Airport | undefined;
-  flights?: Flight[];
+  flights: Flight[];
 }) {
   const dispatch = useAppDispatch();
-  const reduxFlights = useAppSelector((state) => selectSelectedFlights(state));
-  const flights = flightsProp ?? reduxFlights;
 
-  if (!airport || !flights || flights.length === 0) {
+  if (!airport || flights.length === 0) {
     return <></>;
   }
 
@@ -30,7 +28,7 @@ export function AirportView({
         {airport.name}
         {airport.displayCode && (
           <>
-            <span className="airline-code">{airport.displayCode}</span>
+            <span className="airport-code">{airport.displayCode}</span>
           </>
         )}
       </h4>
@@ -79,7 +77,10 @@ export function AirportView({
                 minimal
                 onClick={() =>
                   dispatch(
-                    setSelected({ type: "airport", airportId: airport.id }),
+                    setSelected({
+                      type: SelectionType.Airport,
+                      airportId: airport.id,
+                    }),
                   )
                 }
               />

@@ -1,5 +1,5 @@
 import { type GroupedRoute } from "@data/services/flights/selectFlights";
-import type { Selected } from "@data/services/SelectionHistory";
+import { SelectionType, type Selected } from "@data/services/SelectionHistory";
 import { ArcLayer } from "deck.gl";
 import type { RGB, RGBA } from "../style/colours";
 import { useColours } from "../style/useColours";
@@ -105,22 +105,22 @@ const intensifyColour = (
 const routeIncludesFlight = (route: GroupedRoute, selected?: Selected) => {
   if (!selected) return false;
 
-  if (selected.type === "airline") {
+  if (selected.type === SelectionType.Airline) {
     return route.flights.some((f) => f.airline?.name === selected.airlineId);
-  } else if (selected.type === "flight") {
+  } else if (selected.type === SelectionType.Flight) {
     return route.flights.some((f) => f.id === selected.flightId);
-  } else if (selected.type === "route") {
+  } else if (selected.type === SelectionType.Route) {
     return route.route.key === selected.routeKey;
-  } else if (selected.type === "airport") {
+  } else if (selected.type === SelectionType.Airport) {
     return (
       route.route.origin.id === selected.airportId ||
       route.route.destination.id === selected.airportId
     );
-  } else if (selected.type === "plane") {
-    return route.flights.some((f) => f.plane?.model === selected.planeId);
-  } else if (selected.type === "registration") {
+  } else if (selected.type === SelectionType.Aircraft) {
+    return route.flights.some((f) => f.aircraft?.model === selected.planeId);
+  } else if (selected.type === SelectionType.Registration) {
     return route.flights.some(
-      (f) => f.plane?.registration === selected.registration,
+      (f) => f.aircraft?.registration === selected.registration,
     );
   }
 

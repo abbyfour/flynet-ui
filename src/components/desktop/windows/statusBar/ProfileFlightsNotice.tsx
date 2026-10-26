@@ -1,30 +1,34 @@
 import { icons } from "@assets/icons/icons";
 import { clearSelection } from "@data/flightsSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
-import { setProfileUsername } from "@data/uiSlice";
+import { setViewedProfileUsername } from "@data/uiSlice";
 import "./ProfileFlightsNotice.scss";
 
 export function ProfileFlightsNotice() {
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector((state) => state.user.currentUser);
-  const profileUsername = useAppSelector((state) => state.ui.profileUsername);
+  const viewedProfileUsername = useAppSelector(
+    (state) => state.ui.viewedProfileUsername,
+  );
 
   const isViewingOtherProfile =
-    Boolean(profileUsername) && currentUser?.username !== profileUsername;
+    Boolean(viewedProfileUsername) &&
+    currentUser?.username !== viewedProfileUsername;
 
-  if (!isViewingOtherProfile || !profileUsername) {
+  if (!isViewingOtherProfile || !viewedProfileUsername) {
     return null;
   }
 
   const clearViewedUser = () => {
-    dispatch(setProfileUsername(undefined));
+    dispatch(setViewedProfileUsername(undefined));
     dispatch(clearSelection());
   };
 
   return (
     <div className="ProfileFlightsNotice" role="status" aria-live="polite">
       <span className="message">
-        showing <span className="username">{profileUsername}</span>'s flights
+        showing <span className="username">{viewedProfileUsername}</span>'s
+        flights
       </span>
       <button
         className="clear-viewing-user"

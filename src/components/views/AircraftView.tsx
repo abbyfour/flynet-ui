@@ -1,32 +1,27 @@
 import { FlightListItem } from "@components/panels/flights/FlightListItem";
+import type { Aircraft } from "@data/classes/flights/Aircraft";
 import type { Flight } from "@data/classes/flights/Flight";
-import type { Plane } from "@data/classes/flights/Plane";
-import { selectSelectedFlights } from "@data/services/flights/selectFlights";
-import { useAppSelector } from "@data/store";
 import { uniquifyBy } from "@util/arrayUtil";
 
-import "./PlaneView.scss";
+import "./AircraftView.scss";
 
-export function PlaneView({
-  plane,
-  flights: flightsProp,
+export function AircraftView({
+  aircraft,
+  flights,
 }: {
-  plane: Plane | undefined;
-  flights?: Flight[];
+  aircraft: Aircraft | undefined;
+  flights: Flight[];
 }) {
-  const reduxFlights = useAppSelector((state) => selectSelectedFlights(state));
-  const flights = flightsProp ?? reduxFlights;
-
-  if (!plane || !flights || flights.length === 0) {
+  if (!aircraft || flights.length === 0) {
     return <></>;
   }
 
   return (
-    <div className="PlaneView">
+    <div className="AircraftView">
       <div className="content">
         <h4 className="title">
-          <span className="subtitle">{plane.manufacturer}</span>
-          <span>{plane.manufacturerModel}</span>
+          <span className="subtitle">{aircraft.manufacturer}</span>
+          <span>{aircraft.manufacturerModel}</span>
         </h4>
 
         <div className="airlines">
@@ -50,7 +45,9 @@ export function PlaneView({
         <div className="flights">
           <h5 className="tiny-header">Flights:</h5>
 
-          <p className="flight-count">{flights.length} flights on this plane</p>
+          <p className="flight-count">
+            {flights.length} flights on this aircraft
+          </p>
 
           <div className="flight-list">
             {flights.map((flight) => (

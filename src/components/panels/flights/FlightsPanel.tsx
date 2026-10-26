@@ -4,10 +4,10 @@ import {
 } from "@components/common/hooks/sidepanel";
 import { AddFlight } from "@components/forms/drafting/AddFlight";
 import { EditFlight } from "@components/forms/drafting/EditFlight";
+import { AircraftView } from "@components/views/AircraftView";
 import { AirlineView } from "@components/views/AirlineView";
 import { AirportView } from "@components/views/AirportView";
 import { FlightView } from "@components/views/FlightView";
-import { PlaneView } from "@components/views/PlaneView";
 import { RegistrationView } from "@components/views/RegistrationView";
 import { RouteView } from "@components/views/RouteView";
 import { flightFilter } from "@data/classes/filters";
@@ -21,7 +21,7 @@ import {
   selectFilteredFlights,
   sortFlights,
 } from "@data/services/flights/selectFlights";
-import type { Selected } from "@data/services/SelectionHistory";
+import { SelectionType, type Selected } from "@data/services/SelectionHistory";
 import { useGetTailsManifestQuery } from "@data/services/tails";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { useMediaQuery } from "@mantine/hooks";
@@ -31,7 +31,9 @@ import { FlightsList } from "./FlightsList";
 export function FlightsPanel() {
   const panelRef = useRef<HTMLDivElement>(null);
   const currentUser = useAppSelector((state) => state.user.currentUser);
-  const profileUsername = useAppSelector((state) => state.ui.profileUsername);
+  const viewedProfileUsername = useAppSelector(
+    (state) => state.ui.viewedProfileUsername,
+  );
   const isMobile = useMediaQuery("(max-width: 900px)");
   const selected = useAppSelector((state) => state.flights.selected);
   const drafting = useAppSelector((state) => state.flights.inProgressDraft);
@@ -39,7 +41,8 @@ export function FlightsPanel() {
   const ownFlights = useAppSelector(selectFilteredFlights);
 
   const isViewingOtherProfile =
-    Boolean(profileUsername) && currentUser?.username !== profileUsername;
+    Boolean(viewedProfileUsername) &&
+    currentUser?.username !== viewedProfileUsername;
 
   const { isLoading: ownFlightsLoading, isError: ownFlightsErrored } =
     useGetFlightsQuery(undefined, { skip: !currentUser });
@@ -47,8 +50,8 @@ export function FlightsPanel() {
     data: profileFlights,
     isLoading: profileFlightsLoading,
     isError: profileFlightsErrored,
-  } = useGetUserFlightsQuery(profileUsername ?? "", {
-    skip: !isViewingOtherProfile || !profileUsername,
+  } = useGetUserFlightsQuery(viewedProfileUsername ?? "", {
+    skip: !isViewingOtherProfile || !viewedProfileUsername,
   });
 
   useGetTailsManifestQuery(); // fire and forget — just warms the cache
@@ -109,17 +112,17 @@ export function FlightsPanel() {
       return drafting.type === "new" ? "Add flight" : "Edit flight";
     }
 
-    if (selected && selected.type === "flight") {
+    if (selected && selected.type === SelectionType.Flight) {
       return `Flight ${primaryFlight?.flightNumber ?? selected.flightId}`;
     }
 
-    if (selected && selected.type === "route") {
+    if (selected && selected.type === SelectionType.Route) {
       return primaryFlight
         ? `Route ${primaryFlight.origin.displayCode} ↔ ${primaryFlight.destination.displayCode}`
         : `Route ${selected.routeKey}`;
     }
 
-    if (selected && selected.type === "airport") {
+    if (selected && selected.type === SelectionType.Airport) {
       if (primaryFlight) {
         return `Airport ${primaryFlight.origin.id === selected.airportId ? primaryFlight.origin.displayCode : primaryFlight.destination.displayCode}`;
       }
@@ -127,16 +130,16 @@ export function FlightsPanel() {
       return `Airport ${selected.airportId}`;
     }
 
-    if (selected && selected.type === "airline") {
+    if (selected && selected.type === SelectionType.Airline) {
       return `Airline ${primaryFlight?.airline?.name ?? selected.airlineId}`;
     }
 
-    if (selected && selected.type === "plane") {
-      return `Plane ${primaryFlight?.plane?.manufacturerModel ?? selected.planeId}`;
+    if (selected && selected.type === SelectionType.Aircraft) {
+      return `Plane ${primaryFlight?.aircraft?.manufacturerModel ?? selected.planeId}`;
     }
 
-    if (selected && selected.type === "registration") {
-      return `Registration ${primaryFlight?.plane?.registration ?? selected.registration}`;
+    if (selected && selected.type === SelectionType.Registration) {
+      return `Registration ${primaryFlight?.aircraft?.registration ?? selected.registration}`;
     }
 
     return `Flights${flights && flights.length ? ` (${flights.length})` : ""}`;
@@ -193,18 +196,19 @@ export function FlightsPanel() {
       );
     }
 
-    if (selected && selected.type === "route") {
+    if (selected && selected.type === SelectionType.Route) {
       return (
         <RouteView
           route={
             flights.find((flight) => flight.route.key === selected.routeKey)
               ?.route
           }
+          flights={selectedFlights}
         />
       );
     }
 
-    if (selected && selected.type === "airport") {
+    if (selected && selected.type === SelectionType.Airport) {
       return (
         <AirportView
           airport={
@@ -214,11 +218,12 @@ export function FlightsPanel() {
               (flight) => flight.destination.id === selected.airportId,
             )?.destination
           }
+          flights={selectedFlights}
         />
       );
     }
 
-    if (selected && selected.type === "airline") {
+    if (selected && selected.type === SelectionType.Airline) {
       return (
         <AirlineView
           airline={
@@ -226,28 +231,31 @@ export function FlightsPanel() {
               (flight) => flight.airline?.name === selected.airlineId,
             )?.airline
           }
+          flights={selectedFlights}
         />
       );
     }
 
-    if (selected && selected.type === "plane") {
+    if (selected && selected.type === SelectionType.Aircraft) {
       return (
-        <PlaneView
-          plane={
-            flights.find((flight) => flight.plane?.model === selected.planeId)
-              ?.plane
+        <AircraftView
+          aircraft={
+            flights.find(
+              (flight) => flight.aircraft?.model === selected.planeId,
+            )?.aircraft
           }
+          flights={selectedFlights}
         />
       );
     }
 
-    if (selected && selected.type === "registration") {
+    if (selected && selected.type === SelectionType.Registration) {
       const plane = flights.find(
-        (flight) => flight.plane?.registration === selected.registration,
-      )?.plane;
+        (flight) => flight.aircraft?.registration === selected.registration,
+      )?.aircraft;
 
       if (plane) {
-        return <RegistrationView plane={plane} />;
+        return <RegistrationView aircraft={plane} flights={selectedFlights} />;
       }
     }
 
@@ -284,15 +292,15 @@ function filterFlightsBySelection(
 ) {
   if (!selected) return [];
 
-  if (selected.type === "flight") {
+  if (selected.type === SelectionType.Flight) {
     return flights.filter((flight) => flight.id === selected.flightId);
   }
 
-  if (selected.type === "route") {
+  if (selected.type === SelectionType.Route) {
     return flights.filter((flight) => flight.route.key === selected.routeKey);
   }
 
-  if (selected.type === "airport") {
+  if (selected.type === SelectionType.Airport) {
     return flights.filter(
       (flight) =>
         flight.origin.id === selected.airportId ||
@@ -300,19 +308,21 @@ function filterFlightsBySelection(
     );
   }
 
-  if (selected.type === "airline") {
+  if (selected.type === SelectionType.Airline) {
     return flights.filter(
       (flight) => flight.airline?.name === selected.airlineId,
     );
   }
 
-  if (selected.type === "plane") {
-    return flights.filter((flight) => flight.plane?.model === selected.planeId);
+  if (selected.type === SelectionType.Aircraft) {
+    return flights.filter(
+      (flight) => flight.aircraft?.model === selected.planeId,
+    );
   }
 
-  if (selected.type === "registration") {
+  if (selected.type === SelectionType.Registration) {
     return flights.filter(
-      (flight) => flight.plane?.registration === selected.registration,
+      (flight) => flight.aircraft?.registration === selected.registration,
     );
   }
 

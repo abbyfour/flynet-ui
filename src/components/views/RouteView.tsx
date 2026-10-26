@@ -4,23 +4,21 @@ import { FlightListItem } from "@components/panels/flights/FlightListItem";
 import type { Flight } from "@data/classes/flights/Flight";
 import type { Route } from "@data/classes/flights/Route";
 import { setSelected } from "@data/flightsSlice";
-import { selectSelectedFlights } from "@data/services/flights/selectFlights";
-import { useAppDispatch, useAppSelector } from "@data/store";
+import { SelectionType } from "@data/services/SelectionHistory";
+import { useAppDispatch } from "@data/store";
 
 import "./RouteView.scss";
 
 export function RouteView({
   route,
-  flights: flightsProp,
+  flights,
 }: {
   route: Route | undefined;
-  flights?: Flight[];
+  flights: Flight[];
 }) {
-  const reduxFlights = useAppSelector((state) => selectSelectedFlights(state));
-  const flights = flightsProp ?? reduxFlights;
   const dispatch = useAppDispatch();
 
-  if (!route || !flights || flights.length === 0) {
+  if (!route || flights.length === 0) {
     return <></>;
   }
 
@@ -41,7 +39,7 @@ export function RouteView({
               route.origin &&
               dispatch(
                 setSelected({
-                  type: "airport",
+                  type: SelectionType.Airport,
                   airportId: route.origin.id,
                 }),
               )
@@ -57,7 +55,7 @@ export function RouteView({
               route.destination &&
               dispatch(
                 setSelected({
-                  type: "airport",
+                  type: SelectionType.Airport,
                   airportId: route.destination.id,
                 }),
               )

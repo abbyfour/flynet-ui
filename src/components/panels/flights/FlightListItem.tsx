@@ -2,6 +2,7 @@ import { icons } from "@assets/icons/icons";
 import { AirlineTail } from "@assets/tails/AirlineTail";
 import type { Flight } from "@data/classes/flights/Flight";
 import { setSelected } from "@data/flightsSlice";
+import { SelectionType } from "@data/services/SelectionHistory";
 import { useAppDispatch } from "@data/store";
 import { IconCircleFilled } from "@tabler/icons-react";
 import { joinClasses } from "@util/componentUtil";
@@ -16,7 +17,7 @@ export function FlightListItem({ flight, highlighted }: FlightListItemProps) {
   const dispatch = useAppDispatch();
 
   const handleOnClick = () => {
-    dispatch(setSelected({ type: "flight", flightId: flight.id }));
+    dispatch(setSelected({ type: SelectionType.Flight, flightId: flight.id }));
   };
 
   return (
@@ -62,11 +63,11 @@ export function FlightListItem({ flight, highlighted }: FlightListItemProps) {
 
         <div className="footer text-small">
           <span className="plane-model">
-            {flight.plane ? (
+            {flight.aircraft ? (
               <>
-                {flight.plane?.model || "unknown model"}
-                {flight.plane?.registration
-                  ? ` • ${flight.plane?.registration}`
+                {flight.aircraft?.model || "unknown model"}
+                {flight.aircraft?.registration
+                  ? ` • ${flight.aircraft?.registration}`
                   : ""}
               </>
             ) : (

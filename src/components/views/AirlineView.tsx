@@ -1,23 +1,18 @@
 import { FlightListItem } from "@components/panels/flights/FlightListItem";
 import type { Airline } from "@data/classes/flights/Airline";
 import type { Flight } from "@data/classes/flights/Flight";
-import { selectSelectedFlights } from "@data/services/flights/selectFlights";
-import { useAppSelector } from "@data/store";
 import { uniquifyBy } from "@util/arrayUtil";
 
 import "./AirlineView.scss";
 
 export function AirlineView({
   airline,
-  flights: flightsProp,
+  flights,
 }: {
   airline: Airline | undefined;
-  flights?: Flight[];
+  flights: Flight[];
 }) {
-  const reduxFlights = useAppSelector((state) => selectSelectedFlights(state));
-  const flights = flightsProp ?? reduxFlights;
-
-  if (!airline || !flights || flights.length === 0) {
+  if (!airline || flights.length === 0) {
     return <></>;
   }
 
@@ -39,14 +34,15 @@ export function AirlineView({
           <ul className="planes-list">
             {uniquifyBy(
               flights.filter((flight) => !!flight.airline),
-              (a) => a.plane?.model,
+              (a) => a.aircraft?.model,
             )
               .sort(
                 (a, b) =>
-                  a.plane?.model?.localeCompare(b.plane?.model ?? "") ?? 0,
+                  a.aircraft?.model?.localeCompare(b.aircraft?.model ?? "") ??
+                  0,
               )
               .map((flight) => (
-                <li key={flight.id}>{flight.plane?.model}</li>
+                <li key={flight.id}>{flight.aircraft?.model}</li>
               ))}
           </ul>
         </div>

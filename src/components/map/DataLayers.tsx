@@ -18,6 +18,7 @@ import {
   type GroupedAirport,
   type GroupedRoute,
 } from "@data/services/flights/selectFlights";
+import { SelectionType } from "@data/services/SelectionHistory";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { setActiveSidepanelWindow } from "@data/uiSlice";
 import { type DeckProps, type PickingInfo } from "@deck.gl/core";
@@ -49,11 +50,14 @@ function DeckGLOverlay(props: DeckProps) {
 export function DataLayers() {
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector((state) => state.user.currentUser);
-  const profileUsername = useAppSelector((state) => state.ui.profileUsername);
+  const viewedProfileUsername = useAppSelector(
+    (state) => state.ui.viewedProfileUsername,
+  );
   const filters = useAppSelector((state) => state.flights.filters);
 
   const isViewingOtherProfile =
-    Boolean(profileUsername) && currentUser?.username !== profileUsername;
+    Boolean(viewedProfileUsername) &&
+    currentUser?.username !== viewedProfileUsername;
 
   const { isLoading: flightsLoading, isError: flightsErrored } =
     useGetFlightsQuery(undefined, {
@@ -63,8 +67,8 @@ export function DataLayers() {
     data: profileFlights,
     isLoading: profileFlightsLoading,
     isError: profileFlightsErrored,
-  } = useGetUserFlightsQuery(profileUsername ?? "", {
-    skip: !isViewingOtherProfile || !profileUsername,
+  } = useGetUserFlightsQuery(viewedProfileUsername ?? "", {
+    skip: !isViewingOtherProfile || !viewedProfileUsername,
   });
 
   const currentRoutes = useAppSelector(selectRoutesFromFlights);
@@ -117,11 +121,19 @@ export function DataLayers() {
   const onclick = useCallback(
     ({ object }: PickingInfo<GroupedAirport | GroupedRoute>) => {
       if (object && "route" in object) {
-        dispatch(setSelected({ type: "route", routeKey: object.route.key }));
+        dispatch(
+          setSelected({
+            type: SelectionType.Route,
+            routeKey: object.route.key,
+          }),
+        );
         dispatch(setActiveSidepanelWindow(SidepanelWindows.Flights));
       } else if (object && "airport" in object) {
         dispatch(
-          setSelected({ type: "airport", airportId: object.airport.id }),
+          setSelected({
+            type: SelectionType.Airport,
+            airportId: object.airport.id,
+          }),
         );
         dispatch(setActiveSidepanelWindow(SidepanelWindows.Flights));
       } else {

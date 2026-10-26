@@ -9,20 +9,21 @@ const manufacturers = [
   "Bombardier",
   "McDonnell Douglas",
   "de Havilland Canada",
+  "Sikorsky",
 ];
 
-export class Plane {
+export class Aircraft {
   constructor(
     public model?: string,
     public registration?: string,
   ) {}
 
-  public static fromRawFlight(rawFlight: APIFlight): Plane | undefined {
+  public static fromRawFlight(rawFlight: APIFlight): Aircraft | undefined {
     if (!rawFlight.planeModel && !rawFlight.planeRegistration) {
       return undefined;
     }
 
-    return new Plane(rawFlight.planeModel, rawFlight.planeRegistration);
+    return new Aircraft(rawFlight.planeModel, rawFlight.planeRegistration);
   }
 
   public get id(): string {
@@ -31,6 +32,10 @@ export class Plane {
     }
 
     return this.model;
+  }
+
+  public get icaoCode(): string {
+    return this.model ?? "";
   }
 
   public get manufacturer(): string {
@@ -65,7 +70,7 @@ export class Plane {
     );
   }
 
-  public deregister(): Plane {
-    return new Plane(this.model, undefined);
+  public deregister(): Aircraft {
+    return new Aircraft(this.model, undefined);
   }
 }
