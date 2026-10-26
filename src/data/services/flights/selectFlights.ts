@@ -116,10 +116,6 @@ export const selectAirportsFromFlights = createSelector(
 export const selectSelectedFlights = createSelector(
   [selectFlightsAsObjects, (state: AppRootState) => state.flights.selected],
   (flights, selection) => {
-    console.log("Selection:", selection);
-
-    console.log("Flights for selected airline:", flights);
-
     return selection?.type === SelectionType.Flight
       ? flights.filter((flight) => flight.id === selection.flightId)
       : selection?.type === SelectionType.Route
