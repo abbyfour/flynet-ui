@@ -21,7 +21,7 @@ export function AircraftView({
       <div className="content">
         <h4 className="title">
           <span className="subtitle">{aircraft.manufacturer}</span>
-          <span>{aircraft.manufacturerModel}</span>
+          <span>{aircraft.model}</span>
         </h4>
 
         <div className="airlines">

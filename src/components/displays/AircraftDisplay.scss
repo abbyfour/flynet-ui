@@ -60,9 +60,17 @@
 
   .aircraft-name {
     font-size: 132%;
-    font-weight: 600;
     line-height: 1.2;
     width: fit-content;
+
+    .aircraft-manufacturer {
+      color: var(--dark-grey);
+      font-weight: normal;
+    }
+
+    .aircraft-model {
+      font-weight: bold;
+    }
   }
 
   .aircraft-registration {

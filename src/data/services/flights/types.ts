@@ -5,11 +5,11 @@ export type APIDateString = string;
 
 export interface AddFlightRequestBody {
   flightNumber?: string;
-  airline?: string;
   date?: APIDateString;
   departureTime?: Time;
   arrivalTime?: Time;
-  planeModel?: string;
+  aircraftId?: number;
+  airlineId?: number;
   planeRegistration?: string;
   note?: string;
   originAirportId?: number;
@@ -18,11 +18,11 @@ export interface AddFlightRequestBody {
 
 export interface EditFlightRequestBody {
   flightNumber?: string;
-  airline?: string;
+  airlineId?: number;
   date?: APIDateString;
   departureTime?: Time;
   arrivalTime?: Time;
-  planeModel?: string;
+  aircraftId?: number;
   planeRegistration?: string;
   note?: string;
   originAirportId?: number;

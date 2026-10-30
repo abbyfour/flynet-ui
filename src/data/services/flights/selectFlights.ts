@@ -128,11 +128,11 @@ export const selectSelectedFlights = createSelector(
             )
           : selection?.type === SelectionType.Airline
             ? flights.filter(
-                (flight) => flight?.airline?.name === selection.airlineId,
+                (flight) => flight?.airline?.id === selection.airlineId,
               )
             : selection?.type === SelectionType.Aircraft
               ? flights.filter(
-                  (flight) => flight?.aircraft?.model === selection.planeId,
+                  (flight) => flight?.aircraft?.id === selection.aircraftId,
                 )
               : selection?.type === SelectionType.Registration
                 ? flights.filter(

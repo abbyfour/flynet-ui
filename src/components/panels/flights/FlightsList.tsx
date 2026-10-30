@@ -106,7 +106,7 @@ export function FlightsList({
           </Button>
         ))}
 
-      {isVisible && (
+      {isVisible && (flights.length > 0 || searchText) && (
         <TextInput
           className="search-input"
           placeholder="Search airline, airport, aircraft, registration"
@@ -126,7 +126,14 @@ export function FlightsList({
       )}
 
       {isVisible && flights.length === 0 && (
-        <p>No flights match your search.</p>
+        <p>
+          {searchText ||
+          filters?.search ||
+          filters?.year !== undefined ||
+          filters?.upcoming !== undefined
+            ? "No flights match your search."
+            : "No flights yet."}
+        </p>
       )}
 
       {isLoading && <FlightListSkeleton />}

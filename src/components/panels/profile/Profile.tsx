@@ -384,7 +384,7 @@ function mostVisitedAirport(flights: Flight[]): Airport | undefined {
 function mostFlownAirline(flights: Flight[]): Airline | null {
   if (flights.length === 0) return null;
 
-  const counts = new Map<string, { airline: Airline; count: number }>();
+  const counts = new Map<number, { airline: Airline; count: number }>();
 
   for (const flight of flights) {
     const entry = flight.airline ? counts.get(flight.airline.id) : undefined;
@@ -403,7 +403,7 @@ function mostFlownAirline(flights: Flight[]): Airline | null {
 function mostFlownPlane(flights: Flight[]): Aircraft | null {
   if (flights.length === 0) return null;
 
-  const counts = new Map<string, { plane: Aircraft; count: number }>();
+  const counts = new Map<number, { plane: Aircraft; count: number }>();
 
   for (const flight of flights) {
     const entry = flight.aircraft ? counts.get(flight.aircraft.id) : undefined;

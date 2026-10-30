@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { AirportInput } from "../AirportInput";
 import { Input } from "../Input";
 
+import { AircraftInput } from "../inputs/AircraftInput";
+import { AirlineInput } from "../inputs/AirlineInput";
 import "./FlightDrafter.scss";
 
 interface FlightDrafterProps {
@@ -89,6 +91,9 @@ export function FlightDrafter({
         type="text"
         id="flightNumber"
         label="Flight Number"
+        placeholder="AC 549"
+        mask="AA 0[000]"
+        maskDefinitions={{ A: /[A-Za-z0-9]/ }}
         value={draft.flightNumber}
         disabled={isLoading}
         onChange={(value) => updateDraft({ flightNumber: value })}
@@ -97,8 +102,7 @@ export function FlightDrafter({
 
       <br />
 
-      <Input
-        type="text"
+      <AirlineInput
         id="airline"
         label="Airline"
         value={draft.airline}
@@ -135,13 +139,12 @@ export function FlightDrafter({
 
       <br />
 
-      <Input
-        type="text"
+      <AircraftInput
         id="aircraft"
         label="Aircraft"
+        value={draft.aircraft}
         disabled={isLoading}
-        value={draft.planeModel as string | undefined}
-        onChange={(value) => updateDraft({ planeModel: value })}
+        onChange={(value) => updateDraft({ aircraft: value })}
         fingerprinted={mode === "edit"}
       />
 

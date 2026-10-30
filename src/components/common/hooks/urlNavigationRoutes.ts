@@ -169,12 +169,16 @@ function parseSelectedItem(
       return routeKey ? { type: SelectionType.Route, routeKey } : undefined;
     }
     case RouteSegment.Airline: {
-      const airlineId = decodeURLParam(value);
-      return airlineId ? { type: SelectionType.Airline, airlineId } : undefined;
+      const airlineId = parseURLIntParam(value);
+      return airlineId !== undefined
+        ? { type: SelectionType.Airline, airlineId }
+        : undefined;
     }
     case RouteSegment.Aircraft: {
-      const planeId = decodeURLParam(value);
-      return planeId ? { type: SelectionType.Aircraft, planeId } : undefined;
+      const aircraftId = parseURLIntParam(value);
+      return aircraftId
+        ? { type: SelectionType.Aircraft, aircraftId: aircraftId }
+        : undefined;
     }
     case RouteSegment.Registration: {
       const registration = decodeURLParam(value);
@@ -226,7 +230,7 @@ function buildSelectionPath(
       return joinPathSegments(
         ...prefix,
         RouteSegment.Aircraft,
-        encodeURLParam(selected.planeId),
+        encodeURLParam(selected.aircraftId),
       );
     case SelectionType.Registration:
       return joinPathSegments(

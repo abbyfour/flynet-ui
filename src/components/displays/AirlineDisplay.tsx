@@ -16,8 +16,6 @@ export function AirlineDisplay({
   onClick,
   noHover = false,
 }: AirlineDisplayProps) {
-  const iataCode = flightNumber?.substring(0, 2) ?? null;
-
   return (
     <div
       className={`AirlineDisplay ${noHover ? "no-hover" : ""}`}
@@ -26,14 +24,17 @@ export function AirlineDisplay({
       <AirlineTail
         key={flightNumber || airline.name}
         airline={airline}
-        flightNumber={flightNumber}
+        icaoCode={airline.icaoCode}
+        iataCode={airline.iataCode}
         noTooltip={true}
       />
 
       <div className="airline-details">
         <p className="airline-name">{airline.name}</p>
 
-        <div className="airline-code text-small">{iataCode || "N/A"}</div>
+        <div className="airline-code text-small">
+          {airline.displayCode || "N/A"}
+        </div>
       </div>
     </div>
   );

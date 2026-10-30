@@ -1,76 +1,80 @@
-import type { APIFlight } from "./Flight";
+export enum AircraftClass {
+  Turboprop = "turboprop",
+  Narrowbody = "narrowbody",
+  Widebody = "widebody",
+  RegionalJet = "regional-jet",
+  PistonCommuter = "piston-commuter",
+  Helicopter = "helicopter",
+  Supersonic = "supersonic",
+}
 
-const manufacturers = [
-  "Boeing",
-  "Airbus",
-  "Embraer",
-  "De Havilland Canada",
-  "Fokker",
-  "Bombardier",
-  "McDonnell Douglas",
-  "de Havilland Canada",
-  "Sikorsky",
-];
+export interface APIAircraft {
+  primaryName: string;
+
+  icaoCode: string;
+  iataCode?: string;
+
+  manufacturer: string;
+  model: string;
+  aircraftClass: AircraftClass;
+  family?: string;
+  yearIntroduced: number;
+  id: number;
+}
 
 export class Aircraft {
   constructor(
-    public model?: string,
-    public registration?: string,
-  ) {}
-
-  public static fromRawFlight(rawFlight: APIFlight): Aircraft | undefined {
-    if (!rawFlight.planeModel && !rawFlight.planeRegistration) {
-      return undefined;
-    }
-
-    return new Aircraft(rawFlight.planeModel, rawFlight.planeRegistration);
+    private raw: APIAircraft,
+    private _registration?: string,
+  ) {
+    if (!raw) this.raw = {} as APIAircraft; // to prevent crashes from missing data, but will result in an "Unknown" airport with id -1, so should be avoided if possible
   }
 
-  public get id(): string {
-    if (!this.model) {
-      return "00";
-    }
-
-    return this.model;
+  public get id(): number {
+    return this.raw?.id ?? -1;
   }
 
   public get icaoCode(): string {
-    return this.model ?? "";
+    return this.raw?.icaoCode ?? "";
+  }
+
+  public get iataCode(): string {
+    return this.raw?.iataCode ?? "";
+  }
+
+  public get displayCode(): string {
+    return this.raw?.icaoCode ?? this.raw?.iataCode ?? "";
   }
 
   public get manufacturer(): string {
-    if (!this.model) {
-      return "Unknown";
-    }
+    return this.raw?.manufacturer ?? "Unknown";
+  }
 
-    const modelLower = this.model.toLowerCase();
-
-    for (const manufacturer of manufacturers) {
-      if (modelLower.includes(manufacturer.toLowerCase())) {
-        return manufacturer;
-      }
-    }
-
-    return "Unknown";
+  public get model(): string {
+    return this.raw?.model ?? "Unknown";
   }
 
   public get manufacturerModel(): string {
-    if (!this.model) {
-      return "Unknown";
-    }
+    return this.raw.primaryName;
+  }
 
-    const manufacturer = this.manufacturer;
+  public get aircraftClass(): AircraftClass | undefined {
+    return this.raw?.aircraftClass;
+  }
 
-    if (manufacturer === "Unknown") {
-      return this.model;
-    }
+  public get family(): string {
+    return this.raw?.family ?? "Unknown";
+  }
 
-    return (
-      this.model.replace(new RegExp(manufacturer, "i"), "").trim() || "Unknown"
-    );
+  public get yearIntroduced(): number | undefined {
+    return this.raw?.yearIntroduced;
+  }
+
+  public get registration(): string | undefined {
+    return this._registration;
   }
 
   public deregister(): Aircraft {
-    return new Aircraft(this.model, undefined);
+    return new Aircraft(this.raw, undefined);
   }
 }

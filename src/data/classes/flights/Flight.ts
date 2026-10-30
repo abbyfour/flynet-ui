@@ -2,8 +2,8 @@ import type { APIDateString } from "@data/services/flights/types";
 import { compareObjects } from "@util/arrayUtil";
 import type { Time } from "@util/types";
 import type { UserProperties } from "../user";
-import { Aircraft } from "./Aircraft";
-import { Airline } from "./Airline";
+import { Aircraft, type APIAircraft } from "./Aircraft";
+import { Airline, type APIAirline } from "./Airline";
 import { Airport, type APIAirport } from "./Airport";
 import type { FlightDraft } from "./FlightDraft";
 import { Route } from "./Route";
@@ -11,18 +11,19 @@ import { Route } from "./Route";
 export interface APIFlight {
   id: number;
   flightNumber?: string;
-  airline?: string;
   date?: APIDateString;
 
   departureTime?: Time;
   arrivalTime?: Time;
 
-  planeModel?: string;
-  planeRegistration?: string;
   note?: string;
 
   userId: number;
   user: UserProperties;
+
+  aircraft: APIAircraft;
+  airline: APIAirline;
+  planeRegistration?: string;
 
   /** Full info of the departure airport */
   originAirport: APIAirport;
@@ -39,6 +40,9 @@ export interface APIFlight {
   originAirportId?: number;
   /** @deprecated ID of the arrival airport */
   destinationAirportId?: number;
+
+  /** @deprecated String model of the plane */
+  planeModel?: string;
 }
 
 export class Flight {
@@ -49,7 +53,7 @@ export class Flight {
   public readonly airline: Airline | undefined;
 
   constructor(protected raw: APIFlight) {
-    this.aircraft = Aircraft.fromRawFlight(raw);
+    this.aircraft = new Aircraft(raw.aircraft, raw.planeRegistration);
     this.origin = new Airport(raw.originAirport);
     this.destination = new Airport(raw.destinationAirport);
     this.route = new Route(this.origin, this.destination);
@@ -59,6 +63,7 @@ export class Flight {
   get id(): number {
     return this.raw.id;
   }
+
   get flightNumber(): string | undefined {
     return this.raw.flightNumber;
   }
@@ -94,11 +99,24 @@ export class Flight {
   toDraft(): FlightDraft {
     return {
       flightNumber: this.flightNumber,
-      airline: this.airline?.name,
+      airline: this.airline
+        ? {
+            id: this.airline.id,
+            displayCode: this.airline.displayCode,
+            name: this.airline.name,
+          }
+        : undefined,
       date: this.raw.date ? new Date(this.raw.date) : undefined,
       departureTime: this.departureTime,
       arrivalTime: this.arrivalTime,
-      planeModel: this.aircraft?.model,
+      aircraft:
+        this.aircraft && this.aircraft.id !== -1
+          ? {
+              id: this.aircraft.id,
+              displayCode: this.aircraft.displayCode,
+              name: this.aircraft.manufacturerModel,
+            }
+          : undefined,
       planeRegistration: this.aircraft?.registration,
       note: this.note,
       origin: {

@@ -138,7 +138,7 @@ export function FlightView({ flight, canEdit = true }: FlightViewProps) {
                 dispatch(
                   setSelected({
                     type: SelectionType.Airline,
-                    airlineId: flight.airline!.name,
+                    airlineId: flight.airline.id,
                   }),
                 )
               }
@@ -152,11 +152,11 @@ export function FlightView({ flight, canEdit = true }: FlightViewProps) {
             <AircraftDisplay
               aircraft={flight.aircraft}
               onClick={() =>
-                flight.aircraft?.model &&
+                flight.aircraft &&
                 dispatch(
                   setSelected({
                     type: SelectionType.Aircraft,
-                    planeId: flight.aircraft.model,
+                    aircraftId: flight.aircraft.id,
                   }),
                 )
               }

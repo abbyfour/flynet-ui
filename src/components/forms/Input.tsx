@@ -1,9 +1,15 @@
-import { PasswordInput, Textarea, TextInput } from "@mantine/core";
+import { InputBase, PasswordInput, Textarea, TextInput } from "@mantine/core";
 import { TimeInput } from "@mantine/dates";
 import { type Time } from "@util/types";
 import { useCallback, useState } from "react";
+import { IMaskInput } from "react-imask";
 import "./Input.scss";
 import { InputLabel } from "./InputLabel";
+
+// InputBase's polymorphic typing can't resolve IMaskInput's union of mask props
+const MaskInput = IMaskInput as unknown as React.ComponentClass<
+  Record<string, unknown>
+>;
 
 type InputType = "text" | "date" | "time" | "longtext" | "password";
 
@@ -28,6 +34,9 @@ export interface BaseInputProps {
 type InputProps<T extends InputType> = BaseInputProps & {
   type: T;
   value?: InputValue<T>;
+  /** IMask pattern; only applies to type "text". */
+  mask?: string;
+  maskDefinitions?: Record<string, RegExp>;
 
   onChange?(value: InputValue<T>): void;
 };
@@ -44,6 +53,8 @@ export function Input<T extends InputType>({
 
   disabled = false,
   fingerprinted = false,
+  mask,
+  maskDefinitions,
 }: InputProps<T>) {
   const [initialValue] = useState(value);
 
@@ -88,6 +99,22 @@ export function Input<T extends InputType>({
 
   switch (type) {
     case "text":
+      if (mask) {
+        return (
+          <InputBase
+            {...sharedInputProps}
+            component={MaskInput}
+            mask={mask}
+            definitions={maskDefinitions}
+            prepare={(str: string) => str.toUpperCase()}
+            lazy
+            value={(value as string | undefined) ?? ""}
+            onAccept={(accepted: string) =>
+              onChange?.(transformValue(type, accepted))
+            }
+          />
+        );
+      }
       return (
         <TextInput
           {...sharedInputProps}

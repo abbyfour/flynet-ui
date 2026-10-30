@@ -63,7 +63,14 @@ export function AircraftDisplay({
       </div>
 
       <div className="aircraft-details">
-        <p className="aircraft-name">{planeName}</p>
+        <p className="aircraft-name">
+          {aircraft.manufacturer && aircraft.manufacturer !== "Unknown" && (
+            <span className="aircraft-manufacturer">
+              {aircraft.manufacturer}{" "}
+            </span>
+          )}
+          <span className="aircraft-model">{planeName}</span>
+        </p>
         {onRegistrationClick && registrationCode ? (
           <button
             type="button"

@@ -1,3 +1,5 @@
+import { Aircraft, type APIAircraft } from "@data/classes/flights/Aircraft";
+import { Airline, type APIAirline } from "@data/classes/flights/Airline";
 import { Airport, type APIAirport } from "@data/classes/flights/Airport";
 import type { APIFlight } from "@data/classes/flights/Flight";
 import type {
@@ -5,7 +7,11 @@ import type {
   APIUsernameFlightLog,
 } from "@data/classes/flights/FlightLog";
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { compareAirportsBySize } from "@util/flights";
+import {
+  compareAircraftByYear,
+  compareAirlinesByActivity,
+  compareAirportsBySize,
+} from "@util/flights";
 import { baseFlynetQuery } from "../client";
 import type { AddFlightRequestBody, EditFlightRequestBody } from "./types";
 
@@ -104,10 +110,7 @@ export const flightsApi = createApi({
     getAirportByCode: build.query<Airport | undefined, string>({
       query: (code) => `airport/code/${code.toUpperCase()}`,
       transformResponse: (response: APIAirport) => {
-        if (response) {
-          return new Airport(response);
-        }
-        return undefined;
+        return response ? new Airport(response) : undefined;
       },
     }),
 
@@ -120,6 +123,44 @@ export const flightsApi = createApi({
             .sort((a, b) => compareAirportsBySize(a.type, b.type));
         }
         return [];
+      },
+    }),
+
+    searchAircraft: build.query<Aircraft[], string>({
+      query: (query) => `aircraft/?query=${query}`,
+      transformResponse: (response: { items: APIAircraft[] }) => {
+        if (response) {
+          return response.items
+            .map((aircraft) => new Aircraft(aircraft))
+            .sort(compareAircraftByYear);
+        }
+        return [];
+      },
+    }),
+
+    getAircraftByCode: build.query<Aircraft | undefined, string>({
+      query: (code) => `aircraft/code/${code.toUpperCase()}`,
+      transformResponse: (response: APIAircraft) => {
+        return response ? new Aircraft(response) : undefined;
+      },
+    }),
+
+    searchAirline: build.query<Airline[], string>({
+      query: (query) => `airline/?query=${query}`,
+      transformResponse: (response: { items: APIAirline[] }) => {
+        if (response) {
+          return response.items
+            .map((airline) => new Airline(airline))
+            .sort(compareAirlinesByActivity);
+        }
+        return [];
+      },
+    }),
+
+    getAirlineByCode: build.query<Airline | undefined, string>({
+      query: (code) => `airline/code/${code.toUpperCase()}`,
+      transformResponse: (response: APIAirline) => {
+        return response ? new Airline(response) : undefined;
       },
     }),
 
@@ -160,6 +201,10 @@ export const {
   useLazyGetFlightsQuery,
   useLazyGetAirportByCodeQuery,
   useLazySearchAirportsQuery,
+  useLazySearchAircraftQuery,
+  useLazyGetAircraftByCodeQuery,
+  useLazySearchAirlineQuery,
+  useLazyGetAirlineByCodeQuery,
   useAddFlightMutation,
   useDeleteFlightMutation,
   useUpdateFlightMutation,

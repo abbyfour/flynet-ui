@@ -12,21 +12,22 @@ import notailIcon from "./notail.svg";
 
 type AirlineTailProps = {
   airline: Airline | undefined;
-  flightNumber: string | undefined;
+  icaoCode?: string;
+  iataCode?: string;
   noTooltip?: boolean;
 };
 
 export function AirlineTail({
   airline,
-  flightNumber,
+  icaoCode,
+  iataCode,
   noTooltip,
 }: AirlineTailProps) {
   const { data: tails } = useGetTailsManifestQuery();
 
   const airlineName = airline?.name ?? null;
-  const icaoCode = flightNumber?.substring(0, 2) ?? null;
 
-  const tailAirline = findTailAirline(tails, airlineName, icaoCode);
+  const tailAirline = findTailAirline(tails, airlineName, icaoCode, iataCode);
 
   const imgSrc = tailAirline
     ? getAirlineTailURL(tailAirline, tailAirline.tails[0])
@@ -48,11 +49,12 @@ export function AirlineTail({
 function findTailAirline(
   tails: TailsManifest | undefined,
   airlineName: string | null,
-  icaoCode: string | null,
+  icaoCode: string | undefined,
+  iataCode: string | undefined,
 ): TailAirline | null {
-  if (!tails || (!airlineName && !icaoCode)) return null;
+  if (!tails || (!airlineName && !icaoCode && !iataCode)) return null;
 
-  const matchByTerm = (term: string | null): TailAirline | null => {
+  const matchByTerm = (term: string | null | undefined): TailAirline | null => {
     if (!term) return null;
     const normalizedTerm = term.toLowerCase();
 
@@ -69,5 +71,7 @@ function findTailAirline(
     return null;
   };
 
-  return matchByTerm(airlineName) || matchByTerm(icaoCode);
+  return (
+    matchByTerm(airlineName) || matchByTerm(icaoCode) || matchByTerm(iataCode)
+  );
 }

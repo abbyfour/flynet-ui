@@ -33,6 +33,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-easy-crop": "^5.5.7",
+    "react-imask": "^7.6.1",
     "react-map-gl": "^8.1.0",
     "react-redux": "^9.2.0",
     "react-toggle": "^4.1.3",

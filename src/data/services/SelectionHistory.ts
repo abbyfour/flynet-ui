@@ -16,8 +16,8 @@ export type Selected =
     }
   | { type: SelectionType.Route; routeKey: string }
   | { type: SelectionType.Airport; airportId: number }
-  | { type: SelectionType.Airline; airlineId: string }
-  | { type: SelectionType.Aircraft; planeId: number | string }
+  | { type: SelectionType.Airline; airlineId: number }
+  | { type: SelectionType.Aircraft; aircraftId: number }
   | { type: SelectionType.Registration; registration: string };
 
 export type SelectionHistory = Array<Selected>;

@@ -135,7 +135,7 @@ export function FlightsPanel() {
     }
 
     if (selected && selected.type === SelectionType.Aircraft) {
-      return `Plane ${primaryFlight?.aircraft?.manufacturerModel ?? selected.planeId}`;
+      return `Plane ${primaryFlight?.aircraft?.manufacturerModel ?? selected.aircraftId}`;
     }
 
     if (selected && selected.type === SelectionType.Registration) {
@@ -152,7 +152,7 @@ export function FlightsPanel() {
   });
 
   const isListVisible = Boolean(
-    flightsReady && !selected && !drafting && flights && (flights.length || filters),
+    flightsReady && !selected && !drafting && flights,
   );
 
   useEffect(() => {
@@ -227,9 +227,8 @@ export function FlightsPanel() {
       return (
         <AirlineView
           airline={
-            flights.find(
-              (flight) => flight.airline?.name === selected.airlineId,
-            )?.airline
+            flights.find((flight) => flight.airline?.id === selected.airlineId)
+              ?.airline
           }
           flights={selectedFlights}
         />
@@ -241,7 +240,7 @@ export function FlightsPanel() {
         <AircraftView
           aircraft={
             flights.find(
-              (flight) => flight.aircraft?.model === selected.planeId,
+              (flight) => flight.aircraft?.id === selected.aircraftId,
             )?.aircraft
           }
           flights={selectedFlights}
@@ -310,13 +309,13 @@ function filterFlightsBySelection(
 
   if (selected.type === SelectionType.Airline) {
     return flights.filter(
-      (flight) => flight.airline?.name === selected.airlineId,
+      (flight) => flight.airline?.id === selected.airlineId,
     );
   }
 
   if (selected.type === SelectionType.Aircraft) {
     return flights.filter(
-      (flight) => flight.aircraft?.model === selected.planeId,
+      (flight) => flight.aircraft?.id === selected.aircraftId,
     );
   }
 

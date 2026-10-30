@@ -33,7 +33,8 @@ export function FlightListItem({ flight, highlighted }: FlightListItemProps) {
         <AirlineTail
           key={flight.id}
           airline={flight.airline}
-          flightNumber={flight.flightNumber}
+          icaoCode={flight.airline?.icaoCode}
+          iataCode={flight.airline?.iataCode}
         />
       </div>
 
@@ -65,7 +66,7 @@ export function FlightListItem({ flight, highlighted }: FlightListItemProps) {
           <span className="plane-model">
             {flight.aircraft ? (
               <>
-                {flight.aircraft?.model || "unknown model"}
+                {flight.aircraft?.manufacturerModel || "unknown model"}
                 {flight.aircraft?.registration
                   ? ` • ${flight.aircraft?.registration}`
                   : ""}

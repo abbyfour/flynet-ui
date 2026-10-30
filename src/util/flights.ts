@@ -1,3 +1,5 @@
+import type { Aircraft } from "@data/classes/flights/Aircraft";
+import type { Airline } from "@data/classes/flights/Airline";
 import type { AirportType } from "@data/classes/flights/Airport";
 import type { Flight } from "@data/classes/flights/Flight";
 
@@ -49,4 +51,20 @@ export function compareAirportsBySize(a: AirportType, b: AirportType) {
     "closed",
   ];
   return sizeOrder.indexOf(a) - sizeOrder.indexOf(b);
+}
+
+export function compareAircraftByYear(a: Aircraft, b: Aircraft) {
+  const yearA = a.yearIntroduced ?? 0;
+  const yearB = b.yearIntroduced ?? 0;
+  return yearB - yearA;
+}
+
+export function compareAirlinesByActivity(a: Airline, b: Airline) {
+  // compare by activity (active airlines first) and then name alphabetically
+  const activityA = a.isActive ? 1 : 0;
+  const activityB = b.isActive ? 1 : 0;
+  if (activityB - activityA !== 0) {
+    return activityB - activityA;
+  }
+  return a.name.localeCompare(b.name);
 }

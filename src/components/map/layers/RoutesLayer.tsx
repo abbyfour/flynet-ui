@@ -106,7 +106,7 @@ const routeIncludesFlight = (route: GroupedRoute, selected?: Selected) => {
   if (!selected) return false;
 
   if (selected.type === SelectionType.Airline) {
-    return route.flights.some((f) => f.airline?.name === selected.airlineId);
+    return route.flights.some((f) => f.airline?.id === selected.airlineId);
   } else if (selected.type === SelectionType.Flight) {
     return route.flights.some((f) => f.id === selected.flightId);
   } else if (selected.type === SelectionType.Route) {
@@ -117,7 +117,7 @@ const routeIncludesFlight = (route: GroupedRoute, selected?: Selected) => {
       route.route.destination.id === selected.airportId
     );
   } else if (selected.type === SelectionType.Aircraft) {
-    return route.flights.some((f) => f.aircraft?.model === selected.planeId);
+    return route.flights.some((f) => f.aircraft?.id === selected.aircraftId);
   } else if (selected.type === SelectionType.Registration) {
     return route.flights.some(
       (f) => f.aircraft?.registration === selected.registration,
