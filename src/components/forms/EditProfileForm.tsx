@@ -4,8 +4,9 @@ import { useAppDispatch, useAppSelector } from "@data/store";
 import { saveUser } from "@data/userSlice";
 import { IconAt } from "@tabler/icons-react";
 import { useState } from "react";
-import "./EditProfileForm.scss";
 import { Input } from "./Input";
+
+import "./EditProfileForm.scss";
 
 type EditProfileFormProps = {
   clearEditing: () => void;
@@ -25,6 +26,7 @@ export function EditProfileForm({ clearEditing }: EditProfileFormProps) {
       nickname: editingUser.nickname,
       email: editingUser.email,
       bio: editingUser.bio,
+      isProfilePublic: editingUser.isProfilePublic,
     }).unwrap();
 
     dispatch(saveUser({ ...updatedUser, token: currentUser!.token }));
@@ -70,6 +72,17 @@ export function EditProfileForm({ clearEditing }: EditProfileFormProps) {
             value={editingUser.bio}
             onChange={(v) => setEditingUser({ ...editingUser, bio: v })}
             fingerprinted
+          />
+
+          <Input
+            type="toggle"
+            label="Public profile"
+            description="Public profiles can be viewed by others"
+            id="publicProfile"
+            value={editingUser.isProfilePublic}
+            onChange={(v) =>
+              setEditingUser({ ...editingUser, isProfilePublic: v! })
+            }
           />
         </div>
 

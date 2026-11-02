@@ -1,9 +1,19 @@
 .InputLabel {
-  @include inline-content;
-  border-bottom: none !important;
+  display: flex;
+  flex-direction: column;
 
-  .required {
-    color: rgb(255, 54, 54);
-    font-size: 12px;
+  .tiny-header {
+    @include inline-content;
+    border-bottom: none !important;
+
+    .required {
+      color: rgb(255, 54, 54);
+      font-size: 12px;
+    }
+  }
+
+  .description {
+    color: var(--grey);
+    margin-bottom: var(--gap-xs);
   }
 }

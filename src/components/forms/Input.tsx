@@ -1,4 +1,10 @@
-import { InputBase, PasswordInput, Textarea, TextInput } from "@mantine/core";
+import {
+  InputBase,
+  PasswordInput,
+  Switch,
+  Textarea,
+  TextInput,
+} from "@mantine/core";
 import { TimeInput } from "@mantine/dates";
 import { type Time } from "@util/types";
 import { useCallback, useState } from "react";
@@ -11,7 +17,7 @@ const MaskInput = IMaskInput as unknown as React.ComponentClass<
   Record<string, unknown>
 >;
 
-type InputType = "text" | "date" | "time" | "longtext" | "password";
+type InputType = "text" | "date" | "time" | "longtext" | "password" | "toggle";
 
 type InputValue<T extends InputType> =
   | (T extends "text" ? string : never)
@@ -19,11 +25,13 @@ type InputValue<T extends InputType> =
   | (T extends "time" ? Time : never)
   | (T extends "longtext" ? string : never)
   | (T extends "password" ? string : never)
+  | (T extends "toggle" ? boolean : never)
   | undefined;
 
 export interface BaseInputProps {
   id: string;
   label: string;
+  description?: string;
   disabled?: boolean;
   required?: boolean;
   placeholder?: string;
@@ -50,6 +58,7 @@ export function Input<T extends InputType>({
   required = false,
   placeholder = "",
   icon: leftSection,
+  description,
 
   disabled = false,
   fingerprinted = false,
@@ -74,6 +83,10 @@ export function Input<T extends InputType>({
       return value instanceof Date && initialValue instanceof Date
         ? value.getTime() !== initialValue.getTime()
         : value !== initialValue;
+    }
+
+    if (type === "toggle") {
+      return (value ?? false) !== (initialValue ?? false);
     }
 
     return value !== initialValue;
@@ -179,6 +192,25 @@ export function Input<T extends InputType>({
           onChange={(e) => onChange?.(transformValue(type, e.target.value))}
         />
       );
+
+    case "toggle":
+      return (
+        <div className="date-input">
+          <InputLabel
+            label={label}
+            changed={hasValueChanged()}
+            required={required}
+            description={description}
+          />
+
+          <Switch
+            {...{ ...sharedInputProps, label: undefined }}
+            checked={value as boolean | undefined}
+            onChange={(e) => onChange?.(transformValue(type, e.target.checked))}
+          />
+        </div>
+      );
+
     default:
       throw new Error(`Unsupported input type: ${type}`);
   }
@@ -186,7 +218,7 @@ export function Input<T extends InputType>({
 
 function transformValue<T extends InputType>(
   type: T,
-  value: string | undefined,
+  value: string | boolean | undefined,
 ): InputValue<T> {
   switch (type) {
     case "text":
@@ -201,8 +233,8 @@ function transformValue<T extends InputType>(
   }
 }
 
-function parseDate(value: string | undefined): Date | undefined {
-  if (value === undefined) {
+function parseDate(value: string | boolean | undefined): Date | undefined {
+  if (value === undefined || typeof value === "boolean") {
     return undefined;
   }
 

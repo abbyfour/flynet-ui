@@ -48,7 +48,6 @@ const RAW_RUNTIME_STATE =
           ["@types/prop-types", "npm:15.7.15"],\
           ["@types/react", "npm:19.2.8"],\
           ["@types/react-dom", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:19.2.3"],\
-          ["@types/react-toggle", "npm:4.0.5"],\
           ["@types/redux-persist", "npm:4.3.1"],\
           ["@vitejs/plugin-react-swc", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:4.2.2"],\
           ["dayjs", "npm:1.11.19"],\
@@ -66,7 +65,6 @@ const RAW_RUNTIME_STATE =
           ["react-imask", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:7.6.1"],\
           ["react-map-gl", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.1.0"],\
           ["react-redux", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:9.2.0"],\
-          ["react-toggle", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:4.1.3"],\
           ["redux", "npm:5.0.1"],\
           ["redux-persist", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:6.0.0"],\
           ["sass", "npm:1.97.2"],\
@@ -3851,16 +3849,6 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["@types/react-toggle", [\
-      ["npm:4.0.5", {\
-        "packageLocation": "../../.yarn/berry/cache/@types-react-toggle-npm-4.0.5-c40bf309fb-10c0.zip/node_modules/@types/react-toggle/",\
-        "packageDependencies": [\
-          ["@types/react", "npm:19.2.8"],\
-          ["@types/react-toggle", "npm:4.0.5"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["@types/redux-persist", [\
       ["npm:4.3.1", {\
         "packageLocation": "../../.yarn/berry/cache/@types-redux-persist-npm-4.3.1-c96a3478aa-10c0.zip/node_modules/@types/redux-persist/",\
@@ -4523,15 +4511,6 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../.yarn/berry/cache/chownr-npm-3.0.0-5275e85d25-10c0.zip/node_modules/chownr/",\
         "packageDependencies": [\
           ["chownr", "npm:3.0.0"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["classnames", [\
-      ["npm:2.5.1", {\
-        "packageLocation": "../../.yarn/berry/cache/classnames-npm-2.5.1-c7273f3423-10c0.zip/node_modules/classnames/",\
-        "packageDependencies": [\
-          ["classnames", "npm:2.5.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -5389,7 +5368,6 @@ const RAW_RUNTIME_STATE =
           ["@types/prop-types", "npm:15.7.15"],\
           ["@types/react", "npm:19.2.8"],\
           ["@types/react-dom", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:19.2.3"],\
-          ["@types/react-toggle", "npm:4.0.5"],\
           ["@types/redux-persist", "npm:4.3.1"],\
           ["@vitejs/plugin-react-swc", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:4.2.2"],\
           ["dayjs", "npm:1.11.19"],\
@@ -5407,7 +5385,6 @@ const RAW_RUNTIME_STATE =
           ["react-imask", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:7.6.1"],\
           ["react-map-gl", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:8.1.0"],\
           ["react-redux", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:9.2.0"],\
-          ["react-toggle", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:4.1.3"],\
           ["redux", "npm:5.0.1"],\
           ["redux-persist", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:6.0.0"],\
           ["sass", "npm:1.97.2"],\
@@ -6991,37 +6968,6 @@ const RAW_RUNTIME_STATE =
         ],\
         "packagePeers": [\
           "@types/react",\
-          "react"\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["react-toggle", [\
-      ["npm:4.1.3", {\
-        "packageLocation": "../../.yarn/berry/cache/react-toggle-npm-4.1.3-6397672405-10c0.zip/node_modules/react-toggle/",\
-        "packageDependencies": [\
-          ["react-toggle", "npm:4.1.3"]\
-        ],\
-        "linkType": "SOFT"\
-      }],\
-      ["virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:4.1.3", {\
-        "packageLocation": "./.yarn/__virtual__/react-toggle-virtual-6225ea2358/3/.yarn/berry/cache/react-toggle-npm-4.1.3-6397672405-10c0.zip/node_modules/react-toggle/",\
-        "packageDependencies": [\
-          ["@types/prop-types", "npm:15.7.15"],\
-          ["@types/react", "npm:19.2.8"],\
-          ["@types/react-dom", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:19.2.3"],\
-          ["classnames", "npm:2.5.1"],\
-          ["prop-types", "npm:15.8.1"],\
-          ["react", "npm:19.2.3"],\
-          ["react-dom", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:19.2.3"],\
-          ["react-toggle", "virtual:866b83269bff92afcd0507b22135c2f1f9fe5bff64a138be0cbf8bb6f52fbcdd9300ca50c4a3309775d83aa2e84d92f6909d97483a55cda486849edf753ef465#npm:4.1.3"]\
-        ],\
-        "packagePeers": [\
-          "@types/prop-types",\
-          "@types/react-dom",\
-          "@types/react",\
-          "prop-types",\
-          "react-dom",\
           "react"\
         ],\
         "linkType": "HARD"\

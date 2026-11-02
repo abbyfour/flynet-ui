@@ -15,10 +15,7 @@ type RegistrationViewProps = {
   flights: Flight[];
 };
 
-export function RegistrationView({
-  aircraft,
-  flights,
-}: RegistrationViewProps) {
+export function RegistrationView({ aircraft, flights }: RegistrationViewProps) {
   if (!aircraft?.registration || flights.length === 0) {
     return <></>;
   }
@@ -28,7 +25,7 @@ export function RegistrationView({
       <div className="content">
         <h4 className="title">
           {aircraft.registration}
-          <span className="subtitle">{aircraft.model}</span>
+          <span className="subtitle">{aircraft.manufacturerModel}</span>
         </h4>
 
         <div>
