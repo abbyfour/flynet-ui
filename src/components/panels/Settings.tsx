@@ -77,11 +77,6 @@ export function Settings() {
 
   return (
     <div className="Settings">
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
       <Button
         onClick={() =>
           navigator.enterScope(SELF_SCOPE, {
@@ -89,18 +84,11 @@ export function Settings() {
             editing: true,
           })
         }
-<<<<<<< Updated upstream
         className="add-button"
-=======
->>>>>>> Stashed changes
       >
         Edit your user profile
       </Button>
 
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
       <form onSubmit={handleSubmit}>
         <div className="settings-fields">
           <fieldset className="ui-mode-fieldset">

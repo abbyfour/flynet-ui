@@ -154,26 +154,10 @@ export function FlightView({ flight, canEdit = true }: FlightViewProps) {
               }
               onRegistrationClick={() =>
                 flight.aircraft?.registration &&
-<<<<<<< Updated upstream
-                select({
-                  type: SelectionType.Registration,
-                  registration: flight.aircraft!.registration!,
-                })
-=======
-<<<<<<< Updated upstream
-                dispatch(
-                  setSelected({
-                    type: SelectionType.Registration,
-                    registration: flight.aircraft!.registration!,
-                  }),
-                )
-=======
                 select({
                   type: SelectionType.Registration,
                   registration: flight.aircraft.registration,
                 })
->>>>>>> Stashed changes
->>>>>>> Stashed changes
               }
             />
           </div>
