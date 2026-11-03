@@ -30,6 +30,7 @@
       "@data/*": ["src/data/*"],
       "@components/*": ["src/components/*"],
       "@util/*": ["src/util/*"],
+      "@location/*": ["src/data/location/*"],
       "@/*": ["src/*"]
     }
   },

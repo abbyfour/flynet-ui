@@ -5,7 +5,6 @@ import { Route } from "@data/classes/flights/Route";
 import type { AppRootState } from "@data/store";
 import { createSelector } from "@reduxjs/toolkit";
 import { compareTimes } from "@util/types";
-import { SelectionType } from "../SelectionHistory";
 import { flightsApi } from "./flightsAPI";
 
 export type GroupedFlightDetails = Flight;
@@ -107,39 +106,6 @@ export const selectAirportsFromFlights = createSelector(
     }
 
     return Array.from(airportsById.values());
-  },
-);
-
-/**
- * Selects the currently selected flight object from the Redux store.
- */
-export const selectSelectedFlights = createSelector(
-  [selectFlightsAsObjects, (state: AppRootState) => state.flights.selected],
-  (flights, selection) => {
-    return selection?.type === SelectionType.Flight
-      ? flights.filter((flight) => flight.id === selection.flightId)
-      : selection?.type === SelectionType.Route
-        ? flights.filter((flight) => flight.route.key === selection.routeKey)
-        : selection?.type === SelectionType.Airport
-          ? flights.filter(
-              (flight) =>
-                flight.origin.id === selection.airportId ||
-                flight.destination.id === selection.airportId,
-            )
-          : selection?.type === SelectionType.Airline
-            ? flights.filter(
-                (flight) => flight?.airline?.id === selection.airlineId,
-              )
-            : selection?.type === SelectionType.Aircraft
-              ? flights.filter(
-                  (flight) => flight?.aircraft?.id === selection.aircraftId,
-                )
-              : selection?.type === SelectionType.Registration
-                ? flights.filter(
-                    (flight) =>
-                      flight?.aircraft?.registration === selection.registration,
-                  )
-                : null;
   },
 );
 

@@ -1,4 +1,4 @@
-import { AppTheme, type SidepanelWindows } from "@data/classes/ui";
+import { AppTheme } from "@data/classes/ui";
 import {
   createSelector,
   createSlice,
@@ -13,58 +13,25 @@ export interface Thinking {
 }
 
 export interface UIState {
-  activeSidepanelWindow?: SidepanelWindows;
-  isEditingProfile: boolean;
-  viewedProfileUsername?: string;
   theme?: AppTheme;
   mapPosition?: Coordinates;
   thinking?: Thinking;
 }
 
 const initialState: UIState = {
-  activeSidepanelWindow: undefined,
-  isEditingProfile: false,
-  viewedProfileUsername: undefined,
   mapPosition: undefined,
 };
 
 export const uiPersistConfig = {
   key: "ui",
   storage,
-  whitelist: ["activeSidepanelWindow", "theme", "mapPosition"],
+  whitelist: ["theme", "mapPosition"],
 };
 
 const uiSlice = createSlice({
   name: "ui",
   initialState,
   reducers: {
-    setActiveSidepanelWindow(
-      state: UIState,
-      action: PayloadAction<SidepanelWindows>,
-    ) {
-      state.activeSidepanelWindow = action.payload;
-
-      if (action.payload !== "profile") {
-        state.isEditingProfile = false;
-      }
-    },
-
-    closeActiveSidepanelWindow(state: UIState) {
-      state.activeSidepanelWindow = undefined;
-      state.isEditingProfile = false;
-    },
-
-    setIsEditingProfile(state: UIState, action: PayloadAction<boolean>) {
-      state.isEditingProfile = action.payload;
-    },
-
-    setViewedProfileUsername(
-      state: UIState,
-      action: PayloadAction<string | undefined>,
-    ) {
-      state.viewedProfileUsername = action.payload;
-    },
-
     setTheme(state: UIState, action: PayloadAction<AppTheme | undefined>) {
       state.theme = action.payload;
     },
@@ -87,11 +54,6 @@ const uiSlice = createSlice({
 });
 
 export const {
-  setActiveSidepanelWindow,
-  closeActiveSidepanelWindow,
-  setIsEditingProfile,
-  setViewedProfileUsername,
-
   setTheme,
   recordMapPosition,
 

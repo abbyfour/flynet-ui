@@ -3,6 +3,8 @@ import { clearAllUIFlightData } from "@data/flightsSlice";
 import { clearFlightsCache } from "@data/services/flights/flightsAPI";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { clearUser } from "@data/userSlice";
+import { LocationModule } from "@location/Location";
+import { useNavigator } from "@location/navigator/hooks";
 import { ActionIcon, Tooltip } from "@mantine/core";
 import { useEphemeralThinking } from "@util/thinkingUtil";
 import { useEffect, useState } from "react";
@@ -17,6 +19,7 @@ export function StatusBar() {
   const currentUser = useAppSelector((state) => state.user.currentUser);
   const thinking = useAppSelector((state) => state.ui.thinking);
   const dispatch = useAppDispatch();
+  const navigator = useNavigator();
   const setEphemeralThinking = useEphemeralThinking(dispatch);
 
   useEffect(() => {
@@ -30,6 +33,7 @@ export function StatusBar() {
     dispatch(clearUser());
     dispatch(clearAllUIFlightData());
     clearFlightsCache();
+    navigator.reset({ module: LocationModule.Home });
   };
 
   return (

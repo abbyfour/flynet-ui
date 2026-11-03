@@ -1,3 +1,4 @@
+import { Button } from "@components/common/buttons/Button";
 import { SubmitButton } from "@components/common/buttons/SubmitButton";
 import { Toasts } from "@components/common/notices/Toast";
 import { dispatchNotice } from "@components/common/notices/dispatchNotice";
@@ -8,6 +9,8 @@ import { setSidepanelOptions } from "@data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { setTheme } from "@data/uiSlice";
 import { saveUser } from "@data/userSlice";
+import { LocationModule, SELF_SCOPE } from "@location/Location";
+import { useNavigator } from "@location/navigator/hooks";
 import { useEffect, useState } from "react";
 import "./Settings.scss";
 
@@ -18,6 +21,7 @@ export function Settings() {
   const [uiMode, setUiMode] = useState<UserSettings["uiMode"] | undefined>(
     undefined,
   );
+  const navigator = useNavigator();
 
   useEffect(() => {
     dispatch(
@@ -73,6 +77,18 @@ export function Settings() {
 
   return (
     <div className="Settings">
+      <Button
+        onClick={() =>
+          navigator.enterScope(SELF_SCOPE, {
+            module: LocationModule.Profile,
+            editing: true,
+          })
+        }
+        className="add-button"
+      >
+        Edit your user profile
+      </Button>
+
       <form onSubmit={handleSubmit}>
         <div className="settings-fields">
           <fieldset className="ui-mode-fieldset">

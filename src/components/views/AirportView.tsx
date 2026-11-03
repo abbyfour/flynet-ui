@@ -1,10 +1,9 @@
 import { AirportDisplay } from "@components/displays/AirportDisplay";
 import { FlightListItem } from "@components/panels/flights/FlightListItem";
+import { useSelect } from "@components/panels/flights/useSelect";
 import type { Airport } from "@data/classes/flights/Airport";
 import type { Flight } from "@data/classes/flights/Flight";
-import { setSelected } from "@data/flightsSlice";
-import { SelectionType } from "@data/services/SelectionHistory";
-import { useAppDispatch } from "@data/store";
+import { SelectionType } from "@location/Selection";
 import { uniquifyBy } from "@util/arrayUtil";
 import { displayAirportType } from "@util/flights";
 import "./AirportView.scss";
@@ -16,7 +15,7 @@ export function AirportView({
   airport: Airport | undefined;
   flights: Flight[];
 }) {
-  const dispatch = useAppDispatch();
+  const select = useSelect();
 
   if (!airport || flights.length === 0) {
     return <></>;
@@ -76,12 +75,10 @@ export function AirportView({
                 airport={airport}
                 minimal
                 onClick={() =>
-                  dispatch(
-                    setSelected({
-                      type: SelectionType.Airport,
-                      airportId: airport.id,
-                    }),
-                  )
+                  select({
+                    type: SelectionType.Airport,
+                    airportId: airport.id,
+                  })
                 }
               />
             ))}

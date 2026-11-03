@@ -1,12 +1,14 @@
 import "./Dock.scss";
 
-import { SidepanelWindows } from "@data/classes/ui";
-import { useAppDispatch, useAppSelector } from "@data/store";
 import {
-  closeActiveSidepanelWindow,
-  selectThemeFallbackToSystem,
-  setActiveSidepanelWindow,
-} from "@data/uiSlice";
+  locationForWindow,
+  useActiveSidepanelWindow,
+} from "@components/common/hooks/useActiveSidepanelWindow";
+import { SidepanelWindows } from "@data/classes/ui";
+import { useAppSelector } from "@data/store";
+import { selectThemeFallbackToSystem } from "@data/uiSlice";
+import { LocationModule } from "@location/Location";
+import { useNavigator } from "@location/navigator/hooks";
 
 // icons
 import flightsIconDarkBw from "@assets/dock/flights-bw-dark.svg";
@@ -68,21 +70,21 @@ const windows = {
 } satisfies Record<string, Window>;
 
 export function Dock() {
-  const activeWindow = useAppSelector(
-    (state) => state.ui.activeSidepanelWindow,
-  );
+  const activeWindow = useActiveSidepanelWindow();
   const theme = useAppSelector(selectThemeFallbackToSystem);
-
-  const dispatch = useAppDispatch();
+  const navigator = useNavigator();
 
   const changeWindow = (window: Window) => {
     if (window.disabled) {
       return;
     }
 
-    return activeWindow === window.name
-      ? dispatch(closeActiveSidepanelWindow())
-      : dispatch(setActiveSidepanelWindow(window.name));
+    // Switching windows keeps whoever is being viewed
+    const { scope } = navigator.current;
+    const location =
+      activeWindow === window.name ? undefined : locationForWindow(window.name);
+
+    navigator.reset(location ?? { module: LocationModule.Home }, scope);
   };
 
   return (

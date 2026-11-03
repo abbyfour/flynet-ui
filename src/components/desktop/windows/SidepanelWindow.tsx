@@ -1,4 +1,5 @@
 import { icons } from "@assets/icons/icons";
+import { useActiveSidepanelWindow } from "@components/common/hooks/useActiveSidepanelWindow";
 import { FlightsPanel } from "@components/panels/flights/FlightsPanel";
 import { Profile } from "@components/panels/profile/Profile";
 import { Settings } from "@components/panels/Settings";
@@ -11,16 +12,16 @@ import {
   selectSidepanelOptions,
 } from "@data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
-import { closeActiveSidepanelWindow } from "@data/uiSlice";
+import { LocationModule } from "@location/Location";
+import { useNavigator } from "@location/navigator/hooks";
 import { ActionIcon } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { SidepanelContainer } from "../SidepanelContainer";
 import "./SidepanelWindow.scss";
 
 export function SidepanelWindow() {
-  const activeWindow = useAppSelector(
-    (state) => state.ui.activeSidepanelWindow,
-  );
+  const activeWindow = useActiveSidepanelWindow();
+  const navigator = useNavigator();
   const sidepanelOptions = useAppSelector(selectSidepanelOptions);
 
   const dispatch = useAppDispatch();
@@ -30,7 +31,7 @@ export function SidepanelWindow() {
 
   const handleClose = () => {
     dispatch(clearSidepanelOptions());
-    dispatch(closeActiveSidepanelWindow());
+    navigator.reset({ module: LocationModule.Home }, navigator.current.scope);
   };
 
   const handleGoback = () => {

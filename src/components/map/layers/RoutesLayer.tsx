@@ -1,12 +1,12 @@
 import { type GroupedRoute } from "@data/services/flights/selectFlights";
-import { SelectionType, type Selected } from "@data/services/SelectionHistory";
+import { SelectionType, type Selection } from "@location/Selection";
 import { ArcLayer } from "deck.gl";
 import type { RGB, RGBA } from "../style/colours";
 import { useColours } from "../style/useColours";
 
 type RoutesLayerProps = {
   routes: GroupedRoute[];
-  selected?: Selected;
+  selected?: Selection;
 };
 
 export function RoutesLayer({ routes, selected }: RoutesLayerProps) {
@@ -61,7 +61,7 @@ function routeColourer(
   routeUpcomingColour: RGB,
   maxRouteFlights: number,
 ) {
-  return (route: GroupedRoute, selected?: Selected): RGBA | RGB => {
+  return (route: GroupedRoute, selected?: Selection): RGBA | RGB => {
     if (!selected && routeIncludesUpcomingFlight(route)) {
       return intensifyColour(
         route,
@@ -102,7 +102,7 @@ const intensifyColour = (
   return [...colour, Math.max(intensity, minimumOpacity ?? 0)];
 };
 
-const routeIncludesFlight = (route: GroupedRoute, selected?: Selected) => {
+const routeIncludesFlight = (route: GroupedRoute, selected?: Selection) => {
   if (!selected) return false;
 
   if (selected.type === SelectionType.Airline) {

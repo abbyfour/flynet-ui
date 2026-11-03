@@ -1,5 +1,4 @@
 import { AppContext } from "@components/AppContext.tsx";
-import { useNavigationURLSync } from "@components/common/hooks/useNavigationURLSync.ts";
 import { Dock } from "@components/desktop/Dock.tsx";
 import { LoginWindow } from "@components/desktop/windows/LoginWindow.tsx";
 import { SidepanelWindow } from "@components/desktop/windows/SidepanelWindow.tsx";
@@ -10,8 +9,6 @@ import { Map } from "@components/map/Map.tsx";
 import "./styles.shim.ts";
 
 function App() {
-  useNavigationURLSync();
-
   return (
     <AppContext>
       <div className="app">

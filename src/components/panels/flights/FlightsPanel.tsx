@@ -12,7 +12,6 @@ import { RegistrationView } from "@components/views/RegistrationView";
 import { RouteView } from "@components/views/RouteView";
 import { flightFilter } from "@data/classes/filters";
 import { Flight } from "@data/classes/flights/Flight";
-import { clearSelection, goBackInSelection } from "@data/flightsSlice";
 import {
   useGetFlightsQuery,
   useGetUserFlightsQuery,
@@ -21,9 +20,11 @@ import {
   selectFilteredFlights,
   sortFlights,
 } from "@data/services/flights/selectFlights";
-import { SelectionType, type Selected } from "@data/services/SelectionHistory";
 import { useGetTailsManifestQuery } from "@data/services/tails";
-import { useAppDispatch, useAppSelector } from "@data/store";
+import { useAppSelector } from "@data/store";
+import { LocationModule, scopeUsername } from "@location/Location";
+import { useHistoryEntry, useNavigator } from "@location/navigator/hooks";
+import { SelectionType, type Selection } from "@location/Selection";
 import { useMediaQuery } from "@mantine/hooks";
 import { useEffect, useMemo, useRef } from "react";
 import { FlightsList } from "./FlightsList";
@@ -31,12 +32,14 @@ import { FlightsList } from "./FlightsList";
 export function FlightsPanel() {
   const panelRef = useRef<HTMLDivElement>(null);
   const currentUser = useAppSelector((state) => state.user.currentUser);
-  const viewedProfileUsername = useAppSelector(
-    (state) => state.ui.viewedProfileUsername,
-  );
+  const navigator = useNavigator();
+  const { location, scope } = useHistoryEntry();
+  const viewedProfileUsername = scopeUsername(scope);
   const isMobile = useMediaQuery("(max-width: 900px)");
-  const selected = useAppSelector((state) => state.flights.selected);
-  const drafting = useAppSelector((state) => state.flights.inProgressDraft);
+  const selected =
+    location.module === LocationModule.Flights ? location.selected : undefined;
+  const drafting =
+    location.module === LocationModule.Flights ? location.draft : undefined;
   const filters = useAppSelector((state) => state.flights.filters);
   const ownFlights = useAppSelector(selectFilteredFlights);
 
@@ -76,7 +79,6 @@ export function FlightsPanel() {
     ? !profileFlightsLoading && !profileFlightsErrored
     : !ownFlightsLoading && !ownFlightsErrored;
 
-  const dispatch = useAppDispatch();
   const isViewingDetail = Boolean(drafting?.type || selected);
   const canGoHome = Boolean(!drafting?.type && selected);
 
@@ -87,9 +89,7 @@ export function FlightsPanel() {
             return;
           }
 
-          if (selected) {
-            dispatch(goBackInSelection());
-          }
+          navigator.back();
         }
       : undefined,
     onHomeRequest: isViewingDetail
@@ -98,9 +98,7 @@ export function FlightsPanel() {
             return;
           }
 
-          if (selected) {
-            dispatch(clearSelection());
-          }
+          navigator.reset({ module: LocationModule.Flights }, scope);
         }
       : undefined,
   });
@@ -287,7 +285,7 @@ export function FlightsPanel() {
 
 function filterFlightsBySelection(
   flights: Flight[],
-  selected: Selected | undefined,
+  selected: Selection | undefined,
 ) {
   if (!selected) return [];
 
