@@ -14,8 +14,6 @@ export interface Thinking {
 
 export interface UIState {
   activeSidepanelWindow?: SidepanelWindows;
-  isEditingProfile: boolean;
-  viewedProfileUsername?: string;
   theme?: AppTheme;
   mapPosition?: Coordinates;
   thinking?: Thinking;
@@ -23,8 +21,6 @@ export interface UIState {
 
 const initialState: UIState = {
   activeSidepanelWindow: undefined,
-  isEditingProfile: false,
-  viewedProfileUsername: undefined,
   mapPosition: undefined,
 };
 
@@ -43,26 +39,10 @@ const uiSlice = createSlice({
       action: PayloadAction<SidepanelWindows>,
     ) {
       state.activeSidepanelWindow = action.payload;
-
-      if (action.payload !== "profile") {
-        state.isEditingProfile = false;
-      }
     },
 
     closeActiveSidepanelWindow(state: UIState) {
       state.activeSidepanelWindow = undefined;
-      state.isEditingProfile = false;
-    },
-
-    setIsEditingProfile(state: UIState, action: PayloadAction<boolean>) {
-      state.isEditingProfile = action.payload;
-    },
-
-    setViewedProfileUsername(
-      state: UIState,
-      action: PayloadAction<string | undefined>,
-    ) {
-      state.viewedProfileUsername = action.payload;
     },
 
     setTheme(state: UIState, action: PayloadAction<AppTheme | undefined>) {
@@ -89,8 +69,6 @@ const uiSlice = createSlice({
 export const {
   setActiveSidepanelWindow,
   closeActiveSidepanelWindow,
-  setIsEditingProfile,
-  setViewedProfileUsername,
 
   setTheme,
   recordMapPosition,

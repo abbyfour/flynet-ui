@@ -3,9 +3,8 @@ import { AirportDisplay } from "@components/displays/AirportDisplay";
 import { FlightListItem } from "@components/panels/flights/FlightListItem";
 import type { Flight } from "@data/classes/flights/Flight";
 import type { Route } from "@data/classes/flights/Route";
-import { setSelected } from "@data/flightsSlice";
+import { useSelect } from "@components/panels/flights/useSelect";
 import { SelectionType } from "@data/services/SelectionHistory";
-import { useAppDispatch } from "@data/store";
 
 import "./RouteView.scss";
 
@@ -16,7 +15,7 @@ export function RouteView({
   route: Route | undefined;
   flights: Flight[];
 }) {
-  const dispatch = useAppDispatch();
+  const select = useSelect();
 
   if (!route || flights.length === 0) {
     return <></>;
@@ -37,12 +36,10 @@ export function RouteView({
             airport={route.origin}
             onClick={() =>
               route.origin &&
-              dispatch(
-                setSelected({
-                  type: SelectionType.Airport,
-                  airportId: route.origin.id,
-                }),
-              )
+              select({
+                type: SelectionType.Airport,
+                airportId: route.origin.id,
+              })
             }
           />
         </div>
@@ -53,12 +50,10 @@ export function RouteView({
             airport={route.destination}
             onClick={() =>
               route.destination &&
-              dispatch(
-                setSelected({
-                  type: SelectionType.Airport,
-                  airportId: route.destination.id,
-                }),
-              )
+              select({
+                type: SelectionType.Airport,
+                airportId: route.destination.id,
+              })
             }
           />
         </div>

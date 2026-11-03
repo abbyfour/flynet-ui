@@ -1,12 +1,9 @@
 import { flightFilter } from "@data/classes/filters";
 import { Flight } from "@data/classes/flights/Flight";
-import { SidepanelWindows } from "@data/classes/ui";
 import {
   clearHighlights,
-  clearSelection,
   recordHighlightedAirport,
   recordHighlightedRoute,
-  setSelected,
 } from "@data/flightsSlice";
 import {
   useGetFlightsQuery,
@@ -18,9 +15,10 @@ import {
   type GroupedAirport,
   type GroupedRoute,
 } from "@data/services/flights/selectFlights";
+import { LocationModule, scopeUsername } from "@data/location/Location";
+import { useHistoryEntry, useNavigator } from "@data/location/navigator/hooks";
 import { SelectionType } from "@data/services/SelectionHistory";
 import { useAppDispatch, useAppSelector } from "@data/store";
-import { setActiveSidepanelWindow } from "@data/uiSlice";
 import { type DeckProps, type PickingInfo } from "@deck.gl/core";
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import { useCallback, useMemo } from "react";
@@ -50,9 +48,9 @@ function DeckGLOverlay(props: DeckProps) {
 export function DataLayers() {
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector((state) => state.user.currentUser);
-  const viewedProfileUsername = useAppSelector(
-    (state) => state.ui.viewedProfileUsername,
-  );
+  const navigator = useNavigator();
+  const { location, scope } = useHistoryEntry();
+  const viewedProfileUsername = scopeUsername(scope);
   const filters = useAppSelector((state) => state.flights.filters);
 
   const isViewingOtherProfile =
@@ -73,7 +71,8 @@ export function DataLayers() {
 
   const currentRoutes = useAppSelector(selectRoutesFromFlights);
   const currentAirports = useAppSelector(selectAirportsFromFlights);
-  const selected = useAppSelector((state) => state.flights.selected);
+  const selected =
+    location.module === LocationModule.Flights ? location.selected : undefined;
 
   const profileFlightsAsObjects = useMemo(() => {
     const flights = (profileFlights?.items ?? []).map(
@@ -121,26 +120,26 @@ export function DataLayers() {
   const onclick = useCallback(
     ({ object }: PickingInfo<GroupedAirport | GroupedRoute>) => {
       if (object && "route" in object) {
-        dispatch(
-          setSelected({
-            type: SelectionType.Route,
-            routeKey: object.route.key,
-          }),
-        );
-        dispatch(setActiveSidepanelWindow(SidepanelWindows.Flights));
+        navigator.push({
+          module: LocationModule.Flights,
+          selected: { type: SelectionType.Route, routeKey: object.route.key },
+        });
       } else if (object && "airport" in object) {
-        dispatch(
-          setSelected({
+        navigator.push({
+          module: LocationModule.Flights,
+          selected: {
             type: SelectionType.Airport,
             airportId: object.airport.id,
-          }),
-        );
-        dispatch(setActiveSidepanelWindow(SidepanelWindows.Flights));
+          },
+        });
       } else {
-        dispatch(clearSelection());
+        const { location, scope } = navigator.current;
+        if (location.module === LocationModule.Flights && location.selected) {
+          navigator.reset({ module: LocationModule.Flights }, scope);
+        }
       }
     },
-    [dispatch],
+    [navigator],
   );
 
   return (

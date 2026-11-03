@@ -3,18 +3,17 @@ import { useSidepanelRequests } from "@components/common/hooks/sidepanel";
 import { dispatchNotice } from "@components/common/notices/dispatchNotice";
 import { Toasts } from "@components/common/notices/Toast";
 import { draftToNewRequest } from "@data/classes/flights/FlightDraft";
-import { clearDraftingFlight } from "@data/flightsSlice";
+import { useNavigator } from "@data/location/navigator/hooks";
 import { useAddFlightMutation } from "@data/services/flights/flightsAPI";
-import { useAppDispatch } from "@data/store";
 import { FlightDrafter } from "./FlightDrafter";
 
 export function AddFlight() {
   const [addFlight, { isLoading }] = useAddFlightMutation();
-  const dispatch = useAppDispatch();
+  const navigator = useNavigator();
 
   useSidepanelRequests({
     onBackRequest: () => {
-      dispatch(clearDraftingFlight());
+      navigator.back();
     },
   });
 
@@ -29,7 +28,7 @@ export function AddFlight() {
       dispatchNotice(Toasts.success(m.flight.addedSuccessfully));
     }
 
-    dispatch(clearDraftingFlight());
+    navigator.back();
   };
 
   return (

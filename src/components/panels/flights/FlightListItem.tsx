@@ -1,12 +1,11 @@
 import { icons } from "@assets/icons/icons";
 import { AirlineTail } from "@assets/tails/AirlineTail";
 import type { Flight } from "@data/classes/flights/Flight";
-import { setSelected } from "@data/flightsSlice";
 import { SelectionType } from "@data/services/SelectionHistory";
-import { useAppDispatch } from "@data/store";
 import { IconCircleFilled } from "@tabler/icons-react";
 import { joinClasses } from "@util/componentUtil";
 import "./FlightListItem.scss";
+import { useSelect } from "./useSelect";
 
 type FlightListItemProps = {
   flight: Flight;
@@ -14,10 +13,10 @@ type FlightListItemProps = {
 };
 
 export function FlightListItem({ flight, highlighted }: FlightListItemProps) {
-  const dispatch = useAppDispatch();
+  const select = useSelect();
 
   const handleOnClick = () => {
-    dispatch(setSelected({ type: SelectionType.Flight, flightId: flight.id }));
+    select({ type: SelectionType.Flight, flightId: flight.id });
   };
 
   return (

@@ -1,6 +1,12 @@
 import "./Dock.scss";
 
+import {
+  locationForWindow,
+  useActiveSidepanelWindow,
+} from "@components/common/hooks/useActiveSidepanelWindow";
 import { SidepanelWindows } from "@data/classes/ui";
+import { LocationModule } from "@data/location/Location";
+import { useNavigator } from "@data/location/navigator/hooks";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import {
   closeActiveSidepanelWindow,
@@ -68,10 +74,9 @@ const windows = {
 } satisfies Record<string, Window>;
 
 export function Dock() {
-  const activeWindow = useAppSelector(
-    (state) => state.ui.activeSidepanelWindow,
-  );
+  const activeWindow = useActiveSidepanelWindow();
   const theme = useAppSelector(selectThemeFallbackToSystem);
+  const navigator = useNavigator();
 
   const dispatch = useAppDispatch();
 
@@ -80,9 +85,23 @@ export function Dock() {
       return;
     }
 
-    return activeWindow === window.name
-      ? dispatch(closeActiveSidepanelWindow())
-      : dispatch(setActiveSidepanelWindow(window.name));
+    // Only one of the two systems may show a window at a time
+    dispatch(closeActiveSidepanelWindow());
+
+    // Switching windows keeps whoever is being viewed
+    const { scope } = navigator.current;
+    navigator.reset({ module: LocationModule.Home }, scope);
+
+    if (activeWindow === window.name) {
+      return;
+    }
+
+    const location = locationForWindow(window.name);
+    if (location) {
+      navigator.reset(location, scope);
+    } else {
+      dispatch(setActiveSidepanelWindow(window.name));
+    }
   };
 
   return (

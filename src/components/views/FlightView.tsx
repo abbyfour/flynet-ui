@@ -10,14 +10,11 @@ import { AirlineDisplay } from "@components/displays/AirlineDisplay";
 import { AirportDisplay } from "@components/displays/AirportDisplay";
 import { RouteDisplay } from "@components/displays/RouteDisplay";
 import type { Flight } from "@data/classes/flights/Flight";
-import {
-  goBackInSelection,
-  setEditingFlight,
-  setSelected,
-} from "@data/flightsSlice";
 import { useDeleteFlightMutation } from "@data/services/flights/flightsAPI";
 import { SelectionType } from "@data/services/SelectionHistory";
-import { useAppDispatch } from "@data/store";
+import { LocationModule } from "@data/location/Location";
+import { useNavigator } from "@data/location/navigator/hooks";
+import { useSelect } from "@components/panels/flights/useSelect";
 import "./FlightView.scss";
 
 type FlightViewProps = {
@@ -26,7 +23,8 @@ type FlightViewProps = {
 };
 
 export function FlightView({ flight, canEdit = true }: FlightViewProps) {
-  const dispatch = useAppDispatch();
+  const navigator = useNavigator();
+  const select = useSelect();
 
   const [deleteFlight] = useDeleteFlightMutation();
 
@@ -47,12 +45,15 @@ export function FlightView({ flight, canEdit = true }: FlightViewProps) {
         dispatchNotice(Toasts.success(m.flight.deletedSuccessfully()));
       }
 
-      dispatch(goBackInSelection());
+      navigator.back();
     }
   };
 
   const handleEditFlight = () => {
-    dispatch(setEditingFlight({ flightId: flight.id }));
+    navigator.push({
+      module: LocationModule.Flights,
+      draft: { type: "edit", flightId: flight.id },
+    });
   };
 
   return (
@@ -89,13 +90,11 @@ export function FlightView({ flight, canEdit = true }: FlightViewProps) {
           <RouteDisplay
             route={flight.route}
             onClick={() =>
-              dispatch(
-                flight.route &&
-                  setSelected({
-                    type: SelectionType.Route,
-                    routeKey: flight.route?.key,
-                  }),
-              )
+              flight.route &&
+              select({
+                type: SelectionType.Route,
+                routeKey: flight.route.key,
+              })
             }
           />
 
@@ -103,12 +102,10 @@ export function FlightView({ flight, canEdit = true }: FlightViewProps) {
             airport={flight.origin}
             onClick={() =>
               flight.origin &&
-              dispatch(
-                setSelected({
-                  type: SelectionType.Airport,
-                  airportId: flight.origin.id,
-                }),
-              )
+              select({
+                type: SelectionType.Airport,
+                airportId: flight.origin.id,
+              })
             }
           />
 
@@ -116,12 +113,10 @@ export function FlightView({ flight, canEdit = true }: FlightViewProps) {
             airport={flight.destination}
             onClick={() =>
               flight.destination &&
-              dispatch(
-                setSelected({
-                  type: SelectionType.Airport,
-                  airportId: flight.destination.id,
-                }),
-              )
+              select({
+                type: SelectionType.Airport,
+                airportId: flight.destination.id,
+              })
             }
           />
         </div>
@@ -135,12 +130,10 @@ export function FlightView({ flight, canEdit = true }: FlightViewProps) {
               flightNumber={flight.flightNumber}
               onClick={() =>
                 flight.airline &&
-                dispatch(
-                  setSelected({
-                    type: SelectionType.Airline,
-                    airlineId: flight.airline.id,
-                  }),
-                )
+                select({
+                  type: SelectionType.Airline,
+                  airlineId: flight.airline.id,
+                })
               }
             />
           </div>
@@ -153,21 +146,17 @@ export function FlightView({ flight, canEdit = true }: FlightViewProps) {
               aircraft={flight.aircraft}
               onClick={() =>
                 flight.aircraft &&
-                dispatch(
-                  setSelected({
-                    type: SelectionType.Aircraft,
-                    aircraftId: flight.aircraft.id,
-                  }),
-                )
+                select({
+                  type: SelectionType.Aircraft,
+                  aircraftId: flight.aircraft.id,
+                })
               }
               onRegistrationClick={() =>
                 flight.aircraft?.registration &&
-                dispatch(
-                  setSelected({
-                    type: SelectionType.Registration,
-                    registration: flight.aircraft!.registration!,
-                  }),
-                )
+                select({
+                  type: SelectionType.Registration,
+                  registration: flight.aircraft!.registration!,
+                })
               }
             />
           </div>

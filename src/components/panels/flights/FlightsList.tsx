@@ -2,13 +2,12 @@ import { Button } from "@components/common/buttons/Button";
 import { MemoryFoamList } from "@components/common/MemoryFoamList";
 import type { Flight } from "@data/classes/flights/Flight";
 import {
-  clearSelection,
   recordFlightsListScrollPosition,
-  setNewFlight,
   updateFilters,
 } from "@data/flightsSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
-import { setViewedProfileUsername } from "@data/uiSlice";
+import { LocationModule, SELF_SCOPE } from "@data/location/Location";
+import { useNavigator } from "@data/location/navigator/hooks";
 import { CloseButton, TextInput } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { injectMap } from "@util/arrayUtil";
@@ -33,6 +32,7 @@ export function FlightsList({
   canAddFlight = true,
 }: FlightsListProps) {
   const dispatch = useAppDispatch();
+  const navigator = useNavigator();
 
   const highlightedRouteKey = useAppSelector(
     (state) => state.flights.highlightedRouteKey,
@@ -55,12 +55,11 @@ export function FlightsList({
   }, [filters?.search]);
 
   const handleAddFlight = () => {
-    dispatch(setNewFlight());
+    navigator.push({ module: LocationModule.Flights, draft: { type: "new" } });
   };
 
   const handleGoBackToMyFlights = () => {
-    dispatch(setViewedProfileUsername(undefined));
-    dispatch(clearSelection());
+    navigator.enterScope(SELF_SCOPE, { module: LocationModule.Flights });
   };
 
   const flightsReady = !isLoading;

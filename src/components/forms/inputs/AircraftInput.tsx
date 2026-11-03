@@ -141,10 +141,7 @@ export function AircraftInput({
         <Combobox.Options>
           {searchResults.length > 0 ? (
             searchResults.slice(0, 15).map((aircraft) => (
-              <Combobox.Option
-                key={aircraft.id}
-                value={String(aircraft.id)}
-              >
+              <Combobox.Option key={aircraft.id} value={String(aircraft.id)}>
                 {aircraft.manufacturerModel}{" "}
                 <span
                   style={{

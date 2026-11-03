@@ -1,5 +1,7 @@
 import { icons } from "@assets/icons/icons";
 import { clearAllUIFlightData } from "@data/flightsSlice";
+import { LocationModule } from "@data/location/Location";
+import { useNavigator } from "@data/location/navigator/hooks";
 import { clearFlightsCache } from "@data/services/flights/flightsAPI";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { clearUser } from "@data/userSlice";
@@ -17,6 +19,7 @@ export function StatusBar() {
   const currentUser = useAppSelector((state) => state.user.currentUser);
   const thinking = useAppSelector((state) => state.ui.thinking);
   const dispatch = useAppDispatch();
+  const navigator = useNavigator();
   const setEphemeralThinking = useEphemeralThinking(dispatch);
 
   useEffect(() => {
@@ -30,6 +33,7 @@ export function StatusBar() {
     dispatch(clearUser());
     dispatch(clearAllUIFlightData());
     clearFlightsCache();
+    navigator.reset({ module: LocationModule.Home });
   };
 
   return (

@@ -3,7 +3,10 @@ import { FlightsPanel } from "@components/panels/flights/FlightsPanel";
 import { Profile } from "@components/panels/profile/Profile";
 import { Settings } from "@components/panels/Settings";
 import { Social } from "@components/panels/Social";
+import { useActiveSidepanelWindow } from "@components/common/hooks/useActiveSidepanelWindow";
 import { SidepanelWindows } from "@data/classes/ui";
+import { LocationModule } from "@data/location/Location";
+import { useNavigator } from "@data/location/navigator/hooks";
 import {
   clearSidepanelOptions,
   requestSidepanelBack,
@@ -18,9 +21,8 @@ import { SidepanelContainer } from "../SidepanelContainer";
 import "./SidepanelWindow.scss";
 
 export function SidepanelWindow() {
-  const activeWindow = useAppSelector(
-    (state) => state.ui.activeSidepanelWindow,
-  );
+  const activeWindow = useActiveSidepanelWindow();
+  const navigator = useNavigator();
   const sidepanelOptions = useAppSelector(selectSidepanelOptions);
 
   const dispatch = useAppDispatch();
@@ -31,6 +33,7 @@ export function SidepanelWindow() {
   const handleClose = () => {
     dispatch(clearSidepanelOptions());
     dispatch(closeActiveSidepanelWindow());
+    navigator.reset({ module: LocationModule.Home }, navigator.current.scope);
   };
 
   const handleGoback = () => {

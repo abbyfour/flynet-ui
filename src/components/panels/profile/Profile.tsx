@@ -20,7 +20,14 @@ import {
   getUserAvatarUrl,
   type ExtendedUserProperties,
 } from "@data/classes/user";
-import { clearSelection } from "@data/flightsSlice";
+import { useSelect } from "@components/panels/flights/useSelect";
+import { LocationModule, scopeUsername } from "@data/location/Location";
+import {
+  useCanGoBack,
+  useHistoryEntry,
+  useNavigator,
+} from "@data/location/navigator/hooks";
+import { SelectionType } from "@data/services/SelectionHistory";
 import {
   useGetFlightsQuery,
   useGetUserFlightsQuery,
@@ -33,10 +40,9 @@ import {
   useGetUserByUsernameQuery,
   useUpdateUserAvatarMutation,
 } from "@data/services/usersAPI";
-import { useAppDispatch, useAppSelector } from "@data/store";
-import { setIsEditingProfile, setViewedProfileUsername } from "@data/uiSlice";
+import { useAppSelector } from "@data/store";
 import { joinClasses } from "@util/componentUtil";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./Profile.scss";
 
 const ALLOWED_AVATAR_MIME_TYPES = new Set(["image/png", "image/jpeg"]);
@@ -44,14 +50,13 @@ const ALLOWED_AVATAR_EXTENSIONS = [".png", ".jpg", ".jpeg"];
 
 export function Profile() {
   const currentUser = useAppSelector((state) => state.user.currentUser);
-  const viewedProfileUsername = useAppSelector(
-    (state) => state.ui.viewedProfileUsername,
-  );
-  const editing = useAppSelector((state) => state.ui.isEditingProfile);
-  const dispatch = useAppDispatch();
+  const navigator = useNavigator();
+  const historyEntry = useHistoryEntry();
 
-  const profileHistoryRef = useRef<string[]>([]);
-  const [profileHistoryDepth, setProfileHistoryDepth] = useState(0);
+  const editing =
+    historyEntry.location.module === LocationModule.Profile &&
+    Boolean(historyEntry.location.editing);
+  const viewedProfileUsername = scopeUsername(historyEntry.scope);
 
   const targetUsername = viewedProfileUsername ?? currentUser?.username;
   const isViewingOwnProfile =
@@ -83,94 +88,28 @@ export function Profile() {
 
   const viewedUser = isViewingOwnProfile ? currentUser : fetchedProfile;
 
-  useEffect(() => {
-    if (!targetUsername) {
-      return;
-    }
-
-    const stack = profileHistoryRef.current;
-
-    if (stack.length === 0) {
-      if (currentUser?.username && currentUser.username !== targetUsername) {
-        stack.push(currentUser.username);
-      }
-      stack.push(targetUsername);
-      setProfileHistoryDepth(stack.length);
-      return;
-    }
-
-    if (stack[stack.length - 1] === targetUsername) {
-      return;
-    }
-
-    const existingIndex = stack.lastIndexOf(targetUsername);
-    if (existingIndex >= 0) {
-      stack.splice(existingIndex + 1);
-      setProfileHistoryDepth(stack.length);
-      return;
-    }
-
-    stack.push(targetUsername);
-    setProfileHistoryDepth(stack.length);
-  }, [currentUser?.username, targetUsername]);
-
-  // Reset selection when navigating to a different profile.
-  useEffect(() => {
-    dispatch(clearSelection());
-  }, [targetUsername, dispatch]);
-
   const openEditProfile = () => {
     if (!isViewingOwnProfile) return;
-    dispatch(setIsEditingProfile(true));
+    navigator.push({ module: LocationModule.Profile, editing: true });
   };
 
-  const clearEditing = () => {
-    dispatch(setIsEditingProfile(false));
-  };
+  const goBack = () => navigator.back();
 
   useEffect(() => {
     if (editing && !canEditProfile) {
-      dispatch(setIsEditingProfile(false));
+      navigator.replace({ module: LocationModule.Profile });
     }
-  }, [canEditProfile, dispatch, editing]);
+  }, [canEditProfile, editing, navigator]);
 
-  const canGoBackProfiles = !isEditingOwnProfile && profileHistoryDepth > 1;
+  const canGoBack = useCanGoBack();
 
   useSidepanelHeader({
     title: isEditingOwnProfile ? "Edit profile" : "Profile",
-    showGoBack: isEditingOwnProfile || canGoBackProfiles,
+    showGoBack: canGoBack,
     showGoHome: false,
   });
 
-  useSidepanelRequests({
-    onBackRequest:
-      isEditingOwnProfile || canGoBackProfiles
-        ? () => {
-            if (isEditingOwnProfile) {
-              dispatch(setIsEditingProfile(false));
-            } else if (canGoBackProfiles) {
-              profileHistoryRef.current.pop();
-              setProfileHistoryDepth(profileHistoryRef.current.length);
-              const previousUsername =
-                profileHistoryRef.current[profileHistoryRef.current.length - 1];
-
-              if (!previousUsername) {
-                return;
-              }
-
-              dispatch(clearSelection());
-
-              dispatch(
-                setViewedProfileUsername(
-                  previousUsername === currentUser?.username
-                    ? undefined
-                    : previousUsername,
-                ),
-              );
-            }
-          }
-        : undefined,
-  });
+  useSidepanelRequests({ onBackRequest: canGoBack ? goBack : undefined });
 
   if (!targetUsername) {
     return <div>Please sign in!</div>;
@@ -200,7 +139,7 @@ export function Profile() {
     <div className="Profile">
       <div className="main-content">
         {isEditingOwnProfile ? (
-          <EditProfileForm clearEditing={clearEditing} />
+          <EditProfileForm clearEditing={goBack} />
         ) : (
           <ProfileContent
             openEditProfile={openEditProfile}
@@ -228,6 +167,7 @@ function ProfileContent({
   const [currentAvatar, setCurrentAvatar] = useState<string | undefined>(
     undefined,
   );
+  const select = useSelect();
 
   const [updateUserAvatar] = useUpdateUserAvatarMutation();
 
@@ -269,7 +209,7 @@ function ProfileContent({
 
   const homeAirport = mostVisitedAirport(viewedFlights);
   const favouriteAirline = mostFlownAirline(viewedFlights);
-  const favouritePlane = mostFlownPlane(viewedFlights);
+  const favouriteAircraft = mostFlownPlane(viewedFlights);
 
   return (
     <>
@@ -331,24 +271,44 @@ function ProfileContent({
         {homeAirport && (
           <div className="home-airport">
             <h5 className="tiny-header">Home airport</h5>
-            <AirportDisplay noHover airport={homeAirport} />
+            <AirportDisplay
+              airport={homeAirport}
+              onClick={() =>
+                select({
+                  type: SelectionType.Airport,
+                  airportId: homeAirport.id,
+                })
+              }
+            />
           </div>
         )}
 
         {favouriteAirline && (
           <div className="favourite-airline">
             <h5 className="tiny-header">Favourite airline</h5>
-            <AirlineDisplay noHover airline={favouriteAirline} />
+            <AirlineDisplay
+              airline={favouriteAirline}
+              onClick={() =>
+                select({
+                  type: SelectionType.Airline,
+                  airlineId: favouriteAirline.id,
+                })
+              }
+            />
           </div>
         )}
 
-        {favouritePlane && (
-          <div className="favourite-plane">
-            <h5 className="tiny-header">Favourite plane</h5>
+        {favouriteAircraft && (
+          <div className="favourite-aircraft">
+            <h5 className="tiny-header">Favourite aircraft</h5>
             <AircraftDisplay
-              noHover
-              aircraft={favouritePlane}
-              onClick={() => {}}
+              aircraft={favouriteAircraft}
+              onClick={() =>
+                select({
+                  type: SelectionType.Aircraft,
+                  aircraftId: favouriteAircraft.id,
+                })
+              }
             />
           </div>
         )}
@@ -403,7 +363,7 @@ function mostFlownAirline(flights: Flight[]): Airline | null {
 function mostFlownPlane(flights: Flight[]): Aircraft | null {
   if (flights.length === 0) return null;
 
-  const counts = new Map<number, { plane: Aircraft; count: number }>();
+  const counts = new Map<number, { aircraft: Aircraft; count: number }>();
 
   for (const flight of flights) {
     const entry = flight.aircraft ? counts.get(flight.aircraft.id) : undefined;
@@ -412,12 +372,12 @@ function mostFlownPlane(flights: Flight[]): Aircraft | null {
       entry.count++;
     } else if (flight?.aircraft) {
       counts.set(flight.aircraft.id, {
-        plane: flight.aircraft.deregister(),
+        aircraft: flight.aircraft.deregister(),
         count: 1,
       });
     }
   }
 
   return [...counts.values()].reduce((a, b) => (b.count > a.count ? b : a))
-    .plane;
+    .aircraft;
 }

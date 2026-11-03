@@ -4,19 +4,20 @@ import { confirm } from "@components/common/notices/Confirm";
 import { dispatchNotice } from "@components/common/notices/dispatchNotice";
 import { Toasts } from "@components/common/notices/Toast";
 import { draftToNewRequest } from "@data/classes/flights/FlightDraft";
-import { clearDraftingFlight } from "@data/flightsSlice";
+import { LocationModule } from "@data/location/Location";
+import { useLocation, useNavigator } from "@data/location/navigator/hooks";
 import { useUpdateFlightMutation } from "@data/services/flights/flightsAPI";
 import { selectFlightsAsObjects } from "@data/services/flights/selectFlights";
-import { useAppDispatch, useAppSelector } from "@data/store";
+import { useAppSelector } from "@data/store";
 import { findFlightFromID } from "@util/flights";
 import { useEffect, useMemo, useRef } from "react";
 import { FlightDrafter } from "./FlightDrafter";
 
 export function EditFlight() {
   const [updateFlight, { isLoading }] = useUpdateFlightMutation();
-  const drafting = useAppSelector((state) => state.flights.inProgressDraft);
+  const drafting = useLocation(LocationModule.Flights)?.draft;
   const flights = useAppSelector(selectFlightsAsObjects);
-  const dispatch = useAppDispatch();
+  const navigator = useNavigator();
   const initialDraft = useMemo(
     () =>
       drafting?.type === "edit"
@@ -47,7 +48,7 @@ export function EditFlight() {
       void (async () => {
         const flight = editingFlightRef.current;
         if (!flight || flight.isUnchangedFromDraft(latestDraftRef.current)) {
-          dispatch(clearDraftingFlight());
+          navigator.back();
           return;
         }
 
@@ -59,7 +60,7 @@ export function EditFlight() {
         });
 
         if (confirmation) {
-          dispatch(clearDraftingFlight());
+          navigator.back();
         }
       })();
     },
@@ -81,7 +82,7 @@ export function EditFlight() {
       dispatchNotice(Toasts.success(m.flight.updatedSuccessfully));
     }
 
-    dispatch(clearDraftingFlight());
+    navigator.back();
   };
 
   return (

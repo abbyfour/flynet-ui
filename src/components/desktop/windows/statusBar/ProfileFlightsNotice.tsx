@@ -1,15 +1,17 @@
 import { icons } from "@assets/icons/icons";
-import { clearSelection } from "@data/flightsSlice";
-import { useAppDispatch, useAppSelector } from "@data/store";
-import { setViewedProfileUsername } from "@data/uiSlice";
+import {
+  LocationModule,
+  SELF_SCOPE,
+  scopeUsername,
+} from "@data/location/Location";
+import { useNavigator, useScope } from "@data/location/navigator/hooks";
+import { useAppSelector } from "@data/store";
 import "./ProfileFlightsNotice.scss";
 
 export function ProfileFlightsNotice() {
-  const dispatch = useAppDispatch();
+  const navigator = useNavigator();
   const currentUser = useAppSelector((state) => state.user.currentUser);
-  const viewedProfileUsername = useAppSelector(
-    (state) => state.ui.viewedProfileUsername,
-  );
+  const viewedProfileUsername = scopeUsername(useScope());
 
   const isViewingOtherProfile =
     Boolean(viewedProfileUsername) &&
@@ -20,8 +22,7 @@ export function ProfileFlightsNotice() {
   }
 
   const clearViewedUser = () => {
-    dispatch(setViewedProfileUsername(undefined));
-    dispatch(clearSelection());
+    navigator.enterScope(SELF_SCOPE, { module: LocationModule.Flights });
   };
 
   return (
