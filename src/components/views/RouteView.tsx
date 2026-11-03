@@ -1,10 +1,10 @@
 import { icons } from "@assets/icons/icons";
 import { AirportDisplay } from "@components/displays/AirportDisplay";
 import { FlightListItem } from "@components/panels/flights/FlightListItem";
+import { useSelect } from "@components/panels/flights/useSelect";
 import type { Flight } from "@data/classes/flights/Flight";
 import type { Route } from "@data/classes/flights/Route";
-import { useSelect } from "@components/panels/flights/useSelect";
-import { SelectionType } from "@data/services/SelectionHistory";
+import { SelectionType } from "@location/Selection";
 
 import "./RouteView.scss";
 

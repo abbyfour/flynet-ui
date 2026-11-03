@@ -1,7 +1,7 @@
 import { icons } from "@assets/icons/icons";
 import { AirlineTail } from "@assets/tails/AirlineTail";
 import type { Flight } from "@data/classes/flights/Flight";
-import { SelectionType } from "@data/services/SelectionHistory";
+import { SelectionType } from "@location/Selection";
 import { IconCircleFilled } from "@tabler/icons-react";
 import { joinClasses } from "@util/componentUtil";
 import "./FlightListItem.scss";

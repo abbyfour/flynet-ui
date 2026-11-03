@@ -1,4 +1,4 @@
-import type { Selected } from "@data/services/SelectionHistory";
+import type { Selection } from "@location/Selection";
 
 export enum LocationModule {
   /** No panel open (the "/" URL) */
@@ -42,7 +42,7 @@ export function scopeUsername(scope: NavScope): string | undefined {
 
 export type FlightsLocation = {
   module: LocationModule.Flights;
-  selected?: Selected;
+  selected?: Selection;
   draft?: { type: "new" } | { type: "edit"; flightId: number };
 };
 

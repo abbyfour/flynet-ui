@@ -1,4 +1,4 @@
-import { SelectionType, type Selected } from "@data/services/SelectionHistory";
+import { SelectionType, type Selection } from "@location/Selection";
 import {
   decodeURLParam,
   encodeURLParam,
@@ -25,13 +25,13 @@ enum Segment {
 
 const flights = (): FlightsLocation => ({ module: LocationModule.Flights });
 
-const withSelected = (selected: Selected | undefined): FlightsLocation =>
+const withSelected = (selected: Selection | undefined): FlightsLocation =>
   selected ? { ...flights(), selected } : flights();
 
 function parseSelected(
   segment: string,
   value: string | undefined,
-): Selected | undefined {
+): Selection | undefined {
   switch (segment) {
     case Segment.Flight: {
       const flightId = parseURLIntParam(value);
@@ -72,7 +72,7 @@ function parseSelected(
   }
 }
 
-function buildSelected(selected: Selected): string {
+function buildSelected(selected: Selection): string {
   switch (selected.type) {
     case SelectionType.Flight:
       return joinPathSegments(Segment.Flight, selected.flightId);

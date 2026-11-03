@@ -1,11 +1,7 @@
 import { icons } from "@assets/icons/icons";
-import {
-  LocationModule,
-  SELF_SCOPE,
-  scopeUsername,
-} from "@data/location/Location";
-import { useNavigator, useScope } from "@data/location/navigator/hooks";
 import { useAppSelector } from "@data/store";
+import { LocationModule, SELF_SCOPE, scopeUsername } from "@location/Location";
+import { useNavigator, useScope } from "@location/navigator/hooks";
 import "./ProfileFlightsNotice.scss";
 
 export function ProfileFlightsNotice() {

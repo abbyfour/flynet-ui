@@ -12,6 +12,7 @@ import { AirlineDisplay } from "@components/displays/AirlineDisplay";
 import { AirportDisplay } from "@components/displays/AirportDisplay";
 import { EditProfileForm } from "@components/forms/EditProfileForm";
 import { openCropAvatarModal } from "@components/forms/profile/openCropAvatarModal";
+import { useSelect } from "@components/panels/flights/useSelect";
 import type { Aircraft } from "@data/classes/flights/Aircraft";
 import type { Airline } from "@data/classes/flights/Airline";
 import type { Airport } from "@data/classes/flights/Airport";
@@ -20,14 +21,6 @@ import {
   getUserAvatarUrl,
   type ExtendedUserProperties,
 } from "@data/classes/user";
-import { useSelect } from "@components/panels/flights/useSelect";
-import { LocationModule, scopeUsername } from "@data/location/Location";
-import {
-  useCanGoBack,
-  useHistoryEntry,
-  useNavigator,
-} from "@data/location/navigator/hooks";
-import { SelectionType } from "@data/services/SelectionHistory";
 import {
   useGetFlightsQuery,
   useGetUserFlightsQuery,
@@ -41,6 +34,13 @@ import {
   useUpdateUserAvatarMutation,
 } from "@data/services/usersAPI";
 import { useAppSelector } from "@data/store";
+import { LocationModule, scopeUsername } from "@location/Location";
+import { SelectionType } from "@location/Selection";
+import {
+  useCanGoBack,
+  useHistoryEntry,
+  useNavigator,
+} from "@location/navigator/hooks";
 import { joinClasses } from "@util/componentUtil";
 import { useEffect, useMemo, useState } from "react";
 import "./Profile.scss";

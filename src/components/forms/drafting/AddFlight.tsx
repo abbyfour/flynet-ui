@@ -3,8 +3,8 @@ import { useSidepanelRequests } from "@components/common/hooks/sidepanel";
 import { dispatchNotice } from "@components/common/notices/dispatchNotice";
 import { Toasts } from "@components/common/notices/Toast";
 import { draftToNewRequest } from "@data/classes/flights/FlightDraft";
-import { useNavigator } from "@data/location/navigator/hooks";
 import { useAddFlightMutation } from "@data/services/flights/flightsAPI";
+import { useNavigator } from "@location/navigator/hooks";
 import { FlightDrafter } from "./FlightDrafter";
 
 export function AddFlight() {

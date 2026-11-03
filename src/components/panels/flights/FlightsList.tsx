@@ -6,8 +6,8 @@ import {
   updateFilters,
 } from "@data/flightsSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
-import { LocationModule, SELF_SCOPE } from "@data/location/Location";
-import { useNavigator } from "@data/location/navigator/hooks";
+import { LocationModule, SELF_SCOPE } from "@location/Location";
+import { useNavigator } from "@location/navigator/hooks";
 import { CloseButton, TextInput } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { injectMap } from "@util/arrayUtil";

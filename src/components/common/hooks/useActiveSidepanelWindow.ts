@@ -1,47 +1,27 @@
 import { SidepanelWindows } from "@data/classes/ui";
-import { LocationModule, type Location } from "@data/location/Location";
-import { useLocation } from "@data/location/navigator/hooks";
-import { useAppSelector } from "@data/store";
+import { LocationModule, type Location } from "@location/Location";
+import { useLocation } from "@location/navigator/hooks";
 
-/**
- * Windows that have moved to the navigator, keyed by the location module that
- * shows them. Add a panel here when it is migrated; delete this file once
- * every panel is.
- */
-export const MIGRATED_WINDOWS: Partial<
-  Record<LocationModule, SidepanelWindows>
-> = {
+/** The sidepanel window shown for each location module */
+const WINDOW_FOR_MODULE: Partial<Record<LocationModule, SidepanelWindows>> = {
   [LocationModule.Flights]: SidepanelWindows.Flights,
   [LocationModule.Profile]: SidepanelWindows.Profile,
+  [LocationModule.Social]: SidepanelWindows.Social,
   [LocationModule.Settings]: SidepanelWindows.Settings,
 };
 
 export function locationForWindow(
   window: SidepanelWindows,
 ): Location | undefined {
-  const entry = Object.entries(MIGRATED_WINDOWS).find(
+  const entry = Object.entries(WINDOW_FOR_MODULE).find(
     ([, migrated]) => migrated === window,
   );
 
   return entry ? ({ module: entry[0] } as Location) : undefined;
 }
 
-/**
- * Temporary bridge while panels move from Redux to the navigator: migrated
- * windows are driven by the navigator's location, the rest by Redux.
- */
+/** The sidepanel window for the current location, if it has one */
 export function useActiveSidepanelWindow(): SidepanelWindows | undefined {
   const { module } = useLocation();
-  const reduxWindow = useAppSelector((state) => state.ui.activeSidepanelWindow);
-
-  const migrated = MIGRATED_WINDOWS[module];
-  if (migrated) {
-    return migrated;
-  }
-
-  // A persisted migrated window has no location, so it must not show
-  const isStaleMigratedWindow = Object.values(MIGRATED_WINDOWS).includes(
-    reduxWindow as SidepanelWindows,
-  );
-  return isStaleMigratedWindow ? undefined : reduxWindow;
+  return WINDOW_FOR_MODULE[module];
 }

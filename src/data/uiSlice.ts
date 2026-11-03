@@ -1,4 +1,4 @@
-import { AppTheme, type SidepanelWindows } from "@data/classes/ui";
+import { AppTheme } from "@data/classes/ui";
 import {
   createSelector,
   createSlice,
@@ -13,38 +13,25 @@ export interface Thinking {
 }
 
 export interface UIState {
-  activeSidepanelWindow?: SidepanelWindows;
   theme?: AppTheme;
   mapPosition?: Coordinates;
   thinking?: Thinking;
 }
 
 const initialState: UIState = {
-  activeSidepanelWindow: undefined,
   mapPosition: undefined,
 };
 
 export const uiPersistConfig = {
   key: "ui",
   storage,
-  whitelist: ["activeSidepanelWindow", "theme", "mapPosition"],
+  whitelist: ["theme", "mapPosition"],
 };
 
 const uiSlice = createSlice({
   name: "ui",
   initialState,
   reducers: {
-    setActiveSidepanelWindow(
-      state: UIState,
-      action: PayloadAction<SidepanelWindows>,
-    ) {
-      state.activeSidepanelWindow = action.payload;
-    },
-
-    closeActiveSidepanelWindow(state: UIState) {
-      state.activeSidepanelWindow = undefined;
-    },
-
     setTheme(state: UIState, action: PayloadAction<AppTheme | undefined>) {
       state.theme = action.payload;
     },
@@ -67,9 +54,6 @@ const uiSlice = createSlice({
 });
 
 export const {
-  setActiveSidepanelWindow,
-  closeActiveSidepanelWindow,
-
   setTheme,
   recordMapPosition,
 

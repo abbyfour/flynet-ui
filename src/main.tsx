@@ -1,6 +1,6 @@
-import { navigator, routes } from "@data/location/navigation.ts";
-import { NavigationProvider } from "@data/location/navigator/NavigationProvider.tsx";
 import { persistor, store } from "@data/store.ts";
+import { navigator, routes } from "@location/navigation.ts";
+import { NavigationProvider } from "@location/navigator/NavigationProvider.tsx";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";

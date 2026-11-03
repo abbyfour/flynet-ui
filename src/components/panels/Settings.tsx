@@ -4,13 +4,13 @@ import { Toasts } from "@components/common/notices/Toast";
 import { dispatchNotice } from "@components/common/notices/dispatchNotice";
 import { AppTheme } from "@data/classes/ui";
 import type { UserSettings } from "@data/classes/user";
-import { LocationModule, SELF_SCOPE } from "@data/location/Location";
-import { useNavigator } from "@data/location/navigator/hooks";
 import { useUpdateUserSettingsMutation } from "@data/services/usersAPI";
 import { setSidepanelOptions } from "@data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { setTheme } from "@data/uiSlice";
 import { saveUser } from "@data/userSlice";
+import { LocationModule, SELF_SCOPE } from "@location/Location";
+import { useNavigator } from "@location/navigator/hooks";
 import { useEffect, useState } from "react";
 import "./Settings.scss";
 

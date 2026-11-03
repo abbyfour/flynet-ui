@@ -15,12 +15,12 @@ import {
   type GroupedAirport,
   type GroupedRoute,
 } from "@data/services/flights/selectFlights";
-import { LocationModule, scopeUsername } from "@data/location/Location";
-import { useHistoryEntry, useNavigator } from "@data/location/navigator/hooks";
-import { SelectionType } from "@data/services/SelectionHistory";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { type DeckProps, type PickingInfo } from "@deck.gl/core";
 import { MapboxOverlay } from "@deck.gl/mapbox";
+import { LocationModule, scopeUsername } from "@location/Location";
+import { useHistoryEntry, useNavigator } from "@location/navigator/hooks";
+import { SelectionType } from "@location/Selection";
 import { useCallback, useMemo } from "react";
 import { useControl } from "react-map-gl/maplibre";
 import { AirportsLayer } from "./layers/AirportsLayer";

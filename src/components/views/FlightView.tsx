@@ -9,12 +9,13 @@ import { AircraftDisplay } from "@components/displays/AircraftDisplay";
 import { AirlineDisplay } from "@components/displays/AirlineDisplay";
 import { AirportDisplay } from "@components/displays/AirportDisplay";
 import { RouteDisplay } from "@components/displays/RouteDisplay";
+import { useSelect } from "@components/panels/flights/useSelect";
 import type { Flight } from "@data/classes/flights/Flight";
 import { useDeleteFlightMutation } from "@data/services/flights/flightsAPI";
-import { SelectionType } from "@data/services/SelectionHistory";
-import { LocationModule } from "@data/location/Location";
-import { useNavigator } from "@data/location/navigator/hooks";
-import { useSelect } from "@components/panels/flights/useSelect";
+import { LocationModule } from "@location/Location";
+import { useNavigator } from "@location/navigator/hooks";
+import { SelectionType } from "@location/Selection";
+
 import "./FlightView.scss";
 
 type FlightViewProps = {

@@ -1,12 +1,10 @@
 import { icons } from "@assets/icons/icons";
+import { useActiveSidepanelWindow } from "@components/common/hooks/useActiveSidepanelWindow";
 import { FlightsPanel } from "@components/panels/flights/FlightsPanel";
 import { Profile } from "@components/panels/profile/Profile";
 import { Settings } from "@components/panels/Settings";
 import { Social } from "@components/panels/Social";
-import { useActiveSidepanelWindow } from "@components/common/hooks/useActiveSidepanelWindow";
 import { SidepanelWindows } from "@data/classes/ui";
-import { LocationModule } from "@data/location/Location";
-import { useNavigator } from "@data/location/navigator/hooks";
 import {
   clearSidepanelOptions,
   requestSidepanelBack,
@@ -14,7 +12,8 @@ import {
   selectSidepanelOptions,
 } from "@data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
-import { closeActiveSidepanelWindow } from "@data/uiSlice";
+import { LocationModule } from "@location/Location";
+import { useNavigator } from "@location/navigator/hooks";
 import { ActionIcon } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { SidepanelContainer } from "../SidepanelContainer";
@@ -32,7 +31,6 @@ export function SidepanelWindow() {
 
   const handleClose = () => {
     dispatch(clearSidepanelOptions());
-    dispatch(closeActiveSidepanelWindow());
     navigator.reset({ module: LocationModule.Home }, navigator.current.scope);
   };
 

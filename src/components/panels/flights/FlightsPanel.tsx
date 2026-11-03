@@ -12,8 +12,6 @@ import { RegistrationView } from "@components/views/RegistrationView";
 import { RouteView } from "@components/views/RouteView";
 import { flightFilter } from "@data/classes/filters";
 import { Flight } from "@data/classes/flights/Flight";
-import { LocationModule, scopeUsername } from "@data/location/Location";
-import { useHistoryEntry, useNavigator } from "@data/location/navigator/hooks";
 import {
   useGetFlightsQuery,
   useGetUserFlightsQuery,
@@ -22,9 +20,11 @@ import {
   selectFilteredFlights,
   sortFlights,
 } from "@data/services/flights/selectFlights";
-import { SelectionType, type Selected } from "@data/services/SelectionHistory";
 import { useGetTailsManifestQuery } from "@data/services/tails";
 import { useAppSelector } from "@data/store";
+import { LocationModule, scopeUsername } from "@location/Location";
+import { useHistoryEntry, useNavigator } from "@location/navigator/hooks";
+import { SelectionType, type Selection } from "@location/Selection";
 import { useMediaQuery } from "@mantine/hooks";
 import { useEffect, useMemo, useRef } from "react";
 import { FlightsList } from "./FlightsList";
@@ -285,7 +285,7 @@ export function FlightsPanel() {
 
 function filterFlightsBySelection(
   flights: Flight[],
-  selected: Selected | undefined,
+  selected: Selection | undefined,
 ) {
   if (!selected) return [];
 
