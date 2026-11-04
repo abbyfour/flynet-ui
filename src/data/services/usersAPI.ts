@@ -62,6 +62,13 @@ export const usersApi = createApi({
       },
     }),
 
+    deleteUser: build.mutation<void, void>({
+      query: () => ({
+        url: `user/delete_self`,
+        method: "DELETE",
+      }),
+    }),
+
     updateUserAvatar: build.mutation<
       { avatarUrl: string },
       { avatarDataUrl: string }
@@ -101,6 +108,7 @@ export const {
   useUpdateUserMutation,
   useUpdateUserAvatarMutation,
   useUpdateUserSettingsMutation,
+  useDeleteUserMutation,
 } = usersApi;
 
 function dataUrlToBlob(dataUrl: string) {

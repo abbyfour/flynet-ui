@@ -1,12 +1,7 @@
 import { icons } from "@assets/icons/icons";
-import { clearAllUIFlightData } from "@data/flightsSlice";
-import { clearFlightsCache } from "@data/services/flights/flightsAPI";
-import { useAppDispatch, useAppSelector } from "@data/store";
-import { clearUser } from "@data/userSlice";
-import { LocationModule } from "@location/Location";
-import { useNavigator } from "@location/navigator/hooks";
+import { useLogout } from "@components/common/hooks/useLogout";
+import { useAppSelector } from "@data/store";
 import { ActionIcon, Tooltip } from "@mantine/core";
-import { useEphemeralThinking } from "@util/thinkingUtil";
 import { useEffect, useState } from "react";
 import { Thinking } from "./Thinking";
 
@@ -18,23 +13,12 @@ export function StatusBar() {
   const [now, setNow] = useState(() => new Date());
   const currentUser = useAppSelector((state) => state.user.currentUser);
   const thinking = useAppSelector((state) => state.ui.thinking);
-  const dispatch = useAppDispatch();
-  const navigator = useNavigator();
-  const setEphemeralThinking = useEphemeralThinking(dispatch);
+  const logout = useLogout();
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
   }, []);
-
-  const logout = () => {
-    setEphemeralThinking("goodbye! see you in the air");
-
-    dispatch(clearUser());
-    dispatch(clearAllUIFlightData());
-    clearFlightsCache();
-    navigator.reset({ module: LocationModule.Home });
-  };
 
   return (
     <div className="StatusBar">
@@ -60,7 +44,7 @@ export function StatusBar() {
           />
 
           <Tooltip label="Logout" withArrow color="red">
-            <ActionIcon variant="transparent" color="red" onClick={logout}>
+            <ActionIcon variant="transparent" color="red" onClick={() => logout()}>
               {icons.actions.logout(20)}
             </ActionIcon>
           </Tooltip>

@@ -1,16 +1,24 @@
+import { m } from "@assets/text/messages";
 import { Button } from "@components/common/buttons/Button";
+import { DeleteButton } from "@components/common/buttons/DeleteButton";
 import { SubmitButton } from "@components/common/buttons/SubmitButton";
+import { confirm } from "@components/common/notices/Confirm";
+import { useLogout } from "@components/common/hooks/useLogout";
 import { Toasts } from "@components/common/notices/Toast";
 import { dispatchNotice } from "@components/common/notices/dispatchNotice";
 import { AppTheme } from "@data/classes/ui";
 import type { UserSettings } from "@data/classes/user";
-import { useUpdateUserSettingsMutation } from "@data/services/usersAPI";
+import {
+  useDeleteUserMutation,
+  useUpdateUserSettingsMutation,
+} from "@data/services/usersAPI";
 import { setSidepanelOptions } from "@data/sidepanelSlice";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { setTheme } from "@data/uiSlice";
 import { saveUser } from "@data/userSlice";
 import { LocationModule, SELF_SCOPE } from "@location/Location";
 import { useNavigator } from "@location/navigator/hooks";
+import { Divider } from "@mantine/core";
 import { useEffect, useState } from "react";
 import "./Settings.scss";
 
@@ -18,6 +26,8 @@ export function Settings() {
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector((state) => state.user.currentUser);
   const [updateUserSettings, { isLoading }] = useUpdateUserSettingsMutation();
+  const [deleteUser] = useDeleteUserMutation();
+  const logout = useLogout();
   const [uiMode, setUiMode] = useState<UserSettings["uiMode"] | undefined>(
     undefined,
   );
@@ -36,6 +46,27 @@ export function Settings() {
   if (!currentUser) {
     return <p>Please sign in to edit settings.</p>;
   }
+
+  const handleDeleteAccount = async () => {
+    const confirmation = await confirm({
+      title: m.confirm.deleteAccount.title,
+      children: <p>{m.confirm.deleteAccount.text}</p>,
+      color: "red",
+      labels: { confirm: "Yes, delete it.", cancel: "Nevermind..." },
+    });
+
+    if (confirmation) {
+      const result = await deleteUser();
+
+      if (result.error) {
+        dispatchNotice(Toasts.error(m.confirm.deleteAccount.error));
+        return;
+      }
+
+      dispatchNotice(Toasts.success(m.confirm.deleteAccount.success));
+      logout("account deleted. safe travels");
+    }
+  };
 
   const selectedUiMode = uiMode ?? currentUser.userSettings.uiMode;
   const hasChanges = selectedUiMode !== currentUser.userSettings.uiMode;
@@ -135,6 +166,12 @@ export function Settings() {
         <SubmitButton loading={isLoading} disabled={!hasChanges}>
           Save settings
         </SubmitButton>
+
+        <Divider />
+
+        <DeleteButton type="button" onClick={handleDeleteAccount}>
+          Delete account
+        </DeleteButton>
       </form>
     </div>
   );

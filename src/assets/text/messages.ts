@@ -4,6 +4,12 @@ function random(...options: string[]) {
 
 export const m = {
   confirm: {
+    deleteAccount: {
+      title: "Are you sure you want to delete your account?",
+      text: "This will permanently ground your account and all your flights. This can't be undone.",
+      success: "Account successfully deleted.",
+      error: "Failed to delete account.",
+    },
     losingChanges: {
       title: "Lose unsaved changes?",
       text: "If you go back now, any changes you made will be ejected into space.",

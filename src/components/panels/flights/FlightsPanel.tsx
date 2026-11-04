@@ -111,7 +111,7 @@ export function FlightsPanel() {
     }
 
     if (selected && selected.type === SelectionType.Flight) {
-      return `Flight ${primaryFlight?.flightNumber ?? selected.flightId}`;
+      return `Flight ${primaryFlight?.flightNumber ?? ""}`;
     }
 
     if (selected && selected.type === SelectionType.Route) {
@@ -129,11 +129,11 @@ export function FlightsPanel() {
     }
 
     if (selected && selected.type === SelectionType.Airline) {
-      return `Airline ${primaryFlight?.airline?.name ?? selected.airlineId}`;
+      return `Airline ${primaryFlight?.airline?.displayCode ?? selected.airlineId}`;
     }
 
     if (selected && selected.type === SelectionType.Aircraft) {
-      return `Plane ${primaryFlight?.aircraft?.manufacturerModel ?? selected.aircraftId}`;
+      return `Aircraft ${primaryFlight?.aircraft?.displayCode ?? selected.aircraftId}`;
     }
 
     if (selected && selected.type === SelectionType.Registration) {

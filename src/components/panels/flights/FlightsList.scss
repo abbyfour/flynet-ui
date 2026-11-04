@@ -11,4 +11,23 @@
   .add-button {
     margin-bottom: 1em;
   }
+
+  .empty-state {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 2rem 0;
+
+    img {
+      max-width: 30%;
+      height: auto;
+    }
+
+    p {
+      font-style: italic;
+      margin: 0;
+      text-align: center;
+    }
+  }
 }

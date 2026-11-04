@@ -125,14 +125,17 @@ export function FlightsList({
       )}
 
       {isVisible && flights.length === 0 && (
-        <p>
-          {searchText ||
-          filters?.search ||
-          filters?.year !== undefined ||
-          filters?.upcoming !== undefined
-            ? "No flights match your search."
-            : "No flights yet."}
-        </p>
+        <div className="empty-state">
+          <img src="/images/ufo.png" alt="" />
+          <p>
+            {searchText ||
+            filters?.search ||
+            filters?.year !== undefined ||
+            filters?.upcoming !== undefined
+              ? "No flights match your search."
+              : "No flights yet."}
+          </p>
+        </div>
       )}
 
       {isLoading && <FlightListSkeleton />}
