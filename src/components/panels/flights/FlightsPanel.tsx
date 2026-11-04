@@ -165,7 +165,7 @@ export function FlightsPanel() {
     }
   }, [isMobile, isListVisible, selected, drafting?.type]);
 
-  if (!currentUser) {
+  if (!currentUser && !viewedProfileUsername) {
     return (
       <div>
         <p>Please log in to view your flights.</p>

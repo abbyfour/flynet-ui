@@ -1,11 +1,13 @@
+import { Button } from "@components/common/buttons/Button";
 import { SubmitButton } from "@components/common/buttons/SubmitButton";
 import { Input } from "@components/forms/Input";
+import { openRegisterModal } from "@components/forms/register/openRegisterModal";
 import { useLazyGetFlightsQuery } from "@data/services/flights/flightsAPI";
-import { useLoginMutation } from "@data/services/usersAPI";
+import { useLoginMutation, useRegisterMutation } from "@data/services/usersAPI";
 import { useAppDispatch, useAppSelector } from "@data/store";
 import { clearThinking, setPermanentThinking } from "@data/uiSlice";
 import { saveUser } from "@data/userSlice";
-import { Alert } from "@mantine/core";
+import { Alert, Divider } from "@mantine/core";
 import { useState } from "react";
 import { SidepanelContainer } from "../SidepanelContainer";
 
@@ -26,6 +28,7 @@ export function LoginWindow() {
 function LoginForm() {
   const dispatch = useAppDispatch();
   const [login, { isLoading: isLoggingIn }] = useLoginMutation();
+  const [register] = useRegisterMutation();
   const [loginError, setLoginError] = useState<string | null>(null);
   const [getFlights] = useLazyGetFlightsQuery();
 
@@ -94,6 +97,20 @@ function LoginForm() {
         >
           Login
         </SubmitButton>
+
+        <Divider />
+
+        <Button
+          type="button"
+          onClick={() =>
+            openRegisterModal({
+              title: "Register",
+              onSubmit: (data) => register(data).unwrap(),
+            })
+          }
+        >
+          Register
+        </Button>
       </form>
     </div>
   );

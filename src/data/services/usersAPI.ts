@@ -7,38 +7,10 @@ import type {
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseFlynetQuery } from "./client";
 
-function dataUrlToBlob(dataUrl: string) {
-  const [metadata, base64Data] = dataUrl.split(",");
-
-  if (!metadata || !base64Data) {
-    throw new Error("Invalid avatar data URL");
-  }
-
-  const mimeType = metadata.match(/data:(.*?);base64/)?.[1];
-  const binary = atob(base64Data);
-  const bytes = new Uint8Array(binary.length);
-
-  for (let index = 0; index < binary.length; index++) {
-    bytes[index] = binary.charCodeAt(index);
-  }
-
-  return new Blob([bytes], {
-    type: mimeType ?? "application/octet-stream",
-  });
-}
-
 export const usersApi = createApi({
   reducerPath: "usersApi",
   baseQuery: baseFlynetQuery(),
   endpoints: (build) => ({
-    register: build.mutation<UserProperties, Omit<UserProperties, "id">>({
-      query: (userProperties) => ({
-        url: "user/register",
-        method: "POST",
-        body: userProperties,
-      }),
-    }),
-
     me: build.query<ExtendedUserProperties, void>({
       query: () => ({
         url: "user/me",
@@ -64,6 +36,14 @@ export const usersApi = createApi({
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
+      }),
+    }),
+
+    register: build.mutation<UserProperties, RegisterParams>({
+      query: (registerParams) => ({
+        url: "user/register",
+        method: "POST",
+        body: registerParams,
       }),
     }),
 
@@ -122,3 +102,29 @@ export const {
   useUpdateUserAvatarMutation,
   useUpdateUserSettingsMutation,
 } = usersApi;
+
+function dataUrlToBlob(dataUrl: string) {
+  const [metadata, base64Data] = dataUrl.split(",");
+
+  if (!metadata || !base64Data) {
+    throw new Error("Invalid avatar data URL");
+  }
+
+  const mimeType = metadata.match(/data:(.*?);base64/)?.[1];
+  const binary = atob(base64Data);
+  const bytes = new Uint8Array(binary.length);
+
+  for (let index = 0; index < binary.length; index++) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+
+  return new Blob([bytes], {
+    type: mimeType ?? "application/octet-stream",
+  });
+}
+
+interface RegisterParams {
+  username: string;
+  password: string;
+  email: string;
+}

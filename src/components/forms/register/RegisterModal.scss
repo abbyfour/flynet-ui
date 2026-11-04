@@ -1,0 +1,28 @@
+.RegisterModal {
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+
+  &--success {
+    text-align: center;
+  }
+
+  &__success-content {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    padding: 2rem 0;
+  }
+
+  &__seat {
+    max-width: 60%;
+    height: auto;
+  }
+
+  &__success-title {
+    margin: 0;
+    font-weight: 600;
+  }
+}
