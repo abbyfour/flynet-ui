@@ -1,7 +1,10 @@
 import { icons } from "@assets/icons/icons";
+import { AircraftDisplay } from "@components/displays/AircraftDisplay";
 import { FlightListItem } from "@components/panels/flights/FlightListItem";
+import { useSelect } from "@components/panels/flights/useSelect";
 import type { Aircraft } from "@data/classes/flights/Aircraft";
 import type { Flight } from "@data/classes/flights/Flight";
+import { SelectionType } from "@data/location/Selection";
 import {
   flightawareLink,
   jetphotosLink,
@@ -16,6 +19,8 @@ type RegistrationViewProps = {
 };
 
 export function RegistrationView({ aircraft, flights }: RegistrationViewProps) {
+  const select = useSelect();
+
   if (!aircraft?.registration || flights.length === 0) {
     return <></>;
   }
@@ -23,10 +28,20 @@ export function RegistrationView({ aircraft, flights }: RegistrationViewProps) {
   return (
     <div className="RegistrationView">
       <div className="content">
-        <h4 className="title">
-          {aircraft.registration}
-          <span className="subtitle">{aircraft.manufacturerModel}</span>
-        </h4>
+        <h4 className="title">{aircraft.registration}</h4>
+
+        <div className="manufacturer-model">
+          <h5 className="tiny-header">Model:</h5>
+          <AircraftDisplay
+            aircraft={aircraft.deregister()}
+            onClick={() =>
+              select({
+                type: SelectionType.Aircraft,
+                aircraftId: aircraft.id,
+              })
+            }
+          />
+        </div>
 
         <div>
           <h5 className="tiny-header">External links:</h5>

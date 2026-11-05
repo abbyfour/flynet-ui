@@ -11,3 +11,33 @@
 .support-newlines {
   white-space: pre-wrap;
 }
+
+a {
+  color: var(--accent-dark);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+  transition:
+    color 120ms ease,
+    text-decoration-color 120ms ease;
+
+  &:hover {
+    color: var(--accent-darker);
+    text-decoration-color: currentColor;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+[data-theme="dark"] a {
+  color: var(--accent-dark);
+
+  &:hover {
+    color: var(--accent-dark);
+  }
+}

@@ -18,6 +18,11 @@
   background: var(--glass);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
 
+  // wrapper lets the tooltip fire even on disabled buttons
+  .dock-icon-wrapper {
+    display: flex;
+  }
+
   .dock-icon-button {
     border: none;
     background: none;

@@ -9,6 +9,7 @@ import { useAppSelector } from "@data/store";
 import { selectThemeFallbackToSystem } from "@data/uiSlice";
 import { LocationModule } from "@location/Location";
 import { useNavigator } from "@location/navigator/hooks";
+import { Tooltip } from "@mantine/core";
 
 // icons
 import flightsIconDarkBw from "@assets/dock/flights-bw-dark.svg";
@@ -90,22 +91,31 @@ export function Dock() {
   return (
     <div className="Dock">
       {Object.values(windows).map((window) => (
-        <button
+        <Tooltip
           key={window.name}
-          className={
-            "dock-icon-button" +
-            (activeWindow === window.name ? " active" : "") +
-            ("disabled" in window && window.disabled ? " disabled" : "")
-          }
-          disabled={"disabled" in window && window.disabled}
-          onClick={() => changeWindow(window)}
+          label={window.name.charAt(0).toUpperCase() + window.name.slice(1)}
+          openDelay={600}
+          withArrow
+          position="top"
         >
-          <img
-            src={getIcon(window, activeWindow, theme)}
-            alt={`${window.name} icon`}
-            className="dock-icon-image"
-          />
-        </button>
+          <span className="dock-icon-wrapper">
+            <button
+              className={
+                "dock-icon-button" +
+                (activeWindow === window.name ? " active" : "") +
+                ("disabled" in window && window.disabled ? " disabled" : "")
+              }
+              disabled={"disabled" in window && window.disabled}
+              onClick={() => changeWindow(window)}
+            >
+              <img
+                src={getIcon(window, activeWindow, theme)}
+                alt={`${window.name} icon`}
+                className="dock-icon-image"
+              />
+            </button>
+          </span>
+        </Tooltip>
       ))}
     </div>
   );

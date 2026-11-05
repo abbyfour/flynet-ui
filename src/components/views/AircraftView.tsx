@@ -3,6 +3,9 @@ import type { Aircraft } from "@data/classes/flights/Aircraft";
 import type { Flight } from "@data/classes/flights/Flight";
 import { uniquifyBy } from "@util/arrayUtil";
 
+import { LocationModule } from "@data/location/Location";
+import { Link } from "@data/location/navigator/Link";
+import { SelectionType } from "@data/location/Selection";
 import "./AircraftView.scss";
 
 export function AircraftView({
@@ -30,14 +33,28 @@ export function AircraftView({
           <ul className="airlines-list">
             {uniquifyBy(
               flights.filter((flight) => !!flight.airline),
-              (a) => a.airline?.name,
+              (a) => a.airline?.id,
             )
+              .filter((flight) => !!flight.airline?.id)
               .sort(
                 (a, b) =>
                   a.airline?.name?.localeCompare(b.airline?.name ?? "") ?? 0,
               )
               .map((flight) => (
-                <li key={flight.id}>{flight.airline?.name}</li>
+                <li key={flight.id}>
+                  •{" "}
+                  <Link
+                    to={{
+                      module: LocationModule.Flights,
+                      selected: {
+                        type: SelectionType.Airline,
+                        airlineId: flight.airline!.id,
+                      },
+                    }}
+                  >
+                    {flight.airline?.name}
+                  </Link>
+                </li>
               ))}
           </ul>
         </div>

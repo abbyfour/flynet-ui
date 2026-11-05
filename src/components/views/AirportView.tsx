@@ -1,3 +1,4 @@
+import { AirportCodePill } from "@components/displays/AirportCodePill";
 import { AirportDisplay } from "@components/displays/AirportDisplay";
 import { FlightListItem } from "@components/panels/flights/FlightListItem";
 import { useSelect } from "@components/panels/flights/useSelect";
@@ -26,9 +27,9 @@ export function AirportView({
       <h4 className="title">
         {airport.name}
         {airport.displayCode && (
-          <>
-            <span className="airport-code">{airport.displayCode}</span>
-          </>
+          <span className="airport-code">
+            <AirportCodePill airport={airport} size="md" />
+          </span>
         )}
       </h4>
 
